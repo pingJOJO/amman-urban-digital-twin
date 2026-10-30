@@ -13,9 +13,8 @@ import {
   Sun,
   Moon,
   Bus,
-  Car,
-  Leaf,
-  BarChart3
+  CheckCircle2,
+  Sparkles
 } from 'lucide-react';
 import { AboutPage } from './AboutPage';
 import { TwinExplorePage } from './TwinExplorePage';
@@ -53,7 +52,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
   const scenarios = [
     {
       title: 'Emergency Green Corridor',
-      desc: 'Dynamic signal override for Civil Defense ambulances, cutting response times across Amman arteries by 4.2 minutes.',
+      desc: 'Dynamic signal preemption for Civil Defense ambulances, slashing response times across Amman arteries by 4.2 minutes.',
       statLabel: 'Response Time Reduction',
       statValue: '-38%',
       icon: Siren,
@@ -61,7 +60,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
     },
     {
       title: 'Adaptive Congestion Dissolution',
-      desc: 'Real-time queue length analysis modulating phase splits to prevent spillback at complex roundabouts like 7th & 8th Circles.',
+      desc: 'Real-time queue monitoring modulating phase splits to dissolve spillback at critical nodes like 7th & 8th Circles.',
       statLabel: 'Peak Intersection Delay',
       statValue: '-32.4%',
       icon: Activity,
@@ -69,15 +68,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
     },
     {
       title: 'Queen Rania St. Heat Island',
-      desc: 'Pinpointing 35.2°C open asphalt traps at University gate and validating -3.8°C cooling via native pine tree canopies.',
+      desc: 'Modeling 35.2°C open asphalt traps at the University gate and validating -3.8°C cooling via native pine tree canopies.',
       statLabel: 'Simulated Surface Drop',
       statValue: '-3.8°C',
       icon: Thermometer,
       tag: 'Microclimate Thermal Solver'
     },
     {
-      title: 'BRT Corridor Priority & Carbon',
-      desc: 'Modeling dedicated bus throughput and CO2 dispersion compared to mixed vehicle lanes across the university sector.',
+      title: 'BRT Rapid Transit Priority',
+      desc: 'Simulating dedicated red lane velocity gains and CO2 emission dispersal compared to mixed traffic corridors.',
       statLabel: 'Transit Velocity Gain',
       statValue: '+34.5%',
       icon: Bus,
@@ -101,104 +100,35 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
           <div
             key={leaf.id}
             className={`absolute -top-12 transition-opacity ${
-              isNight ? 'text-emerald-400/35' : 'text-emerald-700/40'
+              isNight ? 'opacity-20 text-emerald-400' : 'opacity-35 text-[#4AA883]'
             }`}
             style={{
               left: leaf.left,
-              animation: `leafDrift ${leaf.duration} cubic-bezier(0.4, 0, 0.2, 1) infinite`,
+              animation: `driftFall ${leaf.duration} linear infinite`,
               animationDelay: leaf.delay
             }}
           >
             <svg
               width={leaf.size}
-              height={leaf.size * 1.5}
-              viewBox="0 0 32 48"
-              fill="none"
-              className="transform rotate-12 drop-shadow-sm"
+              height={leaf.size}
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="transform rotate-45"
             >
-              <path
-                d="M16 2 C26 12 28 28 16 42 C4 28 6 12 16 2 Z"
-                fill="currentColor"
-                fillOpacity={isNight ? '0.6' : '0.5'}
-              />
-              <path
-                d="M16 8 L16 44"
-                stroke={isNight ? '#052214' : '#143823'}
-                strokeWidth="1.2"
-                strokeLinecap="round"
-                strokeOpacity="0.6"
-              />
-              <path
-                d="M16 16 C20 14 22 17 22 17"
-                stroke={isNight ? '#052214' : '#143823'}
-                strokeWidth="0.8"
-                strokeLinecap="round"
-                strokeOpacity="0.5"
-              />
-              <path
-                d="M16 24 C10 22 8 25 8 25"
-                stroke={isNight ? '#052214' : '#143823'}
-                strokeWidth="0.8"
-                strokeLinecap="round"
-                strokeOpacity="0.5"
-              />
+              <path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z" />
             </svg>
           </div>
         ))}
 
-        {/* Dynamic Curved Highway Paths with Smooth Animated Moving Cars */}
-        <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <path id="highwayPath1" d="M -100 240 C 350 180, 700 460, 1600 280" fill="none" />
-            <path id="highwayPath2" d="M 100 700 C 450 540, 850 750, 1650 560" fill="none" />
-          </defs>
-
-          {/* Road Visual Lines */}
-          <use
-            href="#highwayPath1"
-            stroke={isNight ? 'rgba(16, 185, 129, 0.28)' : 'rgba(45, 120, 85, 0.32)'}
-            strokeWidth="3"
-            strokeDasharray="10,14"
-          />
-          <use
-            href="#highwayPath2"
-            stroke={isNight ? 'rgba(56, 189, 248, 0.28)' : 'rgba(68, 194, 208, 0.32)'}
-            strokeWidth="3"
-            strokeDasharray="8,12"
-          />
-
-          {/* Car 1 Moving Smoothly Along Highway 1 */}
-          <g>
-            <animateMotion dur="16s" repeatCount="indefinite" rotate="auto">
-              <mpath href="#highwayPath1" />
-            </animateMotion>
-            <rect x="-11" y="-4.5" width="22" height="9" rx="3.5" fill={isNight ? '#34D399' : '#10B981'} />
-            <rect x="-3" y="-3" width="9" height="6" rx="1.5" fill={isNight ? '#041B10' : '#072A17'} />
-            <circle cx="10" cy="-2.5" r="1.2" fill="#FEF08A" />
-            <circle cx="10" cy="2.5" r="1.2" fill="#FEF08A" />
-          </g>
-
-          {/* Car 2 Moving Smoothly Along Highway 2 */}
-          <g>
-            <animateMotion dur="20s" repeatCount="indefinite" rotate="auto">
-              <mpath href="#highwayPath2" />
-            </animateMotion>
-            <rect x="-11" y="-4.5" width="22" height="9" rx="3.5" fill={isNight ? '#38BDF8' : '#0284C7'} />
-            <rect x="-3" y="-3" width="9" height="6" rx="1.5" fill={isNight ? '#06283D' : '#083B58'} />
-            <circle cx="10" cy="-2.5" r="1.2" fill="#FEF08A" />
-            <circle cx="10" cy="2.5" r="1.2" fill="#FEF08A" />
-          </g>
-        </svg>
-
-        {/* Ambient Center Glows */}
+        {/* Ambient Radial Depth Glows */}
         <div
-          className={`absolute top-[-10%] right-[10%] w-[600px] h-[600px] rounded-full blur-[130px] transition-all duration-700 ${
-            isNight ? 'bg-emerald-500/15' : 'bg-[#75E2D9]/25'
+          className={`absolute top-[-10%] right-[10%] w-[650px] h-[650px] rounded-full blur-[140px] transition-colors duration-700 ${
+            isNight ? 'bg-emerald-600/15' : 'bg-[#75E2D9]/30'
           }`}
         />
         <div
-          className={`absolute bottom-[5%] left-[5%] w-[550px] h-[550px] rounded-full blur-[140px] transition-all duration-700 ${
-            isNight ? 'bg-cyan-500/12' : 'bg-[#82E69F]/25'
+          className={`absolute bottom-[5%] left-[5%] w-[600px] h-[600px] rounded-full blur-[150px] transition-colors duration-700 ${
+            isNight ? 'bg-cyan-600/10' : 'bg-[#82E69F]/30'
           }`}
         />
       </div>
@@ -210,7 +140,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
             isNight ? 'border-emerald-500/20' : 'border-[#3B654C]/15'
           }`}
         >
-          {/* Brand Identity: 100% Transparent Logo (Zero Box) */}
+          {/* Brand Identity: 100% Transparent Floating Logo */}
           <div
             onClick={() => {
               setActiveTab('home');
@@ -288,17 +218,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
             ))}
           </nav>
 
-          {/* Right Actions: Language Indicator, Day/Night Mode & Launch CTA */}
+          {/* Right Actions: Day/Night Mode & Launch CTA */}
           <div className="flex items-center gap-2.5 sm:gap-3">
-            {/* Language Switcher matching Mockup (EN | AR) */}
-            <span
-              className={`hidden sm:inline-block text-xs font-mono font-medium px-2 py-1 transition-colors ${
-                isNight ? 'text-slate-400' : 'text-[#2D4D37]'
-              }`}
-            >
-              EN | AR
-            </span>
-
             {/* Day / Night Mode Toggle */}
             <button
               onClick={() => setTheme(isNight ? 'day' : 'night')}
@@ -326,16 +247,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
         </header>
 
         {/* ================================================================= */}
-        {/* PAGE 1: HOME VIEW (The Complete Rich Landing Page)                */}
+        {/* PAGE 1: HOME VIEW (Refined, Crisp, Luxury Effects, Zero Clutter)   */}
         {/* ================================================================= */}
         {activeTab === 'home' && (
           <>
-            {/* 3. HERO SECTION: Elongated Robotic Arm & Smooth Floating Model */}
+            {/* 3. HERO SECTION: Smooth Elongated Robotic Arm & Hologram 3D Amman City */}
             <section id="overview" className="pt-8 sm:pt-12 pb-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">
-              {/* Left Column: Short, crisp, 2-line copy */}
+              {/* Left Column: Crisp 2-line copy with subtle high-tech effects */}
               <div className="lg:col-span-6 xl:col-span-6 space-y-4 text-left">
                 <div
-                  className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-mono tracking-wide shadow-sm ${
+                  className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-mono tracking-wide shadow-sm backdrop-blur-md ${
                     isNight
                       ? 'bg-emerald-500/10 border-emerald-500/25 text-emerald-400'
                       : 'bg-white/60 border-white/80 text-[#1F5435]'
@@ -363,13 +284,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
                     isNight ? 'text-slate-300' : 'text-slate-700'
                   }`}
                 >
-                  Simulate urban scenarios, test autonomous signal priority, and model microclimate cooling in high-fidelity before investing public capital.
+                  Simulate urban mobility scenarios, emergency signal preemption, and microclimate heat mitigation in high fidelity before breaking ground.
                 </p>
 
-                {/* Key Metric Tickers */}
+                {/* Key Metric Tickers with Subtle Elevation & Border Glow */}
                 <div className="grid grid-cols-3 gap-2.5 pt-1 max-w-lg">
                   <div
-                    className={`p-3 rounded-2xl border shadow-sm ${
+                    className={`p-3 rounded-2xl border shadow-sm transition-transform duration-300 hover:scale-[1.02] ${
                       isNight
                         ? 'bg-[#0B1711]/90 border-emerald-500/25'
                         : 'bg-white/55 border-white/80 shadow-[0_4px_16px_rgba(30,60,40,0.05)]'
@@ -384,7 +305,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
                   </div>
 
                   <div
-                    className={`p-3 rounded-2xl border shadow-sm ${
+                    className={`p-3 rounded-2xl border shadow-sm transition-transform duration-300 hover:scale-[1.02] ${
                       isNight
                         ? 'bg-[#0B1711]/90 border-cyan-500/25'
                         : 'bg-white/55 border-white/80 shadow-[0_4px_16px_rgba(30,60,40,0.05)]'
@@ -399,7 +320,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
                   </div>
 
                   <div
-                    className={`p-3 rounded-2xl border shadow-sm ${
+                    className={`p-3 rounded-2xl border shadow-sm transition-transform duration-300 hover:scale-[1.02] ${
                       isNight
                         ? 'bg-[#0B1711]/90 border-emerald-500/25'
                         : 'bg-white/55 border-white/80 shadow-[0_4px_16px_rgba(30,60,40,0.05)]'
@@ -443,25 +364,26 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
                 </div>
               </div>
 
-              {/* Right Column: Elongated Robotic Arm & Hologram City */}
+              {/* Right Column: Restored Silky Smooth Hero Hand & 3D Amman Hologram */}
               <div className="lg:col-span-6 xl:col-span-6 flex justify-center lg:justify-end relative">
                 <div className="relative w-full max-w-[640px] lg:max-w-[700px] group transform scale-105">
+                  {/* Radiant Ambient Backglow */}
                   <div
                     className={`absolute inset-0 rounded-full blur-[85px] -z-10 transform scale-95 transition-colors duration-700 ${
                       isNight ? 'bg-emerald-500/25' : 'bg-[#51D3BE]/30'
                     }`}
                   />
 
-                  {/* Elongated de-fringed robotic arm cutout */}
+                  {/* Restored Smooth 3D City & Robotic Hand */}
                   <img
                     src="/hero-hand-smooth.png"
                     alt="Amman Digital Twin Holographic City on Smartphone"
                     className="w-full h-auto object-contain filter drop-shadow-[0_24px_45px_rgba(20,45,28,0.25)] transition-transform duration-700 ease-out group-hover:scale-[1.02] pointer-events-none select-none"
                   />
 
-                  {/* Floating Telemetry HUD Overlays */}
+                  {/* Floating Telemetry HUD Overlays with Soft Glassmorphism */}
                   <div
-                    className={`absolute top-4 left-2 sm:left-4 backdrop-blur-md rounded-2xl p-2.5 shadow-lg text-left flex items-center gap-2.5 border ${
+                    className={`absolute top-4 left-2 sm:left-4 backdrop-blur-md rounded-2xl p-2.5 shadow-lg text-left flex items-center gap-2.5 border transition-all duration-300 hover:scale-105 ${
                       isNight
                         ? 'bg-[#070F0B]/85 border-emerald-500/40'
                         : 'bg-white/75 border-white/90 shadow-[0_8px_24px_rgba(20,40,25,0.08)]'
@@ -475,7 +397,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
                   </div>
 
                   <div
-                    className={`absolute bottom-4 right-2 sm:right-4 backdrop-blur-md rounded-2xl p-2.5 shadow-lg text-left flex items-center gap-2.5 border ${
+                    className={`absolute bottom-4 right-2 sm:right-4 backdrop-blur-md rounded-2xl p-2.5 shadow-lg text-left flex items-center gap-2.5 border transition-all duration-300 hover:scale-105 ${
                       isNight
                         ? 'bg-[#070F0B]/85 border-cyan-500/40'
                         : 'bg-white/75 border-white/90 shadow-[0_8px_24px_rgba(20,40,25,0.08)]'
@@ -491,127 +413,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
               </div>
             </section>
 
-            {/* 4. REAL-TIME INSIGHTS SECTION (Faithful to Master Reference Mockup - Image 3) */}
-            <section
-              id="realtime-insights"
-              className={`pt-12 pb-12 border-t transition-colors ${
-                isNight ? 'border-emerald-500/20' : 'border-[#3B654C]/15'
-              } grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center`}
-            >
-              {/* Left Column: Organic Feathered Real-Time Night City View with Heat & Air Quality Markers */}
-              <div className="lg:col-span-6 flex justify-center lg:justify-start">
-                <div className="relative w-full max-w-[580px] group">
-                  <div
-                    className={`absolute inset-0 rounded-3xl blur-[65px] -z-10 ${
-                      isNight ? 'bg-cyan-500/20' : 'bg-[#51D3BE]/25'
-                    }`}
-                  />
-                  <div className="relative rounded-3xl overflow-hidden transition-transform duration-500 hover:scale-[1.01]">
-                    <img
-                      src="/realtime-insights-feathered.png"
-                      alt="Amman Real-Time Heat & Traffic Insights"
-                      className="w-full h-auto object-contain filter drop-shadow-[0_16px_36px_rgba(20,45,28,0.2)] select-none pointer-events-none"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Column: Clean Editorial Copy & 3 Pillars matching Mockup */}
-              <div className="lg:col-span-6 space-y-5 text-left">
-                <div className="inline-flex items-center gap-2">
-                  <span className="text-[11px] font-mono font-bold uppercase tracking-[0.2em] text-emerald-500">
-                    REAL-TIME INSIGHTS ——
-                  </span>
-                </div>
-
-                <div className="space-y-1.5">
-                  <h2
-                    className={`text-3xl sm:text-4xl lg:text-[44px] font-extrabold tracking-tight leading-[1.12] ${
-                      isNight ? 'text-white' : 'text-[#143823]'
-                    }`}
-                  >
-                    Explore Amman
-                  </h2>
-                  <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-extrabold tracking-tight leading-[1.12] bg-gradient-to-r from-[#38BDF8] to-[#34D399] bg-clip-text text-transparent pb-1">
-                    in Real Time
-                  </h2>
-                </div>
-
-                <p
-                  className={`text-sm sm:text-base font-normal leading-relaxed max-w-lg ${
-                    isNight ? 'text-slate-300' : 'text-slate-700'
-                  }`}
-                >
-                  Visualize traffic flow, test scenarios, and make smarter decisions for a more connected, sustainable Amman.
-                </p>
-
-                {/* 3 Core Metric / Feature Columns */}
-                <div className="grid grid-cols-3 gap-3 pt-2 max-w-lg">
-                  <div className="flex flex-col items-start gap-1.5 group">
-                    <div
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${
-                        isNight ? 'bg-emerald-500/15 text-emerald-400' : 'bg-white/70 text-[#1F5435] shadow-sm'
-                      }`}
-                    >
-                      <Car className="w-5 h-5 stroke-[2]" />
-                    </div>
-                    <span
-                      className={`text-xs font-semibold tracking-tight ${
-                        isNight ? 'text-slate-200' : 'text-slate-800'
-                      }`}
-                    >
-                      Traffic Management
-                    </span>
-                  </div>
-
-                  <div className="flex flex-col items-start gap-1.5 group">
-                    <div
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${
-                        isNight ? 'bg-emerald-500/15 text-emerald-400' : 'bg-white/70 text-[#1F5435] shadow-sm'
-                      }`}
-                    >
-                      <Leaf className="w-5 h-5 stroke-[2]" />
-                    </div>
-                    <span
-                      className={`text-xs font-semibold tracking-tight ${
-                        isNight ? 'text-slate-200' : 'text-slate-800'
-                      }`}
-                    >
-                      Greener Mobility
-                    </span>
-                  </div>
-
-                  <div className="flex flex-col items-start gap-1.5 group">
-                    <div
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${
-                        isNight ? 'bg-emerald-500/15 text-emerald-400' : 'bg-white/70 text-[#1F5435] shadow-sm'
-                      }`}
-                    >
-                      <BarChart3 className="w-5 h-5 stroke-[2]" />
-                    </div>
-                    <span
-                      className={`text-xs font-semibold tracking-tight ${
-                        isNight ? 'text-slate-200' : 'text-slate-800'
-                      }`}
-                    >
-                      Data-Driven Planning
-                    </span>
-                  </div>
-                </div>
-
-                <div className="pt-2">
-                  <button
-                    onClick={onExplore}
-                    className="group inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-[#38BDF8] to-[#34D399] text-[#14261B] text-xs font-bold tracking-tight shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
-                  >
-                    <span>Explore Digital Twin Platform</span>
-                    <ArrowRight className="w-3.5 h-3.5 stroke-[2.5] group-hover:translate-x-0.5 transition-transform" />
-                  </button>
-                </div>
-              </div>
-            </section>
-
-            {/* 5. SCENARIOS SECTION: Short 2-line descriptions */}
+            {/* 4. SCENARIOS SECTION: 4 Core Modules with Clean 2-Line Descriptions */}
             <section id="capabilities" className={`pt-10 pb-10 border-t transition-colors ${isNight ? 'border-emerald-500/20' : 'border-[#3B654C]/15'}`}>
               <div className="text-center max-w-2xl mx-auto space-y-2 mb-8">
                 <div
@@ -640,7 +442,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
                     <div
                       key={idx}
                       onClick={() => setSelectedScenario(idx)}
-                      className={`p-4 rounded-2xl transition-all duration-300 cursor-pointer flex flex-col justify-between border ${
+                      className={`p-4 rounded-2xl transition-all duration-300 cursor-pointer flex flex-col justify-between border group ${
                         isSelected
                           ? isNight
                             ? 'bg-[#0B1711] border-emerald-500 shadow-md scale-[1.02]'
@@ -653,10 +455,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
                       <div className="space-y-2 text-left">
                         <div className="flex items-center justify-between">
                           <div
-                            className={`w-9 h-9 rounded-xl flex items-center justify-center ${
+                            className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
                               isSelected
                                 ? isNight ? 'bg-emerald-500 text-slate-950 font-bold' : 'bg-[#44C2D0] text-slate-900 font-bold'
-                                : isNight ? 'bg-emerald-500/15 text-emerald-400' : 'bg-emerald-100 text-emerald-800'
+                                : isNight ? 'bg-emerald-500/15 text-emerald-400 group-hover:bg-emerald-500/25' : 'bg-emerald-100 text-emerald-800 group-hover:bg-[#44C2D0] group-hover:text-white'
                             }`}
                           >
                             <IconComponent className="w-4 h-4 stroke-[2.2]" />
@@ -680,7 +482,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
                           <div className="text-[10px] font-mono opacity-60">{sc.statLabel}</div>
                           <div className="text-base font-black font-mono text-emerald-400">{sc.statValue}</div>
                         </div>
-                        <span className="w-6 h-6 rounded-full flex items-center justify-center bg-white/10">
+                        <span className="w-6 h-6 rounded-full flex items-center justify-center bg-white/10 group-hover:bg-emerald-500 group-hover:text-slate-950 transition-colors">
                           <ArrowUpRight className="w-3.5 h-3.5" />
                         </span>
                       </div>
@@ -690,7 +492,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
               </div>
             </section>
 
-            {/* 5. QUEEN RANIA CORRIDOR: New Foster+Partners Render */}
+            {/* 5. QUEEN RANIA CORRIDOR: Modern Architectural Render & Layer Controls */}
             <section id="corridor" className={`pt-10 pb-10 border-t transition-colors ${isNight ? 'border-emerald-500/20' : 'border-[#3B654C]/15'} grid grid-cols-1 lg:grid-cols-12 gap-8 items-center`}>
               <div className="lg:col-span-6 flex justify-center lg:justify-start">
                 <div className="relative w-full max-w-[540px] group">
@@ -733,7 +535,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
                         (e.currentTarget as HTMLImageElement).src = '/queen-rania-corridor-twin.png';
                       }}
                       alt="Queen Rania St. Corridor Twin - BRT and Microclimate Heatmap"
-                      className="w-full h-auto object-contain rounded-2xl"
+                      className="w-full h-auto object-contain rounded-2xl transition-transform duration-500 group-hover:scale-[1.01]"
                     />
 
                     <div className="absolute top-4 left-4 bg-[#070F0B]/85 backdrop-blur-md rounded-2xl px-3 py-1.5 flex items-center gap-2 border border-emerald-500/40 text-xs font-mono text-emerald-400">
@@ -769,25 +571,25 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
                   Focusing on Queen Rania Al-Abdullah Street by University of Jordan. Evaluating 35.2°C asphalt heat reduction via pine canopies alongside dedicated BRT priority phases.
                 </p>
 
-                <div className="space-y-1.5 pt-1 font-mono text-xs">
+                <div className="space-y-2 pt-1 font-mono text-xs">
                   <div className="flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                     <span>35.2°C Asphalt heat island alleviation down to 28.6°C via canopies</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                     <span>Smart adaptive signal priority for BRT buses at University gates</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                     <span>Carbon emissions dispersal modeling and pedestrian bridge flows</span>
                   </div>
                 </div>
 
-                <div className="pt-1">
+                <div className="pt-2">
                   <button
                     onClick={onExplore}
-                    className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-[#44C2D0] to-[#51D3BE] text-[#14261B] text-xs font-extrabold tracking-tight shadow-md hover:scale-105 transition-all cursor-pointer"
+                    className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-[#44C2D0] to-[#51D3BE] text-[#14261B] text-xs font-extrabold tracking-tight shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
                   >
                     <span>Test Queen Rania Scenario</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -798,12 +600,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
 
             {/* 6. FINAL CTA BANNER */}
             <section
-              className={`my-8 rounded-3xl p-8 border text-center space-y-3 backdrop-blur-md shadow-xl transition-all ${
+              className={`my-8 rounded-3xl p-8 border text-center space-y-3 backdrop-blur-md shadow-xl transition-all relative overflow-hidden ${
                 isNight
                   ? 'bg-gradient-to-r from-[#07130E] via-[#0A1F16] to-[#07130E] border-emerald-500/30'
                   : 'bg-gradient-to-r from-white/70 via-white/85 to-white/70 border-white/90 shadow-[0_16px_40px_rgba(20,40,25,0.08)]'
               }`}
             >
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/20 text-[11px] font-mono text-emerald-500 bg-emerald-500/10">
+                <Sparkles className="w-3 h-3" />
+                <span>Next-Generation Urban Digital Twin</span>
+              </div>
               <h2 className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${isNight ? 'text-white' : 'text-slate-900'}`}>
                 Ready to Experience Amman’s Digital Twin?
               </h2>

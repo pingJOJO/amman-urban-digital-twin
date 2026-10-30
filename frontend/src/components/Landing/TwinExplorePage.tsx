@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import {
   Thermometer,
   Wind,
-  Gauge,
+  Layers,
   TrendingDown,
-  Bus,
-  Siren,
+  Gauge,
   Sliders,
-  RotateCcw,
   History,
-  Maximize2,
+  RotateCcw,
   Play,
   Pause,
-  ArrowRight
+  Camera,
+  X,
+  Clock
 } from 'lucide-react';
 
 interface TwinExplorePageProps {
@@ -21,457 +21,380 @@ interface TwinExplorePageProps {
   onLaunch: () => void;
 }
 
-export const TwinExplorePage: React.FC<TwinExplorePageProps> = ({
-  theme,
-  onLaunch
-}) => {
+export const TwinExplorePage: React.FC<TwinExplorePageProps> = ({ theme }) => {
   const isNight = theme === 'night';
 
-  // Live Scenario Parameters (Mock Controls)
-  const [trafficDensity, setTrafficDensity] = useState<number>(14500);
-  const [surfaceTemp, setSurfaceTemp] = useState<number>(35.2);
-  const [emergencyActive, setEmergencyActive] = useState<boolean>(true);
-  const [canopyActive, setCanopyActive] = useState<boolean>(true);
-  const [brtSurgeActive, setBrtSurgeActive] = useState<boolean>(true);
-  const [simPlaying, setSimPlaying] = useState<boolean>(true);
-  const [showHistoryModal, setShowHistoryModal] = useState<boolean>(false);
+  const [isRunning, setIsRunning] = useState<boolean>(true);
+  const [activeIntervention, setActiveIntervention] = useState<'normal' | 'emergency' | 'cooling' | 'congestion'>('cooling');
+  const [showHistory, setShowHistory] = useState<boolean>(false);
+  const [vehicleCount, setVehicleCount] = useState<number>(18420);
 
-  // Dynamic calculations
-  const calculatedDelay = Math.round((trafficDensity / 420) * (emergencyActive ? 0.62 : 1.0));
-  const calculatedTemp = canopyActive ? (surfaceTemp - 3.8).toFixed(1) : surfaceTemp.toFixed(1);
-  const calculatedCO2 = Math.round(trafficDensity * 0.11 * (canopyActive ? 0.8 : 1.0));
-  const brtVelocity = brtSurgeActive ? '+38.4%' : '+18.2%';
-  const aqiScore = canopyActive ? 42 : 68;
-
-  // Mock History Records
-  const historyRuns = [
+  const scenarioHistory = [
     {
-      id: 'RUN-2026-089',
-      timestamp: 'Today, 10:45 AM',
-      scenario: 'Emergency Wave: JUH to 8th Circle',
-      result: '-4.2m Response Time (100% Preempted)',
-      status: 'Passed'
-    },
-    {
-      id: 'RUN-2026-088',
-      timestamp: 'Today, 09:12 AM',
-      scenario: 'Queen Rania BRT Frequency Surge',
-      result: '+34.5% Velocity, Zero Deadlock',
+      id: 'SC-108',
+      time: '14:25:00',
+      scenario: 'Queen Rania Pine Canopy Buffer Activation',
+      result: 'Surface temperature dropped -3.8°C at UOJ Gate',
       status: 'Validated'
     },
     {
-      id: 'RUN-2026-087',
-      timestamp: 'Yesterday, 16:30 PM',
-      scenario: 'Canopy Microclimate Cooling (35.2°C)',
-      result: '-3.8°C Asphalt Drop, 28.6°C Ambient',
-      status: 'Target Met'
+      id: 'SC-107',
+      time: '13:50:12',
+      scenario: 'Emergency Ambulance Wave - Zahran Corridor',
+      result: 'Downstream queues flushed, response time -4.2 min',
+      status: 'Validated'
     },
     {
-      id: 'RUN-2026-086',
-      timestamp: 'Yesterday, 14:15 PM',
-      scenario: '7th Circle Queue Flushing Algorithm',
-      result: '-32.4% Spillback Prevention',
-      status: 'Optimized'
+      id: 'SC-106',
+      time: '12:15:40',
+      scenario: 'BRT Transit Dedicated Signal Override',
+      result: 'Transit throughput +34.5%, passenger delay -28%',
+      status: 'Validated'
+    },
+    {
+      id: 'SC-105',
+      time: '11:00:22',
+      scenario: '7th Circle Adaptive Split Balancing',
+      result: 'Roundabout spillback dissolved, flow velocity +18%',
+      status: 'Validated'
     }
   ];
 
   return (
     <div className="space-y-8 py-6">
-      {/* 1. TOP EXECUTIVE KPI DASHBOARD (5 Core Urban Metrics) */}
-      <section className="space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className={isNight ? 'text-slate-300' : 'text-slate-700'}>
-              Live Telemetry Dashboard • SUMO Pipeline
+      {/* 1. TOP EXECUTIVE TELEMETRY ROW (5 KPIs) */}
+      <section className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        {/* KPI 1: Heat Island */}
+        <div
+          className={`p-4 rounded-2xl border transition-all duration-300 hover:scale-[1.02] shadow-sm ${
+            isNight
+              ? 'bg-[#0B1812]/90 border-emerald-500/25'
+              : 'bg-white/60 border-white/80 shadow-[0_4px_16px_rgba(20,40,25,0.04)]'
+          }`}
+        >
+          <div className="flex items-center justify-between text-xs font-mono text-emerald-500 mb-1">
+            <span className="flex items-center gap-1.5">
+              <Thermometer className="w-3.5 h-3.5" />
+              <span>Junction Heat</span>
             </span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
           </div>
-          <span className="text-[11px] font-mono text-emerald-500 font-semibold">
-            Network Sync: 60 FPS
-          </span>
+          <div className={`text-2xl font-black font-mono ${isNight ? 'text-white' : 'text-slate-900'}`}>
+            28.6°C
+          </div>
+          <div className="text-[10px] font-mono text-emerald-500 font-semibold mt-0.5">
+            -3.8°C with Pine Canopy
+          </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-          {/* 1. Junction Heat */}
-          <div
-            className={`p-4 rounded-2xl border transition-all ${
-              isNight
-                ? 'bg-[#0B1711]/90 border-emerald-500/25 shadow-sm'
-                : 'bg-white/70 border-white/90 shadow-sm'
-            }`}
-          >
-            <div className="flex items-center justify-between mb-1">
-              <span className={`text-[11px] font-mono ${isNight ? 'text-slate-400' : 'text-slate-600'}`}>
-                Junction Heat
-              </span>
-              <Thermometer className="w-4 h-4 text-emerald-500" />
-            </div>
-            <div className={`text-2xl font-black font-mono ${isNight ? 'text-white' : 'text-slate-900'}`}>
-              {calculatedTemp}°C
-            </div>
-            <div className="text-[10.5px] font-mono text-emerald-500 mt-0.5">
-              {canopyActive ? '-3.8°C via Canopy' : '35.2°C Asphalt Trap'}
-            </div>
+        {/* KPI 2: Air Quality */}
+        <div
+          className={`p-4 rounded-2xl border transition-all duration-300 hover:scale-[1.02] shadow-sm ${
+            isNight
+              ? 'bg-[#0B1812]/90 border-cyan-500/25'
+              : 'bg-white/60 border-white/80 shadow-[0_4px_16px_rgba(20,40,25,0.04)]'
+          }`}
+        >
+          <div className="flex items-center justify-between text-xs font-mono text-cyan-400 mb-1">
+            <span className="flex items-center gap-1.5">
+              <Wind className="w-3.5 h-3.5" />
+              <span>Air Quality</span>
+            </span>
+            <span className="text-[10px] bg-cyan-500/15 px-1.5 rounded">AQI 42</span>
           </div>
-
-          {/* 2. Air Quality & Dispersion */}
-          <div
-            className={`p-4 rounded-2xl border transition-all ${
-              isNight
-                ? 'bg-[#0B1711]/90 border-cyan-500/25 shadow-sm'
-                : 'bg-white/70 border-white/90 shadow-sm'
-            }`}
-          >
-            <div className="flex items-center justify-between mb-1">
-              <span className={`text-[11px] font-mono ${isNight ? 'text-slate-400' : 'text-slate-600'}`}>
-                Air Quality
-              </span>
-              <Wind className="w-4 h-4 text-cyan-400" />
-            </div>
-            <div className={`text-2xl font-black font-mono ${isNight ? 'text-white' : 'text-slate-900'}`}>
-              AQI {aqiScore}
-            </div>
-            <div className="text-[10.5px] font-mono text-cyan-400 mt-0.5">
-              {canopyActive ? 'Good • 418 ppm CO2' : 'Moderate'}
-            </div>
+          <div className={`text-2xl font-black font-mono ${isNight ? 'text-white' : 'text-slate-900'}`}>
+            Optimal
           </div>
-
-          {/* 3. Corridor Capacity */}
-          <div
-            className={`p-4 rounded-2xl border transition-all ${
-              isNight
-                ? 'bg-[#0B1711]/90 border-emerald-500/25 shadow-sm'
-                : 'bg-white/70 border-white/90 shadow-sm'
-            }`}
-          >
-            <div className="flex items-center justify-between mb-1">
-              <span className={`text-[11px] font-mono ${isNight ? 'text-slate-400' : 'text-slate-600'}`}>
-                Corridor Flow
-              </span>
-              <Gauge className="w-4 h-4 text-emerald-400" />
-            </div>
-            <div className={`text-2xl font-black font-mono ${isNight ? 'text-white' : 'text-slate-900'}`}>
-              {trafficDensity.toLocaleString()}
-            </div>
-            <div className="text-[10.5px] font-mono text-emerald-400 mt-0.5">
-              VPH • Normal Service
-            </div>
+          <div className="text-[10px] font-mono text-slate-400 mt-0.5">
+            418 ppm CO2 Level
           </div>
+        </div>
 
-          {/* 4. Carbon Emissions Mitigation */}
-          <div
-            className={`p-4 rounded-2xl border transition-all ${
-              isNight
-                ? 'bg-[#0B1711]/90 border-indigo-500/25 shadow-sm'
-                : 'bg-white/70 border-white/90 shadow-sm'
-            }`}
-          >
-            <div className="flex items-center justify-between mb-1">
-              <span className={`text-[11px] font-mono ${isNight ? 'text-slate-400' : 'text-slate-600'}`}>
-                Carbon Offset
-              </span>
-              <TrendingDown className="w-4 h-4 text-indigo-400" />
-            </div>
-            <div className={`text-2xl font-black font-mono ${isNight ? 'text-white' : 'text-slate-900'}`}>
-              -24.8%
-            </div>
-            <div className="text-[10.5px] font-mono text-indigo-400 mt-0.5">
-              {calculatedCO2} kg/hr Dispersed
-            </div>
+        {/* KPI 3: Corridor Capacity */}
+        <div
+          className={`p-4 rounded-2xl border transition-all duration-300 hover:scale-[1.02] shadow-sm ${
+            isNight
+              ? 'bg-[#0B1812]/90 border-emerald-500/25'
+              : 'bg-white/60 border-white/80 shadow-[0_4px_16px_rgba(20,40,25,0.04)]'
+          }`}
+        >
+          <div className="flex items-center justify-between text-xs font-mono text-emerald-500 mb-1">
+            <span className="flex items-center gap-1.5">
+              <Layers className="w-3.5 h-3.5" />
+              <span>Corridor Capacity</span>
+            </span>
+            <span className="text-[10px] bg-emerald-500/15 px-1.5 rounded">94.2%</span>
           </div>
+          <div className={`text-2xl font-black font-mono ${isNight ? 'text-white' : 'text-slate-900'}`}>
+            18,420
+          </div>
+          <div className="text-[10px] font-mono text-slate-400 mt-0.5">
+            Vehicles Per Hour
+          </div>
+        </div>
 
-          {/* 5. Transit Reliability */}
-          <div
-            className={`p-4 rounded-2xl border col-span-2 md:col-span-1 transition-all ${
-              isNight
-                ? 'bg-[#0B1711]/90 border-amber-500/25 shadow-sm'
-                : 'bg-white/70 border-white/90 shadow-sm'
-            }`}
-          >
-            <div className="flex items-center justify-between mb-1">
-              <span className={`text-[11px] font-mono ${isNight ? 'text-slate-400' : 'text-slate-600'}`}>
-                BRT Velocity
-              </span>
-              <Bus className="w-4 h-4 text-amber-400" />
-            </div>
-            <div className={`text-2xl font-black font-mono ${isNight ? 'text-white' : 'text-slate-900'}`}>
-              {brtVelocity}
-            </div>
-            <div className="text-[10.5px] font-mono text-amber-400 mt-0.5">
-              Dedicated Red Lane
-            </div>
+        {/* KPI 4: Carbon Emissions Offset */}
+        <div
+          className={`p-4 rounded-2xl border transition-all duration-300 hover:scale-[1.02] shadow-sm ${
+            isNight
+              ? 'bg-[#0B1812]/90 border-emerald-500/25'
+              : 'bg-white/60 border-white/80 shadow-[0_4px_16px_rgba(20,40,25,0.04)]'
+          }`}
+        >
+          <div className="flex items-center justify-between text-xs font-mono text-emerald-500 mb-1">
+            <span className="flex items-center gap-1.5">
+              <TrendingDown className="w-3.5 h-3.5" />
+              <span>Carbon Offset</span>
+            </span>
+            <span className="text-[10px] bg-emerald-500/15 px-1.5 rounded">Green</span>
+          </div>
+          <div className={`text-2xl font-black font-mono ${isNight ? 'text-white' : 'text-slate-900'}`}>
+            -24.8%
+          </div>
+          <div className="text-[10px] font-mono text-emerald-500 font-semibold mt-0.5">
+            Avoided Idling Losses
+          </div>
+        </div>
+
+        {/* KPI 5: Transit Velocity */}
+        <div
+          className={`p-4 rounded-2xl border transition-all duration-300 hover:scale-[1.02] shadow-sm col-span-2 sm:col-span-1 ${
+            isNight
+              ? 'bg-[#0B1812]/90 border-cyan-500/25'
+              : 'bg-white/60 border-white/80 shadow-[0_4px_16px_rgba(20,40,25,0.04)]'
+          }`}
+        >
+          <div className="flex items-center justify-between text-xs font-mono text-cyan-400 mb-1">
+            <span className="flex items-center gap-1.5">
+              <Gauge className="w-3.5 h-3.5" />
+              <span>BRT Velocity</span>
+            </span>
+            <span className="text-[10px] bg-cyan-500/15 px-1.5 rounded">+38.4%</span>
+          </div>
+          <div className={`text-2xl font-black font-mono ${isNight ? 'text-white' : 'text-slate-900'}`}>
+            42 km/h
+          </div>
+          <div className="text-[10px] font-mono text-slate-400 mt-0.5">
+            Dedicated Red Lane
           </div>
         </div>
       </section>
 
       {/* 2. SUMO MICROSCOPIC VIEWPORT CONTAINER */}
       <section
-        className={`rounded-3xl border overflow-hidden shadow-2xl transition-all ${
-          isNight
-            ? 'bg-[#08120D] border-emerald-500/30'
-            : 'bg-white/80 border-slate-300/80 shadow-[0_16px_40px_rgba(20,40,25,0.08)]'
+        className={`relative rounded-3xl border overflow-hidden shadow-2xl transition-all ${
+          isNight ? 'bg-[#070F0B] border-emerald-500/30' : 'bg-slate-900 border-slate-700'
         }`}
       >
-        {/* Viewport Top Bar */}
-        <div
-          className={`px-5 py-3 border-b flex items-center justify-between text-xs font-mono ${
-            isNight
-              ? 'bg-[#0D1D16] border-emerald-500/20 text-slate-300'
-              : 'bg-slate-100/80 border-slate-200 text-slate-700'
-          }`}
-        >
+        {/* Top Viewport Header */}
+        <div className="flex items-center justify-between px-5 py-3 border-b border-white/10 bg-black/40 backdrop-blur-md">
           <div className="flex items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/15 text-emerald-400 font-bold border border-emerald-500/30">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
               SUMO ENGINE v1.21
             </span>
-            <span className="hidden sm:inline-block opacity-75">
-              TraCI AI Control Loop: Active
-            </span>
-            <span className="hidden md:inline-block opacity-50">•</span>
-            <span className="hidden md:inline-block opacity-75">
-              Nodes: Queen Rania & UOJ Gateway
+            <span className="text-xs font-mono text-slate-400">
+              Corridor: Queen Rania St. (31.9875° N, 35.8752° E)
             </span>
           </div>
 
           <div className="flex items-center gap-2">
             <button
-              onClick={() => setSimPlaying(!simPlaying)}
-              className={`p-1.5 rounded-lg border flex items-center gap-1 transition-all cursor-pointer ${
-                simPlaying
-                  ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400'
-                  : 'bg-amber-500/20 border-amber-500/40 text-amber-400'
-              }`}
+              onClick={() => setIsRunning(!isRunning)}
+              className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+              title={isRunning ? 'Pause Simulation' : 'Resume Simulation'}
             >
-              {simPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-              <span className="text-[11px]">{simPlaying ? 'Live' : 'Paused'}</span>
+              {isRunning ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
             </button>
             <button
-              onClick={onLaunch}
-              className="p-1.5 rounded-lg border border-current/20 hover:bg-current/10 cursor-pointer"
-              title="Full Viewport"
+              onClick={() => setVehicleCount((v) => (v === 18420 ? 19800 : 18420))}
+              className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+              title="Reset View"
             >
-              <Maximize2 className="w-3.5 h-3.5" />
+              <RotateCcw className="w-4 h-4" />
+            </button>
+            <button
+              className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+              title="Camera Switch"
+            >
+              <Camera className="w-4 h-4" />
             </button>
           </div>
         </div>
 
-        {/* Viewport Canvas / Stream Screen */}
-        <div className="relative aspect-video w-full max-h-[460px] overflow-hidden bg-slate-950 flex items-center justify-center group">
+        {/* Viewport Render Area with Crosshairs and Live Simulation Graphic */}
+        <div className="relative min-h-[420px] lg:min-h-[500px] flex items-center justify-center overflow-hidden">
+          {/* Architectural Digital Twin Viewport */}
           <img
             src="/queen-rania-corridor-twin-v2.png"
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).src = '/queen-rania-corridor-twin.png';
             }}
-            alt="SUMO Microscopic Corridor Simulation"
-            className="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-[1.02]"
+            alt="SUMO Simulation Viewport"
+            className="w-full h-full object-cover max-h-[540px] opacity-90 transition-transform duration-700"
           />
 
-          {/* High-tech Viewport Crosshairs & HUD Overlays */}
-          <div className="pointer-events-none absolute inset-0 flex flex-col justify-between p-4">
-            <div className="flex justify-between items-start">
-              <div className="backdrop-blur-md bg-black/70 border border-emerald-500/40 rounded-xl p-2.5 text-left font-mono text-[11px] text-emerald-400 space-y-0.5">
-                <div>LAT 31.9892° N • LON 35.8714° E</div>
-                <div className="text-white font-bold">Active Agents: {trafficDensity.toLocaleString()}</div>
-                <div className="text-cyan-400">Delay: {calculatedDelay}s • Clearance: 94.2%</div>
-              </div>
-
-              <div className="backdrop-blur-md bg-black/70 border border-cyan-500/40 rounded-xl px-3 py-1.5 text-xs font-mono text-cyan-300">
-                Ready for SUMO Canvas / WebSocket Feed
-              </div>
+          {/* Center Targeting Crosshair */}
+          <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+            <div className="w-32 h-32 rounded-full border border-emerald-400/30 flex items-center justify-center">
+              <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_12px_#34d399]" />
             </div>
+            <div className="absolute w-48 h-px bg-emerald-400/25" />
+            <div className="absolute h-48 w-px bg-emerald-400/25" />
+          </div>
 
-            <div className="flex justify-between items-end">
-              <div className="backdrop-blur-md bg-black/70 border border-white/20 rounded-xl px-3 py-1.5 text-[11px] font-mono text-slate-300">
-                Queen Rania Al-Abdullah Dedicated BRT Segment
-              </div>
-              <div className="backdrop-blur-md bg-black/70 border border-emerald-500/40 rounded-xl px-3 py-1.5 text-xs font-mono text-emerald-400 font-bold">
-                {emergencyActive ? 'Emergency Corridor Active' : 'Standard Routine'}
-              </div>
-            </div>
+          {/* Floating Live Telemetry Chips */}
+          <div className="absolute top-4 left-4 bg-black/75 backdrop-blur-md rounded-2xl px-3.5 py-2 border border-emerald-500/40 font-mono text-xs text-left">
+            <div className="text-[10px] text-slate-400 uppercase">ACTIVE AGENTS (SUMO)</div>
+            <div className="text-sm font-bold text-emerald-400">{vehicleCount.toLocaleString()} Live Micro-Vehicles</div>
+            <div className="text-[10px] text-cyan-300">TraCI Loop: 60 FPS Locked</div>
+          </div>
+
+          <div className="absolute bottom-4 left-4 bg-black/75 backdrop-blur-md rounded-2xl px-3.5 py-2 border border-white/20 font-mono text-xs text-left">
+            <div className="text-[10px] text-slate-400 uppercase">SELECTED INTERVENTION</div>
+            <div className="text-xs font-bold text-white capitalize">{activeIntervention} Protocol Active</div>
+          </div>
+
+          <div className="absolute bottom-4 right-4 bg-black/75 backdrop-blur-md rounded-2xl px-3.5 py-2 border border-cyan-500/40 font-mono text-xs text-right">
+            <div className="text-[10px] text-slate-400 uppercase">SIGNAL COORDINATION</div>
+            <div className="text-xs font-bold text-cyan-400">Green Wave: Autonomous Sync</div>
           </div>
         </div>
       </section>
 
-      {/* 3. CONTROL YOUR SCENARIO & HISTORY CONTROLLER */}
+      {/* 3. CONTROL YOUR SCENARIO PANEL */}
       <section
-        className={`p-6 sm:p-8 rounded-3xl border shadow-lg space-y-6 ${
-          isNight
-            ? 'bg-[#0B1711]/90 border-emerald-500/25 text-white'
-            : 'bg-white/70 border-white/90 text-slate-900'
+        className={`p-6 rounded-3xl border transition-all ${
+          isNight ? 'bg-[#0B1812]/90 border-emerald-500/20' : 'bg-white/60 border-white/80 shadow-md'
         }`}
       >
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-current/15">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-current/10">
           <div>
-            <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-emerald-500">
-              <Sliders className="w-4 h-4" />
+            <div className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-emerald-500">
+              <Sliders className="w-3.5 h-3.5" />
               <span>Control Your Scenario</span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight mt-0.5">
-              Live Parameter Tuning & Interventions
-            </h2>
+            <h3 className={`text-xl font-extrabold tracking-tight mt-0.5 ${isNight ? 'text-white' : 'text-slate-900'}`}>
+              Autonomous Intervention Controller
+            </h3>
           </div>
 
-          {/* Scenario History Log Button */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setShowHistoryModal(!showHistoryModal)}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-xs font-mono font-bold tracking-wider transition-all cursor-pointer ${
-                showHistoryModal
-                  ? 'bg-emerald-500 text-slate-950 border-emerald-500 shadow-md'
-                  : 'bg-white/10 hover:bg-white/20 border-current/20'
-              }`}
-            >
-              <History className="w-3.5 h-3.5" />
-              <span>Scenario History</span>
-            </button>
-
-            <button
-              onClick={() => {
-                setTrafficDensity(14500);
-                setSurfaceTemp(35.2);
-                setEmergencyActive(true);
-                setCanopyActive(true);
-                setBrtSurgeActive(true);
-              }}
-              className="p-2 rounded-xl border border-current/20 hover:bg-current/10 cursor-pointer"
-              title="Reset Parameters"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-            </button>
-          </div>
+          {/* Dedicated Scenario History Button */}
+          <button
+            onClick={() => setShowHistory(true)}
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-mono font-bold transition-all cursor-pointer ${
+              isNight
+                ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20'
+                : 'border-[#3B654C]/25 bg-white text-slate-800 hover:bg-slate-50'
+            }`}
+          >
+            <History className="w-3.5 h-3.5" />
+            <span>Scenario History</span>
+          </button>
         </div>
 
-        {/* Live Scenario History Drawer / Modal */}
-        {showHistoryModal && (
-          <div className="p-4 rounded-2xl border border-emerald-500/30 bg-black/30 backdrop-blur-md space-y-2.5 animate-fadeIn">
-            <div className="flex items-center justify-between text-xs font-mono text-emerald-400 font-bold border-b border-white/10 pb-2">
-              <span>Historical Simulation Benchmarks</span>
-              <span>Validated Logs</span>
+        {/* Intervention Selection Pills */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-4">
+          {[
+            {
+              id: 'normal',
+              label: 'Standard Traffic Flow',
+              desc: 'Baseline morning peak with fixed signal timing plans.'
+            },
+            {
+              id: 'emergency',
+              label: 'Emergency Green Corridor',
+              desc: 'Dynamic preemption opening signals for approaching ambulances.'
+            },
+            {
+              id: 'cooling',
+              label: 'Microclimate Pine Canopy',
+              desc: 'Thermal shadow cooling reducing asphalt heat by -3.8°C.'
+            },
+            {
+              id: 'congestion',
+              label: 'Adaptive Queue Dissolution',
+              desc: 'Real-time phase modulation eliminating circle spillback.'
+            }
+          ].map((item) => (
+            <div
+              key={item.id}
+              onClick={() => setActiveIntervention(item.id as any)}
+              className={`p-4 rounded-2xl border transition-all cursor-pointer text-left ${
+                activeIntervention === item.id
+                  ? isNight
+                    ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-md scale-[1.02] font-semibold'
+                    : 'bg-[#44C2D0] text-slate-950 border-[#44C2D0] shadow-md scale-[1.02] font-semibold'
+                  : isNight
+                  ? 'bg-white/5 border-white/10 hover:bg-white/10 text-slate-200'
+                  : 'bg-white/40 border-white/70 hover:bg-white/80 text-slate-800'
+              }`}
+            >
+              <div className="text-xs font-bold font-mono mb-1">{item.label}</div>
+              <p className="text-[11px] leading-relaxed opacity-80">{item.desc}</p>
             </div>
-            <div className="space-y-2">
-              {historyRuns.map((run, idx) => (
+          ))}
+        </div>
+      </section>
+
+      {/* 4. SCENARIO HISTORY MODAL / DRAWER */}
+      {showHistory && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
+          <div
+            className={`w-full max-w-xl rounded-3xl border p-6 space-y-4 shadow-2xl ${
+              isNight ? 'bg-[#0B1812] border-emerald-500/30 text-white' : 'bg-white border-slate-200 text-slate-900'
+            }`}
+          >
+            <div className="flex items-center justify-between pb-3 border-b border-current/10">
+              <div className="flex items-center gap-2">
+                <History className="w-5 h-5 text-emerald-500" />
+                <h4 className="text-lg font-bold">Scenario Execution Log</h4>
+              </div>
+              <button
+                onClick={() => setShowHistory(false)}
+                className="p-1 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-2.5 max-h-[340px] overflow-y-auto pr-1">
+              {scenarioHistory.map((item) => (
                 <div
-                  key={idx}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between p-2.5 rounded-xl bg-white/5 border border-white/10 text-xs font-mono gap-1"
+                  key={item.id}
+                  className={`p-3.5 rounded-2xl border text-xs font-mono text-left flex items-start justify-between gap-3 ${
+                    isNight ? 'bg-white/5 border-white/10' : 'bg-slate-50 border-slate-200'
+                  }`}
                 >
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-slate-200">{run.id}</span>
-                    <span className="text-slate-400">• {run.scenario}</span>
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-emerald-500">{item.id}</span>
+                      <span className="text-[10px] text-slate-400 flex items-center gap-1">
+                        <Clock className="w-3 h-3" />
+                        {item.time}
+                      </span>
+                    </div>
+                    <div className="font-semibold font-sans">{item.scenario}</div>
+                    <div className="text-[11px] text-slate-400 font-sans">{item.result}</div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-emerald-400">{run.result}</span>
-                    <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-300 font-bold">
-                      {run.status}
-                    </span>
-                  </div>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/15 text-emerald-500 border border-emerald-500/30 font-semibold shrink-0">
+                    {item.status}
+                  </span>
                 </div>
               ))}
             </div>
-          </div>
-        )}
 
-        {/* 4 Interactive Intervention Toggles */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          {/* Toggle 1: Emergency Preemption */}
-          <div
-            onClick={() => setEmergencyActive(!emergencyActive)}
-            className={`p-4 rounded-2xl border cursor-pointer transition-all ${
-              emergencyActive
-                ? isNight
-                  ? 'bg-emerald-950/40 border-emerald-500 text-white'
-                  : 'bg-emerald-50 border-emerald-500 text-emerald-950'
-                : 'bg-white/5 border-current/10 opacity-70'
-            }`}
-          >
-            <div className="flex items-center justify-between mb-2">
-              <Siren className={`w-5 h-5 ${emergencyActive ? 'text-red-400' : 'text-slate-400'}`} />
-              <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${emergencyActive ? 'bg-red-500/20 text-red-400' : 'bg-slate-500/20 text-slate-400'}`}>
-                {emergencyActive ? 'ACTIVE' : 'OFF'}
-              </span>
-            </div>
-            <div className="text-sm font-bold">Emergency Wave</div>
-            <p className="text-xs opacity-75 mt-0.5">Preempts 6 signals for JUH ambulances.</p>
-          </div>
-
-          {/* Toggle 2: Pine Canopy Cooling */}
-          <div
-            onClick={() => setCanopyActive(!canopyActive)}
-            className={`p-4 rounded-2xl border cursor-pointer transition-all ${
-              canopyActive
-                ? isNight
-                  ? 'bg-emerald-950/40 border-emerald-500 text-white'
-                  : 'bg-emerald-50 border-emerald-500 text-emerald-950'
-                : 'bg-white/5 border-current/10 opacity-70'
-            }`}
-          >
-            <div className="flex items-center justify-between mb-2">
-              <Thermometer className="w-5 h-5 text-emerald-400" />
-              <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${canopyActive ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-500/20 text-slate-400'}`}>
-                {canopyActive ? '-3.8°C' : 'OFF'}
-              </span>
-            </div>
-            <div className="text-sm font-bold">Pine Canopy Buffer</div>
-            <p className="text-xs opacity-75 mt-0.5">Cooling 35.2°C asphalt at university gate.</p>
-          </div>
-
-          {/* Toggle 3: BRT Frequency Surge */}
-          <div
-            onClick={() => setBrtSurgeActive(!brtSurgeActive)}
-            className={`p-4 rounded-2xl border cursor-pointer transition-all ${
-              brtSurgeActive
-                ? isNight
-                  ? 'bg-emerald-950/40 border-emerald-500 text-white'
-                  : 'bg-emerald-50 border-emerald-500 text-emerald-950'
-                : 'bg-white/5 border-current/10 opacity-70'
-            }`}
-          >
-            <div className="flex items-center justify-between mb-2">
-              <Bus className="w-5 h-5 text-amber-400" />
-              <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${brtSurgeActive ? 'bg-amber-500/20 text-amber-400' : 'bg-slate-500/20 text-slate-400'}`}>
-                {brtSurgeActive ? '+38.4%' : 'OFF'}
-              </span>
-            </div>
-            <div className="text-sm font-bold">BRT Express Surge</div>
-            <p className="text-xs opacity-75 mt-0.5">Dedicated lane bus interval priority.</p>
-          </div>
-
-          {/* Toggle 4: Traffic Demand Slider */}
-          <div className="p-4 rounded-2xl border border-current/10 bg-white/5 space-y-2">
-            <div className="flex items-center justify-between text-xs font-mono">
-              <span className="opacity-75">Vehicle Density</span>
-              <span className="font-bold text-emerald-400">{trafficDensity.toLocaleString()}</span>
-            </div>
-            <input
-              type="range"
-              min="5000"
-              max="25000"
-              step="1000"
-              value={trafficDensity}
-              onChange={(e) => setTrafficDensity(Number(e.target.value))}
-              className="w-full accent-emerald-500 cursor-pointer h-1.5 bg-slate-700 rounded-lg"
-            />
-            <div className="flex justify-between text-[10px] font-mono opacity-50">
-              <span>Off-Peak</span>
-              <span>Gridlock</span>
+            <div className="pt-2 text-right">
+              <button
+                onClick={() => setShowHistory(false)}
+                className="px-5 py-2 rounded-full bg-emerald-500 text-slate-950 font-bold text-xs hover:bg-emerald-400 transition-colors cursor-pointer"
+              >
+                Close History
+              </button>
             </div>
           </div>
         </div>
-
-        {/* Bottom CTA to Launch Simulation Workspace */}
-        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-xs font-mono opacity-75">
-            Microscopic TraCI execution loop ready for socket handshakes.
-          </div>
-          <button
-            onClick={onLaunch}
-            className="group inline-flex items-center gap-2.5 px-7 py-3 rounded-full bg-gradient-to-r from-[#44C2D0] to-[#51D3BE] text-[#14261B] text-xs font-extrabold tracking-tight shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
-          >
-            <span>Launch Simulation Workspace</span>
-            <ArrowRight className="w-3.5 h-3.5 stroke-[2.5] group-hover:translate-x-1 transition-transform" />
-          </button>
-        </div>
-      </section>
+      )}
     </div>
   );
 };

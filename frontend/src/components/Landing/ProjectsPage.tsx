@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   FolderKanban,
-  Bus,
-  Siren,
-  Thermometer,
-  ArrowRight,
   CheckCircle2,
-  Calendar,
-  MapPin,
-  Cpu
+  XCircle,
+  Bus,
+  Activity,
+  Thermometer,
+  Siren,
+  ArrowRight
 } from 'lucide-react';
 
 interface ProjectsPageProps {
@@ -17,328 +16,233 @@ interface ProjectsPageProps {
   onLaunch: () => void;
 }
 
-export const ProjectsPage: React.FC<ProjectsPageProps> = ({
-  theme,
-  onExplore,
-  onLaunch
-}) => {
+export const ProjectsPage: React.FC<ProjectsPageProps> = ({ theme, onLaunch }) => {
   const isNight = theme === 'night';
-  const [selectedProjectId, setSelectedProjectId] = useState<number>(0);
 
   const projects = [
     {
-      id: 0,
-      title: 'Queen Rania St. BRT Corridor & Thermal Mitigation',
-      category: 'Public Transit & Microclimate',
-      location: 'University of Jordan, Amman',
-      date: '2026',
+      id: 'PRJ-BRT-01',
+      title: 'Amman BRT Transit Corridor Priority',
+      corridor: 'Queen Rania Al-Abdullah Street',
+      desc: 'Simulating dedicated red lane signal preemption at University gates, achieving +34.5% transit velocity gains while containing cross-traffic delays.',
+      metrics: [
+        { label: 'Transit Velocity', value: '+34.5%' },
+        { label: 'Passenger Delay', value: '-28.0%' }
+      ],
       icon: Bus,
-      summary:
-        'A digital twin of Queen Rania Al-Abdullah Street evaluating dedicated BRT bus lanes alongside campus pine tree shading to mitigate the 35.2°C asphalt heat island.',
-      metrics: [
-        { label: 'Heat Mitigation', value: '-3.8°C', highlight: '28.6°C Target' },
-        { label: 'BRT Velocity', value: '+34.5%', highlight: 'Dedicated Red Lane' },
-        { label: 'Conflict Points', value: '-92%', highlight: 'Pedestrian Flow' }
-      ],
-      features: [
-        '18,400 daily vehicle agent microscopic simulation using SUMO 1.21',
-        'Physical microclimate solver targeting asphalt surface heat traps',
-        'Dedicated red BRT corridor priority timing at University gates',
-        'Pedestrian bridge throughput and crowd movement synchronization'
-      ],
-      image: '/queen-rania-corridor-twin-v2.png'
+      tag: 'Public Transit'
     },
     {
-      id: 1,
-      title: 'Emergency Green Wave Preemption (Civil Defense)',
-      category: 'Emergency Logistics',
-      location: 'JUH Hospital to 8th Circle',
-      date: '2026',
-      icon: Siren,
-      summary:
-        'Autonomous TraCI signal preemption algorithm detecting civil defense ambulances and flushing traffic queues 1,200 meters ahead of vehicle arrival.',
+      id: 'PRJ-CIRC-02',
+      title: '7th & 8th Circles Congestion Dissolution',
+      corridor: 'Zahran Arterial Highway',
+      desc: 'Microscopic agent testing of adaptive signal metering. Modulating phase splits to eliminate roundabout queue spillback during peak morning hours.',
       metrics: [
-        { label: 'Response Time', value: '-4.2 min', highlight: '-38% Delay' },
-        { label: 'Signal Preemption', value: '100%', highlight: '6 Junctions' },
-        { label: 'Queue Clearance', value: '88 sec', highlight: 'Fast Recovery' }
+        { label: 'Queue Length', value: '-32.4%' },
+        { label: 'Intersection Delay', value: '-4.8 min' }
       ],
-      features: [
-        'TraCI trajectory override across 6 consecutive signalized junctions',
-        'Dynamic phase extension for upstream and downstream corridors',
-        'Emergency siren sensor modeling and connected vehicle protocols',
-        'Zero collision risk via automated safety clearance intervals'
-      ],
-      image: '/queen-rania-corridor-twin-v2.png'
+      icon: Activity,
+      tag: 'Adaptive Signal AI'
     },
     {
-      id: 2,
-      title: '7th & 8th Circles Congestion Dissolution Engine',
-      category: 'Arterial Optimization',
-      location: 'Zahran Arterial Corridor, Amman',
-      date: '2026',
-      icon: Cpu,
-      summary:
-        'Reinforcement learning loop assessing queue backlogs in real time and modulating circular phase splits to prevent gridlock spillback onto expressways.',
+      id: 'PRJ-HEAT-03',
+      title: 'University Gate Urban Heat Island Offset',
+      corridor: 'Queen Rania - UOJ Campus Buffer',
+      desc: 'Spatial microclimate modeling of 35.2°C open asphalt traps and evaluating native pine canopy shade to achieve a -3.8°C thermal drop.',
       metrics: [
-        { label: 'Peak Delay', value: '-32.4%', highlight: 'Roundabout Flow' },
-        { label: 'Spillback Prevention', value: '94.2%', highlight: 'Expressway' },
-        { label: 'Idling Fuel', value: '-22.0%', highlight: 'Cost Saving' }
+        { label: 'Asphalt Heat', value: '-3.8°C' },
+        { label: 'Pedestrian Comfort', value: '+46.0%' }
       ],
-      features: [
-        'Microscopic vehicle queue tracking on 12 inbound arterial approaches',
-        'Real-time phase modulation preventing circle interior deadlock',
-        'Carbon and NOx emissions minimization modeling',
-        'Dynamic detour routing recommendations for peripheral traffic'
-      ],
-      image: '/queen-rania-corridor-twin-v2.png'
-    },
-    {
-      id: 3,
-      title: 'Urban Canopy Buffer & Carbon Sequestration Twin',
-      category: 'Ecological Intelligence',
-      location: 'Greater Amman Urban Basin',
-      date: '2026',
       icon: Thermometer,
-      summary:
-        'Satellite land surface temperature mapping matched with microscopic emissions data to position pine buffer belts that absorb traffic CO2.',
+      tag: 'Microclimate'
+    },
+    {
+      id: 'PRJ-EMRG-04',
+      title: 'Civil Defense Green Wave Preemption',
+      corridor: 'Citywide Emergency Grid',
+      desc: 'Autonomous TraCI signal override granting green waves to ambulances, cutting emergency response times by 4.2 minutes across Amman.',
       metrics: [
-        { label: 'Carbon Sink', value: '-18.5%', highlight: 'Annual Drop' },
-        { label: 'Thermal Offset', value: '-3.8°C', highlight: 'Shaded Belts' },
-        { label: 'Green Area', value: '120k m²', highlight: 'Targeted Canopy' }
+        { label: 'Response Time', value: '-4.2 min' },
+        { label: 'Incident Clearance', value: '100%' }
       ],
-      features: [
-        'Satellite land surface temperature (LST) overlay on SUMO grid',
-        'Microclimate wind canyon and heat dispersion simulation',
-        'Native Jordanian drought-resistant species selection (Pinus halepensis)',
-        'Urban forestry economic cost-benefit analysis'
-      ],
-      image: '/queen-rania-corridor-twin-v2.png'
+      icon: Siren,
+      tag: 'Emergency Services'
     }
   ];
 
-  const currentProj = projects[selectedProjectId];
+  const comparison = [
+    {
+      criteria: 'Capital Expenditure',
+      physical: 'Millions of Dinars in physical roadworks & asphalt modifications',
+      digital: 'Zero physical spend; 100% verified in high-fidelity simulation',
+      better: 'digital'
+    },
+    {
+      criteria: 'Public Traffic Disruption',
+      physical: 'Months of detours, gridlock, and commuter frustration',
+      digital: 'Zero citizen disruption; millions of vehicles tested in silicon',
+      better: 'digital'
+    },
+    {
+      criteria: 'Iteration Speed',
+      physical: '6 to 18 months per physical trial with irreversible risks',
+      digital: 'Instant parameter tweaking; 60 FPS microscopic validation',
+      better: 'digital'
+    },
+    {
+      criteria: 'Environmental Impact Modeling',
+      physical: 'Difficult to quantify before construction is complete',
+      digital: 'Predictive CO2 dispersion and 35.2°C thermal heat island mapping',
+      better: 'digital'
+    }
+  ];
 
   return (
-    <div className="space-y-10 py-6">
-      {/* 1. PORTFOLIO HERO */}
-      <section className="text-center max-w-3xl mx-auto space-y-3">
+    <div className="space-y-16 py-8">
+      {/* 1. HEADER */}
+      <section className="text-center max-w-3xl mx-auto space-y-4">
         <div
-          className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-mono font-bold tracking-wider uppercase shadow-sm ${
+          className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-mono font-bold tracking-wider uppercase shadow-sm ${
             isNight
               ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
-              : 'bg-white/70 border-white/90 text-emerald-900'
+              : 'bg-white/65 border-white/85 text-[#1F5435]'
           }`}
         >
           <FolderKanban className="w-4 h-4 text-emerald-500" />
-          <span>Digital Twin Portfolio • Doha Ziad 2026</span>
+          <span>Municipal Simulation Portfolio 2026</span>
         </div>
 
-        <h1
-          className={`text-4xl sm:text-5xl font-extrabold tracking-tight ${
-            isNight ? 'text-white' : 'text-slate-900'
-          }`}
-        >
-          Civic Co-Simulation Projects
-        </h1>
+        <div className="space-y-1">
+          <h1
+            className={`text-4xl sm:text-5xl font-extrabold tracking-tight ${
+              isNight ? 'text-white' : 'text-[#133020]'
+            }`}
+          >
+            Digital Twin Project Showcase
+          </h1>
+          <h2 className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#4A72DF] via-[#48C3CB] to-[#5BCF7B] bg-clip-text text-transparent pb-1">
+            Real Infrastructure Scenarios Simulated Before Construction
+          </h2>
+        </div>
+
         <p
           className={`text-sm sm:text-base leading-relaxed max-w-xl mx-auto ${
-            isNight ? 'text-slate-300' : 'text-slate-600'
+            isNight ? 'text-slate-300' : 'text-slate-700'
           }`}
         >
-          Microscopic case studies demonstrating how digital twin algorithms reduce traffic congestion, mitigate asphalt heat islands, and cut municipal capital waste.
+          Four targeted microscopic co-simulation case studies across Amman's vital transport corridors, balancing mobility, emergency access, and microclimates.
         </p>
       </section>
 
-      {/* 2. PROJECT SELECTOR TILES */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        {projects.map((proj, idx) => {
-          const isSelected = selectedProjectId === idx;
+      {/* 2. FOUR PROJECT CARDS */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {projects.map((proj) => {
           const Icon = proj.icon;
           return (
             <div
-              key={idx}
-              onClick={() => setSelectedProjectId(idx)}
-              className={`p-4 rounded-2xl border cursor-pointer transition-all ${
-                isSelected
-                  ? isNight
-                    ? 'bg-[#0B1711] border-emerald-500 shadow-md scale-[1.02]'
-                    : 'bg-white border-emerald-500 shadow-md scale-[1.02]'
-                  : isNight
-                  ? 'bg-[#0B1711]/75 hover:bg-[#0E2018] border-emerald-500/15'
-                  : 'bg-white/60 hover:bg-white/80 border-white/85'
+              key={proj.id}
+              className={`p-6 rounded-3xl border shadow-sm flex flex-col justify-between transition-all duration-300 hover:scale-[1.01] ${
+                isNight
+                  ? 'bg-[#0B1812]/85 border-emerald-500/20 hover:border-emerald-500/50'
+                  : 'bg-white/60 border-white/85 shadow-[0_8px_24px_rgba(20,40,25,0.05)] hover:bg-white/80'
               }`}
             >
-              <div className="space-y-2 text-left">
+              <div className="space-y-3 text-left">
                 <div className="flex items-center justify-between">
-                  <div
-                    className={`w-9 h-9 rounded-xl flex items-center justify-center ${
-                      isSelected
-                        ? isNight ? 'bg-emerald-500 text-slate-950 font-bold' : 'bg-emerald-500 text-white font-bold'
-                        : isNight ? 'bg-emerald-500/15 text-emerald-400' : 'bg-emerald-100 text-emerald-800'
-                    }`}
-                  >
-                    <Icon className="w-4 h-4 stroke-[2.2]" />
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center">
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-mono text-slate-500 uppercase">{proj.id}</span>
+                      <div className="text-xs font-mono font-semibold text-emerald-500">{proj.corridor}</div>
+                    </div>
                   </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 opacity-70">
-                    Case 0{idx + 1}
+                  <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full border bg-white/5 border-current/15">
+                    {proj.tag}
                   </span>
                 </div>
 
-                <div className="text-[11px] font-mono text-emerald-500 font-semibold truncate">
-                  {proj.category}
-                </div>
-
-                <h3 className={`text-sm font-bold line-clamp-1 ${isNight ? 'text-white' : 'text-slate-900'}`}>
+                <h3 className={`text-lg font-bold ${isNight ? 'text-white' : 'text-[#133020]'}`}>
                   {proj.title}
                 </h3>
+
+                <p className={`text-xs sm:text-sm leading-relaxed ${isNight ? 'text-slate-300' : 'text-slate-600'}`}>
+                  {proj.desc}
+                </p>
               </div>
 
-              <div className="pt-2 mt-3 border-t border-current/10 flex items-center justify-between text-xs font-mono">
-                <span className="opacity-60">{proj.location.split(',')[0]}</span>
-                <span className="font-bold text-emerald-400">{proj.metrics[0].value}</span>
+              <div className={`grid grid-cols-2 gap-3 pt-4 mt-4 border-t ${isNight ? 'border-white/10' : 'border-[#3B654C]/15'}`}>
+                {proj.metrics.map((m, idx) => (
+                  <div key={idx} className="text-left font-mono">
+                    <div className="text-[10px] text-slate-500 uppercase">{m.label}</div>
+                    <div className="text-lg font-black text-emerald-400">{m.value}</div>
+                  </div>
+                ))}
               </div>
             </div>
           );
         })}
       </section>
 
-      {/* 3. SELECTED PROJECT DETAILS CARD */}
-      <section
-        className={`p-6 sm:p-8 rounded-3xl border shadow-xl ${
-          isNight
-            ? 'bg-[#0B1711]/90 border-emerald-500/25 text-white'
-            : 'bg-white/70 border-white/90 text-slate-900'
-        }`}
-      >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-          <div className="lg:col-span-7 space-y-4 text-left">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                {currentProj.category}
-              </span>
-              <span className="flex items-center gap-1 text-xs font-mono opacity-70">
-                <MapPin className="w-3.5 h-3.5" />
-                <span>{currentProj.location}</span>
-              </span>
-              <span className="flex items-center gap-1 text-xs font-mono opacity-70">
-                <Calendar className="w-3.5 h-3.5" />
-                <span>{currentProj.date}</span>
-              </span>
-            </div>
+      {/* 3. COMPARISON: PHYSICAL TRIALS VS DIGITAL TWIN */}
+      <section className="space-y-6">
+        <div className="text-center max-w-2xl mx-auto space-y-2">
+          <h3 className={`text-2xl sm:text-3xl font-extrabold ${isNight ? 'text-white' : 'text-[#133020]'}`}>
+            Physical Road Trials vs Digital Twin Feasibility
+          </h3>
+          <p className={`text-xs sm:text-sm ${isNight ? 'text-slate-300' : 'text-slate-600'}`}>
+            Why testing infrastructure hypotheses in virtual simulation outperforms risky on-ground modifications.
+          </p>
+        </div>
 
-            <h2 className="text-2xl font-bold tracking-tight">
-              {currentProj.title}
-            </h2>
-
-            <p className={`text-xs sm:text-sm leading-relaxed ${isNight ? 'text-slate-300' : 'text-slate-600'}`}>
-              {currentProj.summary}
-            </p>
-
-            {/* Metrics Trio */}
-            <div className="grid grid-cols-3 gap-2.5 pt-1">
-              {currentProj.metrics.map((m, mIdx) => (
-                <div
-                  key={mIdx}
-                  className="p-3 rounded-xl border border-current/10 bg-white/5 text-center"
-                >
-                  <div className="text-[10.5px] font-mono opacity-60 truncate">{m.label}</div>
-                  <div className="text-xl font-bold font-mono text-emerald-400 mt-0.5">{m.value}</div>
-                  <div className="text-[10px] font-mono opacity-50 mt-0.5">{m.highlight}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* Features List */}
-            <div className="space-y-1.5 pt-1">
-              {currentProj.features.slice(0, 3).map((feat, fIdx) => (
-                <div key={fIdx} className="flex items-start gap-2 text-xs font-mono">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                  <span className={isNight ? 'text-slate-300' : 'text-slate-700'}>{feat}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="pt-2">
-              <button
-                onClick={onExplore}
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-[#44C2D0] to-[#51D3BE] text-[#14261B] text-xs font-extrabold tracking-tight shadow-md hover:scale-105 transition-all cursor-pointer"
-              >
-                <span>Run This Case Study</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
-
-          <div className="lg:col-span-5 flex justify-center">
-            <div className="rounded-2xl overflow-hidden border border-white/20 shadow-md">
-              <img
-                src={currentProj.image}
-                onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).src = '/queen-rania-corridor-twin.png';
-                }}
-                alt={currentProj.title}
-                className="w-full h-auto object-cover max-h-[260px]"
-              />
-            </div>
+        <div
+          className={`rounded-3xl border overflow-hidden shadow-lg ${
+            isNight ? 'bg-[#0B1812]/90 border-emerald-500/25' : 'bg-white/70 border-white/90 shadow-md'
+          }`}
+        >
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse text-xs sm:text-sm">
+              <thead>
+                <tr className={`border-b font-mono text-[11px] uppercase tracking-wider ${isNight ? 'border-white/10 text-slate-400 bg-white/5' : 'border-slate-200 text-slate-600 bg-slate-50'}`}>
+                  <th className="p-4 pl-6">Evaluation Criteria</th>
+                  <th className="p-4 text-red-400">Physical Road Trial</th>
+                  <th className="p-4 pr-6 text-emerald-400">Digital Twin Co-Simulation</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-current/10">
+                {comparison.map((row, idx) => (
+                  <tr key={idx} className="transition-colors hover:bg-white/5">
+                    <td className="p-4 pl-6 font-bold font-mono text-xs">{row.criteria}</td>
+                    <td className="p-4 text-slate-400">
+                      <div className="flex items-start gap-2">
+                        <XCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                        <span>{row.physical}</span>
+                      </div>
+                    </td>
+                    <td className="p-4 pr-6 font-semibold">
+                      <div className="flex items-start gap-2 text-emerald-500">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                        <span className={isNight ? 'text-slate-200' : 'text-slate-800'}>{row.digital}</span>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
 
-      {/* 4. VALUE COMPARISON TABLE */}
-      <section className="space-y-4">
-        <div className="text-center max-w-xl mx-auto space-y-1">
-          <div className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-500">
-            Civic Feasibility
-          </div>
-          <h3 className={`text-2xl font-bold tracking-tight ${isNight ? 'text-white' : 'text-slate-900'}`}>
-            Physical Trials vs. Digital Twin Simulation
-          </h3>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table
-            className={`w-full rounded-2xl border overflow-hidden text-xs font-mono ${
-              isNight
-                ? 'bg-[#0B1711]/90 border-emerald-500/20 text-white'
-                : 'bg-white/70 border-white/90 text-slate-900'
-            }`}
-          >
-            <thead>
-              <tr className={`border-b ${isNight ? 'border-white/10 bg-white/5' : 'border-slate-200 bg-white/60'}`}>
-                <th className="p-3 text-left font-bold uppercase">Factor</th>
-                <th className="p-3 text-left font-bold text-red-400">Physical Road Trial</th>
-                <th className="p-3 text-left font-bold text-emerald-400">Digital Twin (SUMO)</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-current/10">
-              <tr>
-                <td className="p-3 font-bold">Capital Cost</td>
-                <td className="p-3 text-red-400 font-semibold">Millions of Dinars (Asphalt, Closures)</td>
-                <td className="p-3 text-emerald-400 font-bold">Zero Trial Cost (100% In-Silicon)</td>
-              </tr>
-              <tr>
-                <td className="p-3 font-bold">Timeline</td>
-                <td className="p-3 text-red-400 font-semibold">6 to 18 Months of Public Gridlock</td>
-                <td className="p-3 text-emerald-400 font-bold">Minutes via Accelerated Solver</td>
-              </tr>
-              <tr>
-                <td className="p-3 font-bold">Public Safety</td>
-                <td className="p-3 text-red-400 font-semibold">Live Traffic Risk & Congestion</td>
-                <td className="p-3 text-emerald-400 font-bold">Zero Risk Virtual Sandbox</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div className="pt-4 text-center">
-          <button
-            onClick={onLaunch}
-            className="group inline-flex items-center gap-2 px-7 py-3 rounded-full bg-gradient-to-r from-[#44C2D0] to-[#51D3BE] text-[#14261B] text-xs font-extrabold tracking-tight shadow-md hover:scale-105 transition-all cursor-pointer"
-          >
-            <span>Launch Simulation Workspace</span>
-            <ArrowRight className="w-3.5 h-3.5 stroke-[2.5] group-hover:translate-x-1 transition-transform" />
-          </button>
-        </div>
+      {/* 4. BOTTOM ACTION */}
+      <section className="text-center pt-2">
+        <button
+          onClick={onLaunch}
+          className="group inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-gradient-to-r from-[#44C2D0] to-[#51D3BE] text-[#14261B] text-sm font-extrabold tracking-tight shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
+        >
+          <span>Launch Municipal Simulation Workspace</span>
+          <ArrowRight className="w-4 h-4 stroke-[2.5] group-hover:translate-x-1 transition-transform" />
+        </button>
       </section>
     </div>
   );
