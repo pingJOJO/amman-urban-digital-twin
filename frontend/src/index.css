@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+:root {
+  --bg-mint-left: #E2F4DC;
+  --bg-mint-right: #EFF8EB;
+  --text-dark: #192218;
+  --road-main: #7B8B75;
+  --road-sub: #F6FAF4;
+  --block-light: #E5F1DF;
+  --block-mid: #D4E8CC;
+  --park-green: #C5DFB8;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(115deg, #E1F4DA 0%, #E7F6E1 38%, #EFF8EB 100%);
+  color: var(--text-dark);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Editorial Serif Typography */
+.font-editorial {
+  font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  font-feature-settings: "liga" 1, "kern" 1;
+}
+
+/* Glassmorphism Authentication Card */
+.glass-card {
+  background: linear-gradient(
+    145deg,
+    rgba(241, 247, 238, 0.88) 0%,
+    rgba(233, 242, 229, 0.78) 100%
+  );
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 
+    0 28px 60px -15px rgba(38, 56, 35, 0.16),
+    0 4px 16px -2px rgba(38, 56, 35, 0.06),
+    inset 0 1px 1px rgba(255, 255, 255, 0.95);
+}
+
+/* Form Inputs */
+.twin-input {
+  background: rgba(248, 252, 246, 0.65);
+  border: 1px solid #B5C3B1;
+  color: #1E281D;
+  transition: all 0.2s ease;
+}
+.twin-input::placeholder {
+  color: #6B7868;
+  font-weight: 400;
+}
+.twin-input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.92);
+  border-color: #68B88E;
+  box-shadow: 0 0 0 3px rgba(104, 195, 163, 0.22);
+}
+
+/* Primary CTA Button */
+.btn-cta {
+  background: linear-gradient(90deg, #B8EEA4 0%, #8EDAA7 48%, #68C3A3 100%);
+  box-shadow: 
+    0 8px 18px -4px rgba(104, 195, 163, 0.5),
+    0 2px 6px -1px rgba(45, 70, 45, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 0.65);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-cta:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 12px 24px -4px rgba(104, 195, 163, 0.65),
+    0 4px 8px -1px rgba(45, 70, 45, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.8);
+  filter: brightness(1.02);
+}
+.btn-cta:active:not(:disabled) {
+  transform: translateY(0px);
+}
+.btn-cta:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  filter: grayscale(0.2);
+}
+
+/* Smooth Map Mask Container */
+.map-mask-container {
+  -webkit-mask-image: linear-gradient(
+    105deg,
+    rgba(0, 0, 0, 0.45) 0%,
+    rgba(0, 0, 0, 0.75) 24%,
+    rgba(0, 0, 0, 1) 48%
+  );
+  mask-image: linear-gradient(
+    105deg,
+    rgba(0, 0, 0, 0.45) 0%,
+    rgba(0, 0, 0, 0.75) 24%,
+    rgba(0, 0, 0, 1) 48%
+  );
+}
+
+/* Traffic Signal Light Transition */
+.traffic-signal {
+  transition: fill 0.3s ease;
+}
