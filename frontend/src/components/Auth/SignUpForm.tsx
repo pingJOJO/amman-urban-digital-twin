@@ -355,8 +355,8 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToLogin }) => {
         <div className="flex-grow border-t border-[#B5C4B2]"></div>
       </div>
 
-      {/* Google OAuth Button */}
-      <GoogleAuthButton disabled={isLoading} />
+      {/* Google OAuth Button - Official Pill Design matching Attachment 1 */}
+      <GoogleAuthButton disabled={isLoading} label="Sign up with Google" />
 
       {/* Footer Switcher */}
       <p className="text-center text-[13px] text-[#1E271D] mt-3.5 font-normal">

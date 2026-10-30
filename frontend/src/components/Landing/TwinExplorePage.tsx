@@ -1,467 +1,475 @@
 import React, { useState } from 'react';
 import {
-  Activity,
-  Siren,
   Thermometer,
-  Cpu,
-  ArrowRight,
+  Wind,
+  Gauge,
+  TrendingDown,
+  Bus,
+  Siren,
   Sliders,
   RotateCcw,
-  Zap,
-  Bus,
-  ShieldCheck,
-  TrendingDown,
-  Gauge
+  History,
+  Maximize2,
+  Play,
+  Pause,
+  ArrowRight
 } from 'lucide-react';
 
 interface TwinExplorePageProps {
-  lang: 'EN' | 'AR';
   theme: 'day' | 'night';
   onExplore: () => void;
   onLaunch: () => void;
 }
 
 export const TwinExplorePage: React.FC<TwinExplorePageProps> = ({
-  lang,
   theme,
   onLaunch
 }) => {
-  const isAr = lang === 'AR';
   const isNight = theme === 'night';
 
-  // Interactive Sandbox Controls (Mock parameters)
-  const [trafficDensity, setTrafficDensity] = useState<number>(14500); // 5000 to 25000 vehicles
-  const [surfaceTemp, setSurfaceTemp] = useState<number>(35.2); // 20 to 45 °C
+  // Live Scenario Parameters (Mock Controls)
+  const [trafficDensity, setTrafficDensity] = useState<number>(14500);
+  const [surfaceTemp, setSurfaceTemp] = useState<number>(35.2);
   const [emergencyActive, setEmergencyActive] = useState<boolean>(true);
-  const [treeCanopyActive, setTreeCanopyActive] = useState<boolean>(true);
-  const [activeScenarioId, setActiveScenarioId] = useState<number>(0);
+  const [canopyActive, setCanopyActive] = useState<boolean>(true);
+  const [brtSurgeActive, setBrtSurgeActive] = useState<boolean>(true);
+  const [simPlaying, setSimPlaying] = useState<boolean>(true);
+  const [showHistoryModal, setShowHistoryModal] = useState<boolean>(false);
 
-  // Dynamic calculations based on sliders
-  const calculatedDelay = Math.round((trafficDensity / 400) * (emergencyActive ? 0.65 : 1.0));
-  const calculatedTemp = treeCanopyActive ? (surfaceTemp - 3.8).toFixed(1) : surfaceTemp.toFixed(1);
-  const calculatedCO2 = Math.round(trafficDensity * 0.12 * (treeCanopyActive ? 0.82 : 1.0));
-  const brtEfficiency = treeCanopyActive ? '+34.5%' : '+18.0%';
+  // Dynamic calculations
+  const calculatedDelay = Math.round((trafficDensity / 420) * (emergencyActive ? 0.62 : 1.0));
+  const calculatedTemp = canopyActive ? (surfaceTemp - 3.8).toFixed(1) : surfaceTemp.toFixed(1);
+  const calculatedCO2 = Math.round(trafficDensity * 0.11 * (canopyActive ? 0.8 : 1.0));
+  const brtVelocity = brtSurgeActive ? '+38.4%' : '+18.2%';
+  const aqiScore = canopyActive ? 42 : 68;
 
-  const scenarios = [
+  // Mock History Records
+  const historyRuns = [
     {
-      id: 0,
-      titleEn: 'Queen Rania BRT & Thermal Mitigation',
-      titleAr: 'شارع الملكة رانيا • الباص السريع والتبريد',
-      badgeEn: 'University Corridor',
-      badgeAr: 'شريان الجامعة الأردنية',
-      icon: Bus,
-      descEn:
-        'Analyzes dedicated red BRT lane speed vs mixed private vehicle congestion alongside the 35.2°C asphalt heat trap at the University gate.',
-      descAr:
-        'محاكاة سرعة وانسيابية الباص السريع في مساره المخصص مقابل ازدحام المركبات، وتبريد بؤرة 35.2°C الإسفلتية بأشجار سور الجامعة.',
-      node: 'UOJ-CORRIDOR-01'
+      id: 'RUN-2026-089',
+      timestamp: 'Today, 10:45 AM',
+      scenario: 'Emergency Wave: JUH to 8th Circle',
+      result: '-4.2m Response Time (100% Preempted)',
+      status: 'Passed'
     },
     {
-      id: 1,
-      titleEn: 'Emergency Green Wave Preemption',
-      titleAr: 'الموجة الخضراء الذكية لمركبات الإسعاف',
-      badgeEn: 'Ambulance Priority',
-      badgeAr: 'أولوية الدفاع المدني',
-      icon: Siren,
-      descEn:
-        'Overrides 6 consecutive signal phases dynamically to allow Civil Defense ambulances swift clearance between Jordan University Hospital and 8th Circle.',
-      descAr:
-        'فتح 6 إشارات ضوئية متتالية استباقياً لمركبات الإسعاف بين مستشفى الجامعة الأردنية والدوار الثامن لتقليص زمن الاستجابة.',
-      node: 'AMBULANCE-WAVE-09'
+      id: 'RUN-2026-088',
+      timestamp: 'Today, 09:12 AM',
+      scenario: 'Queen Rania BRT Frequency Surge',
+      result: '+34.5% Velocity, Zero Deadlock',
+      status: 'Validated'
     },
     {
-      id: 2,
-      titleEn: 'Adaptive Congestion Dissolution (7th Circle)',
-      titleAr: 'خوارزمية فك الاختناقات التلقائية (الدوار السابع)',
-      badgeEn: 'Roundabout Flow',
-      badgeAr: 'إدارة تدفق الدوار',
-      icon: Cpu,
-      descEn:
-        'Modulates green phase splits dynamically via Python TraCI loop to prevent traffic spillback onto Zahran arterial street.',
-      descAr:
-        'تعديل ديناميكي لأزمنة الإشارات الضوئية ذاتياً عبر خوارزمية بايثون لمنع ارتداد الطوابير إلى شارع زهران الرئيسي.',
-      node: 'ZAHRAN-CIRCLE-07'
+      id: 'RUN-2026-087',
+      timestamp: 'Yesterday, 16:30 PM',
+      scenario: 'Canopy Microclimate Cooling (35.2°C)',
+      result: '-3.8°C Asphalt Drop, 28.6°C Ambient',
+      status: 'Target Met'
     },
     {
-      id: 3,
-      titleEn: 'Urban Canopy & Carbon Dispersion',
-      titleAr: 'التخضير الحضري وتشتيت الكربون',
-      badgeEn: 'Ecological Twin',
-      badgeAr: 'التوأم البيئي',
-      icon: Thermometer,
-      descEn:
-        'Maps urban heat island relief and calculates atmospheric CO2 sink capacity using pine and olive green buffer belts.',
-      badge2: 'Clean Air',
-      descAr:
-        'حساب امتصاص غاز ثاني أكسيد الكربون وخفض الحرارة عبر أحزمة الصنوبر والمسطحات الخضراء في العاصمة.',
-      node: 'ECO-BUFFER-03'
+      id: 'RUN-2026-086',
+      timestamp: 'Yesterday, 14:15 PM',
+      scenario: '7th Circle Queue Flushing Algorithm',
+      result: '-32.4% Spillback Prevention',
+      status: 'Optimized'
     }
   ];
 
   return (
-    <div className="space-y-12 py-8">
-      {/* 1. HEADER BANNER */}
-      <section className="text-center max-w-4xl mx-auto space-y-4">
-        <div
-          className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-mono font-bold tracking-wider uppercase shadow-sm ${
-            isNight
-              ? 'bg-[#10B981]/10 border-[#10B981]/30 text-[#34D399]'
-              : 'bg-white/65 border-white/85 text-[#1F5435]'
-          }`}
-        >
-          <Activity className="w-4 h-4 text-[#10B981] animate-pulse" />
-          <span>
-            {isAr
-              ? 'مختبر المحاكاة التفاعلي • التوأم الرقمي لعمان'
-              : 'Interactive Twin Explorer • Live Simulation Sandbox'}
+    <div className="space-y-8 py-6">
+      {/* 1. TOP EXECUTIVE KPI DASHBOARD (5 Core Urban Metrics) */}
+      <section className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className={isNight ? 'text-slate-300' : 'text-slate-700'}>
+              Live Telemetry Dashboard • SUMO Pipeline
+            </span>
+          </div>
+          <span className="text-[11px] font-mono text-emerald-500 font-semibold">
+            Network Sync: 60 FPS
           </span>
         </div>
 
-        <h1
-          className={`text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight ${
-            isNight ? 'text-white' : 'text-[#133020]'
-          }`}
-        >
-          {isAr ? 'استكشاف التوأم الرقمي' : 'Explore the Digital Twin'}
-        </h1>
-        <h2 className="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-[#3FB8C5] via-[#48C3CB] to-[#5BCF7B] bg-clip-text text-transparent">
-          {isAr ? 'اختبر الفرضيات وتحكم بالمتغيرات لحظياً' : 'Stress-Test Scenarios & Observe Real-Time Dynamics'}
-        </h2>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+          {/* 1. Junction Heat */}
+          <div
+            className={`p-4 rounded-2xl border transition-all ${
+              isNight
+                ? 'bg-[#0B1711]/90 border-emerald-500/25 shadow-sm'
+                : 'bg-white/70 border-white/90 shadow-sm'
+            }`}
+          >
+            <div className="flex items-center justify-between mb-1">
+              <span className={`text-[11px] font-mono ${isNight ? 'text-slate-400' : 'text-slate-600'}`}>
+                Junction Heat
+              </span>
+              <Thermometer className="w-4 h-4 text-emerald-500" />
+            </div>
+            <div className={`text-2xl font-black font-mono ${isNight ? 'text-white' : 'text-slate-900'}`}>
+              {calculatedTemp}°C
+            </div>
+            <div className="text-[10.5px] font-mono text-emerald-500 mt-0.5">
+              {canopyActive ? '-3.8°C via Canopy' : '35.2°C Asphalt Trap'}
+            </div>
+          </div>
 
-        <p
-          className={`text-sm sm:text-base leading-relaxed max-w-2xl mx-auto ${
-            isNight ? 'text-[#94A3B8]' : 'text-[#2E4738]'
-          }`}
-        >
-          {isAr
-            ? 'لوحة تفاعلية تتيح لك تغيير كثافة المركبات، اختبار درجات الحرارة السطحية، تفعيل أولويات الإسعاف، وملاحظة كيف يستجيب التوأم الرقمي فمع الخوارزميات الذكية فوراً.'
-            : 'Manipulate vehicle densities, trigger emergency ambulance preemption, observe microclimate thermal drops, and inspect how AI algorithms dissolve congestion in real-time.'}
-        </p>
+          {/* 2. Air Quality & Dispersion */}
+          <div
+            className={`p-4 rounded-2xl border transition-all ${
+              isNight
+                ? 'bg-[#0B1711]/90 border-cyan-500/25 shadow-sm'
+                : 'bg-white/70 border-white/90 shadow-sm'
+            }`}
+          >
+            <div className="flex items-center justify-between mb-1">
+              <span className={`text-[11px] font-mono ${isNight ? 'text-slate-400' : 'text-slate-600'}`}>
+                Air Quality
+              </span>
+              <Wind className="w-4 h-4 text-cyan-400" />
+            </div>
+            <div className={`text-2xl font-black font-mono ${isNight ? 'text-white' : 'text-slate-900'}`}>
+              AQI {aqiScore}
+            </div>
+            <div className="text-[10.5px] font-mono text-cyan-400 mt-0.5">
+              {canopyActive ? 'Good • 418 ppm CO2' : 'Moderate'}
+            </div>
+          </div>
+
+          {/* 3. Corridor Capacity */}
+          <div
+            className={`p-4 rounded-2xl border transition-all ${
+              isNight
+                ? 'bg-[#0B1711]/90 border-emerald-500/25 shadow-sm'
+                : 'bg-white/70 border-white/90 shadow-sm'
+            }`}
+          >
+            <div className="flex items-center justify-between mb-1">
+              <span className={`text-[11px] font-mono ${isNight ? 'text-slate-400' : 'text-slate-600'}`}>
+                Corridor Flow
+              </span>
+              <Gauge className="w-4 h-4 text-emerald-400" />
+            </div>
+            <div className={`text-2xl font-black font-mono ${isNight ? 'text-white' : 'text-slate-900'}`}>
+              {trafficDensity.toLocaleString()}
+            </div>
+            <div className="text-[10.5px] font-mono text-emerald-400 mt-0.5">
+              VPH • Normal Service
+            </div>
+          </div>
+
+          {/* 4. Carbon Emissions Mitigation */}
+          <div
+            className={`p-4 rounded-2xl border transition-all ${
+              isNight
+                ? 'bg-[#0B1711]/90 border-indigo-500/25 shadow-sm'
+                : 'bg-white/70 border-white/90 shadow-sm'
+            }`}
+          >
+            <div className="flex items-center justify-between mb-1">
+              <span className={`text-[11px] font-mono ${isNight ? 'text-slate-400' : 'text-slate-600'}`}>
+                Carbon Offset
+              </span>
+              <TrendingDown className="w-4 h-4 text-indigo-400" />
+            </div>
+            <div className={`text-2xl font-black font-mono ${isNight ? 'text-white' : 'text-slate-900'}`}>
+              -24.8%
+            </div>
+            <div className="text-[10.5px] font-mono text-indigo-400 mt-0.5">
+              {calculatedCO2} kg/hr Dispersed
+            </div>
+          </div>
+
+          {/* 5. Transit Reliability */}
+          <div
+            className={`p-4 rounded-2xl border col-span-2 md:col-span-1 transition-all ${
+              isNight
+                ? 'bg-[#0B1711]/90 border-amber-500/25 shadow-sm'
+                : 'bg-white/70 border-white/90 shadow-sm'
+            }`}
+          >
+            <div className="flex items-center justify-between mb-1">
+              <span className={`text-[11px] font-mono ${isNight ? 'text-slate-400' : 'text-slate-600'}`}>
+                BRT Velocity
+              </span>
+              <Bus className="w-4 h-4 text-amber-400" />
+            </div>
+            <div className={`text-2xl font-black font-mono ${isNight ? 'text-white' : 'text-slate-900'}`}>
+              {brtVelocity}
+            </div>
+            <div className="text-[10.5px] font-mono text-amber-400 mt-0.5">
+              Dedicated Red Lane
+            </div>
+          </div>
+        </div>
       </section>
 
-      {/* 2. INTERACTIVE CONTROLLER SANDBOX & TELEMETRY */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Column: Live Parameter Tuning (Sliders & Toggles) */}
+      {/* 2. SUMO MICROSCOPIC VIEWPORT CONTAINER */}
+      <section
+        className={`rounded-3xl border overflow-hidden shadow-2xl transition-all ${
+          isNight
+            ? 'bg-[#08120D] border-emerald-500/30'
+            : 'bg-white/80 border-slate-300/80 shadow-[0_16px_40px_rgba(20,40,25,0.08)]'
+        }`}
+      >
+        {/* Viewport Top Bar */}
         <div
-          className={`lg:col-span-5 p-6 sm:p-8 rounded-3xl border shadow-lg space-y-6 ${
+          className={`px-5 py-3 border-b flex items-center justify-between text-xs font-mono ${
             isNight
-              ? 'bg-[#0B1812]/90 border-[#10B981]/30 text-white'
-              : 'bg-white/70 border-white/90 text-[#142A1D]'
+              ? 'bg-[#0D1D16] border-emerald-500/20 text-slate-300'
+              : 'bg-slate-100/80 border-slate-200 text-slate-700'
           }`}
         >
-          <div className="flex items-center justify-between pb-3 border-b border-current opacity-20">
-            <div className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider">
-              <Sliders className="w-4 h-4 text-[#10B981]" />
-              <span>{isAr ? 'معايير المحاكاة الحية' : 'Simulation Parameters'}</span>
+          <div className="flex items-center gap-3">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/15 text-emerald-400 font-bold border border-emerald-500/30">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+              SUMO ENGINE v1.21
+            </span>
+            <span className="hidden sm:inline-block opacity-75">
+              TraCI AI Control Loop: Active
+            </span>
+            <span className="hidden md:inline-block opacity-50">•</span>
+            <span className="hidden md:inline-block opacity-75">
+              Nodes: Queen Rania & UOJ Gateway
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setSimPlaying(!simPlaying)}
+              className={`p-1.5 rounded-lg border flex items-center gap-1 transition-all cursor-pointer ${
+                simPlaying
+                  ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400'
+                  : 'bg-amber-500/20 border-amber-500/40 text-amber-400'
+              }`}
+            >
+              {simPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+              <span className="text-[11px]">{simPlaying ? 'Live' : 'Paused'}</span>
+            </button>
+            <button
+              onClick={onLaunch}
+              className="p-1.5 rounded-lg border border-current/20 hover:bg-current/10 cursor-pointer"
+              title="Full Viewport"
+            >
+              <Maximize2 className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Viewport Canvas / Stream Screen */}
+        <div className="relative aspect-video w-full max-h-[460px] overflow-hidden bg-slate-950 flex items-center justify-center group">
+          <img
+            src="/queen-rania-corridor-twin-v2.png"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = '/queen-rania-corridor-twin.png';
+            }}
+            alt="SUMO Microscopic Corridor Simulation"
+            className="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-[1.02]"
+          />
+
+          {/* High-tech Viewport Crosshairs & HUD Overlays */}
+          <div className="pointer-events-none absolute inset-0 flex flex-col justify-between p-4">
+            <div className="flex justify-between items-start">
+              <div className="backdrop-blur-md bg-black/70 border border-emerald-500/40 rounded-xl p-2.5 text-left font-mono text-[11px] text-emerald-400 space-y-0.5">
+                <div>LAT 31.9892° N • LON 35.8714° E</div>
+                <div className="text-white font-bold">Active Agents: {trafficDensity.toLocaleString()}</div>
+                <div className="text-cyan-400">Delay: {calculatedDelay}s • Clearance: 94.2%</div>
+              </div>
+
+              <div className="backdrop-blur-md bg-black/70 border border-cyan-500/40 rounded-xl px-3 py-1.5 text-xs font-mono text-cyan-300">
+                Ready for SUMO Canvas / WebSocket Feed
+              </div>
             </div>
+
+            <div className="flex justify-between items-end">
+              <div className="backdrop-blur-md bg-black/70 border border-white/20 rounded-xl px-3 py-1.5 text-[11px] font-mono text-slate-300">
+                Queen Rania Al-Abdullah Dedicated BRT Segment
+              </div>
+              <div className="backdrop-blur-md bg-black/70 border border-emerald-500/40 rounded-xl px-3 py-1.5 text-xs font-mono text-emerald-400 font-bold">
+                {emergencyActive ? 'Emergency Corridor Active' : 'Standard Routine'}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. CONTROL YOUR SCENARIO & HISTORY CONTROLLER */}
+      <section
+        className={`p-6 sm:p-8 rounded-3xl border shadow-lg space-y-6 ${
+          isNight
+            ? 'bg-[#0B1711]/90 border-emerald-500/25 text-white'
+            : 'bg-white/70 border-white/90 text-slate-900'
+        }`}
+      >
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-current/15">
+          <div>
+            <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-emerald-500">
+              <Sliders className="w-4 h-4" />
+              <span>Control Your Scenario</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight mt-0.5">
+              Live Parameter Tuning & Interventions
+            </h2>
+          </div>
+
+          {/* Scenario History Log Button */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowHistoryModal(!showHistoryModal)}
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-xs font-mono font-bold tracking-wider transition-all cursor-pointer ${
+                showHistoryModal
+                  ? 'bg-emerald-500 text-slate-950 border-emerald-500 shadow-md'
+                  : 'bg-white/10 hover:bg-white/20 border-current/20'
+              }`}
+            >
+              <History className="w-3.5 h-3.5" />
+              <span>Scenario History</span>
+            </button>
+
             <button
               onClick={() => {
                 setTrafficDensity(14500);
                 setSurfaceTemp(35.2);
                 setEmergencyActive(true);
-                setTreeCanopyActive(true);
+                setCanopyActive(true);
+                setBrtSurgeActive(true);
               }}
-              className="text-[11px] font-mono text-[#10B981] hover:underline flex items-center gap-1 cursor-pointer"
+              className="p-2 rounded-xl border border-current/20 hover:bg-current/10 cursor-pointer"
+              title="Reset Parameters"
             >
-              <RotateCcw className="w-3 h-3" />
-              <span>{isAr ? 'إعادة الضبط' : 'Reset Defaults'}</span>
+              <RotateCcw className="w-3.5 h-3.5" />
             </button>
           </div>
+        </div>
 
-          {/* Slider 1: Traffic Density (Active Vehicles) */}
-          <div className="space-y-2 text-left rtl:text-right">
+        {/* Live Scenario History Drawer / Modal */}
+        {showHistoryModal && (
+          <div className="p-4 rounded-2xl border border-emerald-500/30 bg-black/30 backdrop-blur-md space-y-2.5 animate-fadeIn">
+            <div className="flex items-center justify-between text-xs font-mono text-emerald-400 font-bold border-b border-white/10 pb-2">
+              <span>Historical Simulation Benchmarks</span>
+              <span>Validated Logs</span>
+            </div>
+            <div className="space-y-2">
+              {historyRuns.map((run, idx) => (
+                <div
+                  key={idx}
+                  className="flex flex-col sm:flex-row sm:items-center justify-between p-2.5 rounded-xl bg-white/5 border border-white/10 text-xs font-mono gap-1"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-slate-200">{run.id}</span>
+                    <span className="text-slate-400">• {run.scenario}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-emerald-400">{run.result}</span>
+                    <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-300 font-bold">
+                      {run.status}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 4 Interactive Intervention Toggles */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* Toggle 1: Emergency Preemption */}
+          <div
+            onClick={() => setEmergencyActive(!emergencyActive)}
+            className={`p-4 rounded-2xl border cursor-pointer transition-all ${
+              emergencyActive
+                ? isNight
+                  ? 'bg-emerald-950/40 border-emerald-500 text-white'
+                  : 'bg-emerald-50 border-emerald-500 text-emerald-950'
+                : 'bg-white/5 border-current/10 opacity-70'
+            }`}
+          >
+            <div className="flex items-center justify-between mb-2">
+              <Siren className={`w-5 h-5 ${emergencyActive ? 'text-red-400' : 'text-slate-400'}`} />
+              <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${emergencyActive ? 'bg-red-500/20 text-red-400' : 'bg-slate-500/20 text-slate-400'}`}>
+                {emergencyActive ? 'ACTIVE' : 'OFF'}
+              </span>
+            </div>
+            <div className="text-sm font-bold">Emergency Wave</div>
+            <p className="text-xs opacity-75 mt-0.5">Preempts 6 signals for JUH ambulances.</p>
+          </div>
+
+          {/* Toggle 2: Pine Canopy Cooling */}
+          <div
+            onClick={() => setCanopyActive(!canopyActive)}
+            className={`p-4 rounded-2xl border cursor-pointer transition-all ${
+              canopyActive
+                ? isNight
+                  ? 'bg-emerald-950/40 border-emerald-500 text-white'
+                  : 'bg-emerald-50 border-emerald-500 text-emerald-950'
+                : 'bg-white/5 border-current/10 opacity-70'
+            }`}
+          >
+            <div className="flex items-center justify-between mb-2">
+              <Thermometer className="w-5 h-5 text-emerald-400" />
+              <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${canopyActive ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-500/20 text-slate-400'}`}>
+                {canopyActive ? '-3.8°C' : 'OFF'}
+              </span>
+            </div>
+            <div className="text-sm font-bold">Pine Canopy Buffer</div>
+            <p className="text-xs opacity-75 mt-0.5">Cooling 35.2°C asphalt at university gate.</p>
+          </div>
+
+          {/* Toggle 3: BRT Frequency Surge */}
+          <div
+            onClick={() => setBrtSurgeActive(!brtSurgeActive)}
+            className={`p-4 rounded-2xl border cursor-pointer transition-all ${
+              brtSurgeActive
+                ? isNight
+                  ? 'bg-emerald-950/40 border-emerald-500 text-white'
+                  : 'bg-emerald-50 border-emerald-500 text-emerald-950'
+                : 'bg-white/5 border-current/10 opacity-70'
+            }`}
+          >
+            <div className="flex items-center justify-between mb-2">
+              <Bus className="w-5 h-5 text-amber-400" />
+              <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${brtSurgeActive ? 'bg-amber-500/20 text-amber-400' : 'bg-slate-500/20 text-slate-400'}`}>
+                {brtSurgeActive ? '+38.4%' : 'OFF'}
+              </span>
+            </div>
+            <div className="text-sm font-bold">BRT Express Surge</div>
+            <p className="text-xs opacity-75 mt-0.5">Dedicated lane bus interval priority.</p>
+          </div>
+
+          {/* Toggle 4: Traffic Demand Slider */}
+          <div className="p-4 rounded-2xl border border-current/10 bg-white/5 space-y-2">
             <div className="flex items-center justify-between text-xs font-mono">
-              <span className={isNight ? 'text-[#94A3B8]' : 'text-[#4A6854]'}>
-                {isAr ? 'كثافة المركبات (SUMO Agents)' : 'Active Vehicle Agents'}
-              </span>
-              <span className="font-bold text-[#10B981] text-sm">
-                {trafficDensity.toLocaleString()} {isAr ? 'مركبة' : 'Vehicles'}
-              </span>
+              <span className="opacity-75">Vehicle Density</span>
+              <span className="font-bold text-emerald-400">{trafficDensity.toLocaleString()}</span>
             </div>
             <input
               type="range"
               min="5000"
               max="25000"
-              step="500"
+              step="1000"
               value={trafficDensity}
               onChange={(e) => setTrafficDensity(Number(e.target.value))}
-              className="w-full accent-[#10B981] cursor-pointer h-2 bg-gray-200 dark:bg-gray-700 rounded-lg"
+              className="w-full accent-emerald-500 cursor-pointer h-1.5 bg-slate-700 rounded-lg"
             />
             <div className="flex justify-between text-[10px] font-mono opacity-50">
-              <span>5,000 (Off-Peak)</span>
-              <span>15,000 (Normal)</span>
-              <span>25,000 (Gridlock)</span>
+              <span>Off-Peak</span>
+              <span>Gridlock</span>
             </div>
           </div>
+        </div>
 
-          {/* Slider 2: Surface Ambient Temperature */}
-          <div className="space-y-2 text-left rtl:text-right">
-            <div className="flex items-center justify-between text-xs font-mono">
-              <span className={isNight ? 'text-[#94A3B8]' : 'text-[#4A6854]'}>
-                {isAr ? 'حرارة سطح الإسفلت المكشوف' : 'Asphalt Surface Heat Trap'}
-              </span>
-              <span className="font-bold text-red-500 text-sm">{surfaceTemp}°C</span>
-            </div>
-            <input
-              type="range"
-              min="20"
-              max="45"
-              step="0.5"
-              value={surfaceTemp}
-              onChange={(e) => setSurfaceTemp(Number(e.target.value))}
-              className="w-full accent-red-500 cursor-pointer h-2 bg-gray-200 dark:bg-gray-700 rounded-lg"
-            />
-            <div className="flex justify-between text-[10px] font-mono opacity-50">
-              <span>20°C (Spring)</span>
-              <span>35°C (Amman Summer)</span>
-              <span>45°C (Heatwave)</span>
-            </div>
+        {/* Bottom CTA to Launch Simulation Workspace */}
+        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="text-xs font-mono opacity-75">
+            Microscopic TraCI execution loop ready for socket handshakes.
           </div>
-
-          {/* Toggle 1: Emergency Ambulance Wave */}
-          <div className="p-3.5 rounded-2xl border flex items-center justify-between transition-colors bg-white/40 dark:bg-white/5 border-current/15">
-            <div className="flex items-center gap-3">
-              <div
-                className={`w-9 h-9 rounded-xl flex items-center justify-center ${
-                  emergencyActive ? 'bg-red-500 text-white' : 'bg-gray-300 dark:bg-gray-700 text-gray-500'
-                }`}
-              >
-                <Siren className="w-4 h-4 stroke-[2.2]" />
-              </div>
-              <div className="text-left rtl:text-right">
-                <div className="text-xs font-bold font-sans">
-                  {isAr ? 'الموجة الخضراء للإسعاف' : 'Emergency Green Corridor'}
-                </div>
-                <div className="text-[10.5px] font-mono opacity-60">
-                  {isAr ? 'فتح أولوية الإشارات الضوئية' : 'TraCI Trajectory Preemption'}
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={() => setEmergencyActive(!emergencyActive)}
-              className={`px-3 py-1 rounded-full text-xs font-mono font-bold transition-all cursor-pointer ${
-                emergencyActive
-                  ? 'bg-red-500 text-white shadow-sm'
-                  : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
-              }`}
-            >
-              {emergencyActive ? (isAr ? 'مُفعّل' : 'ENABLED') : (isAr ? 'مُعطّل' : 'DISABLED')}
-            </button>
-          </div>
-
-          {/* Toggle 2: Tree Canopy Cooling Buffer */}
-          <div className="p-3.5 rounded-2xl border flex items-center justify-between transition-colors bg-white/40 dark:bg-white/5 border-current/15">
-            <div className="flex items-center gap-3">
-              <div
-                className={`w-9 h-9 rounded-xl flex items-center justify-center ${
-                  treeCanopyActive ? 'bg-emerald-500 text-white' : 'bg-gray-300 dark:bg-gray-700 text-gray-500'
-                }`}
-              >
-                <Thermometer className="w-4 h-4 stroke-[2.2]" />
-              </div>
-              <div className="text-left rtl:text-right">
-                <div className="text-xs font-bold font-sans">
-                  {isAr ? 'تشجير الصنوبر وتخفيف الحرارة' : 'Pine Tree Canopy Buffer'}
-                </div>
-                <div className="text-[10.5px] font-mono opacity-60">
-                  {isAr ? 'تبريد سور الجامعة الأردنية (-3.8°C)' : 'UOJ Campus Perimeter Cooling'}
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={() => setTreeCanopyActive(!treeCanopyActive)}
-              className={`px-3 py-1 rounded-full text-xs font-mono font-bold transition-all cursor-pointer ${
-                treeCanopyActive
-                  ? 'bg-emerald-500 text-white shadow-sm'
-                  : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
-              }`}
-            >
-              {treeCanopyActive ? (isAr ? 'مُفعّل' : 'ACTIVE') : (isAr ? 'مُعطّل' : 'OFF')}
-            </button>
-          </div>
-
-          {/* Workspace Launch Quick Action */}
           <button
             onClick={onLaunch}
-            className="w-full group inline-flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-gradient-to-r from-[#44C2D0] to-[#51D3BE] text-[#14261B] text-xs sm:text-sm font-extrabold tracking-tight shadow-md hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
+            className="group inline-flex items-center gap-2.5 px-7 py-3 rounded-full bg-gradient-to-r from-[#44C2D0] to-[#51D3BE] text-[#14261B] text-xs font-extrabold tracking-tight shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
           >
-            <span>{isAr ? 'فتح المحاكي الكامل (SUMO HUD)' : 'Launch Full Interactive HUD'}</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform" />
+            <span>Launch Simulation Workspace</span>
+            <ArrowRight className="w-3.5 h-3.5 stroke-[2.5] group-hover:translate-x-1 transition-transform" />
           </button>
-        </div>
-
-        {/* Right Column: Real-Time Recalculated HUD Display */}
-        <div className="lg:col-span-7 space-y-6">
-          {/* 4 Live Recalculating KPI Tiles */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div
-              className={`p-4 rounded-2xl border shadow-sm text-left rtl:text-right ${
-                isNight ? 'bg-[#0B1812]/90 border-[#10B981]/20' : 'bg-white/60 border-white/85'
-              }`}
-            >
-              <div className="flex items-center gap-1.5 text-xs font-mono text-[#10B981] mb-1">
-                <Gauge className="w-3.5 h-3.5" />
-                <span>{isAr ? 'التأخير' : 'Intersection Delay'}</span>
-              </div>
-              <div className="text-2xl font-black font-mono">{calculatedDelay}s</div>
-              <p className="text-[10px] font-mono text-emerald-600">
-                {emergencyActive ? (isAr ? '-35% بالموجة الخضراء' : 'Preempted') : (isAr ? 'عادي' : 'Standard')}
-              </p>
-            </div>
-
-            <div
-              className={`p-4 rounded-2xl border shadow-sm text-left rtl:text-right ${
-                isNight ? 'bg-[#0B1812]/90 border-emerald-500/20' : 'bg-white/60 border-white/85'
-              }`}
-            >
-              <div className="flex items-center gap-1.5 text-xs font-mono text-emerald-600 mb-1">
-                <Thermometer className="w-3.5 h-3.5" />
-                <span>{isAr ? 'الحرارة المهدئة' : 'Cooled Temp'}</span>
-              </div>
-              <div className="text-2xl font-black font-mono text-emerald-500">{calculatedTemp}°C</div>
-              <p className="text-[10px] font-mono text-emerald-600">
-                {treeCanopyActive ? '-3.8°C Canopy' : 'No Buffer'}
-              </p>
-            </div>
-
-            <div
-              className={`p-4 rounded-2xl border shadow-sm text-left rtl:text-right ${
-                isNight ? 'bg-[#0B1812]/90 border-cyan-500/20' : 'bg-white/60 border-white/85'
-              }`}
-            >
-              <div className="flex items-center gap-1.5 text-xs font-mono text-cyan-600 mb-1">
-                <Bus className="w-3.5 h-3.5" />
-                <span>{isAr ? 'انسياب BRT' : 'BRT Flow'}</span>
-              </div>
-              <div className="text-2xl font-black font-mono text-cyan-500">{brtEfficiency}</div>
-              <p className="text-[10px] font-mono text-cyan-600">
-                {isAr ? 'مسار مخصص' : 'Dedicated Lane'}
-              </p>
-            </div>
-
-            <div
-              className={`p-4 rounded-2xl border shadow-sm text-left rtl:text-right ${
-                isNight ? 'bg-[#0B1812]/90 border-indigo-500/20' : 'bg-white/60 border-white/85'
-              }`}
-            >
-              <div className="flex items-center gap-1.5 text-xs font-mono text-indigo-500 mb-1">
-                <TrendingDown className="w-3.5 h-3.5" />
-                <span>{isAr ? 'انبعاثات CO2' : 'Carbon PPM'}</span>
-              </div>
-              <div className="text-2xl font-black font-mono text-indigo-400">{calculatedCO2} kg</div>
-              <p className="text-[10px] font-mono text-indigo-500">
-                {treeCanopyActive ? (isAr ? '-18% امتصاص' : '-18% Absorbed') : (isAr ? 'بدون شجر' : 'Bare')}
-              </p>
-            </div>
-          </div>
-
-          {/* Visual Corridor Display with Live Status Badge */}
-          <div
-            className={`p-5 rounded-3xl border shadow-lg space-y-4 ${
-              isNight
-                ? 'bg-[#0B1812]/90 border-[#10B981]/30 text-white'
-                : 'bg-white/65 border-white/90 text-[#142A1D]'
-            }`}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-ping" />
-                <span className="font-mono text-xs font-bold uppercase tracking-wider">
-                  {scenarios[activeScenarioId].node}
-                </span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30">
-                  {isAr ? scenarios[activeScenarioId].badgeAr : scenarios[activeScenarioId].badgeEn}
-                </span>
-              </div>
-            </div>
-
-            <div className="relative rounded-2xl overflow-hidden border shadow-inner">
-              <img
-                src="/queen-rania-corridor-twin.png"
-                alt="Amman Digital Twin Visualization"
-                className="w-full h-auto object-cover max-h-[340px]"
-              />
-
-              <div className="absolute top-3 left-3 bg-[#070F0B]/85 backdrop-blur-md px-3 py-1.5 rounded-xl border border-[#10B981]/40 flex items-center gap-2 text-xs font-mono text-[#34D399]">
-                <Zap className="w-3.5 h-3.5 animate-pulse text-[#38BDF8]" />
-                <span>
-                  {isAr
-                    ? `نشط: ${trafficDensity.toLocaleString()} مركبة | الحرارة: ${calculatedTemp}°C`
-                    : `Active: ${trafficDensity.toLocaleString()} Agents | Temp: ${calculatedTemp}°C`}
-                </span>
-              </div>
-            </div>
-
-            {/* Scenario Quick Selector Tabs */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
-              {scenarios.map((sc) => {
-                const isSelected = activeScenarioId === sc.id;
-                const Icon = sc.icon;
-                return (
-                  <button
-                    key={sc.id}
-                    onClick={() => setActiveScenarioId(sc.id)}
-                    className={`p-2.5 rounded-xl border text-left rtl:text-right transition-all cursor-pointer ${
-                      isSelected
-                        ? isNight
-                          ? 'bg-[#10B981] text-[#070F0B] border-[#10B981] font-bold shadow-md'
-                          : 'bg-[#44C2D0] text-[#14261B] border-[#44C2D0] font-bold shadow-md'
-                        : isNight
-                        ? 'bg-white/5 hover:bg-white/10 border-white/10 text-white'
-                        : 'bg-white/50 hover:bg-white/80 border-white/80 text-[#142A1D]'
-                    }`}
-                  >
-                    <Icon className="w-4 h-4 mb-1" />
-                    <div className="text-[11px] font-sans truncate">
-                      {isAr ? sc.titleAr : sc.titleEn}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. SIMULATION WORKSPACE CALLOUT */}
-      <section
-        className={`p-8 sm:p-10 rounded-3xl border text-center space-y-4 shadow-xl backdrop-blur-md ${
-          isNight
-            ? 'bg-gradient-to-r from-[#0D261B] via-[#0F3022] to-[#0A1F16] border-[#10B981]/30'
-            : 'bg-gradient-to-r from-white/70 via-white/85 to-white/70 border-white/90 shadow-[0_16px_40px_rgba(20,40,25,0.08)]'
-        }`}
-      >
-        <div className="max-w-2xl mx-auto space-y-3">
-          <div
-            className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-mono font-bold tracking-wider uppercase shadow-sm ${
-              isNight ? 'bg-[#10B981]/15 text-[#34D399] border-[#10B981]/30' : 'bg-white/80 text-[#1F5435] border-white/90'
-            }`}
-          >
-            <ShieldCheck className="w-3.5 h-3.5 text-[#10B981]" />
-            <span>{isAr ? 'دخول المهندسين والباحثين' : 'Authorized Engineer Access'}</span>
-          </div>
-          <h3 className={`text-3xl sm:text-4xl font-extrabold ${isNight ? 'text-white' : 'text-[#133020]'}`}>
-            {isAr ? 'جاهز لتشغيل محاكاة ثلاثية الأبعاد كاملة؟' : 'Ready to Launch High-Resolution Micro-Simulation?'}
-          </h3>
-          <p className={`text-xs sm:text-sm leading-relaxed ${isNight ? 'text-[#94A3B8]' : 'text-[#385141]'}`}>
-            {isAr
-              ? 'سجل دخولك الآن للوصول إلى لوحة تحكم التوأم الرقمي الكاملة، عرض الخريطة ثلاثية الأبعاد التفاعلية، وتصدير تقارير الأداء.'
-              : 'Sign in to access full 3D viewport control, detailed telemetry charts, vehicle trajectory inspection, and CSV scenario exports.'}
-          </p>
-          <div className="pt-2">
-            <button
-              onClick={onLaunch}
-              className="group inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-gradient-to-r from-[#44C2D0] to-[#51D3BE] text-[#14261B] text-sm font-extrabold tracking-tight shadow-[0_6px_22px_rgba(68,194,208,0.45)] hover:shadow-[0_8px_30px_rgba(68,194,208,0.65)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
-            >
-              <span>{isAr ? 'الدخول للمحاكي ولوحة التحكم' : 'Launch Simulation Workspace'}</span>
-              <ArrowRight className="w-3.5 h-3.5 stroke-[2.5] group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform" />
-            </button>
-          </div>
         </div>
       </section>
     </div>
