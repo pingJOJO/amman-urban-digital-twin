@@ -3,23 +3,23 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { InteractiveMapBackground } from './components/DigitalTwinMap/InteractiveMapBackground';
 import { AuthCard } from './components/Auth/AuthCard';
-import { UserProfileDashboard } from './components/Dashboard/UserProfileDashboard';
 import { LandingPage } from './components/Landing/LandingPage';
 import { Loader2 } from 'lucide-react';
 
 const AppContent: React.FC = () => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user, logout } = useAuth();
   const [viewMode, setViewMode] = useState<'landing' | 'auth'>('landing');
 
-  // If user has an active authenticated session, show the digital twin engineer dashboard
+  // When user is authenticated, enter directly into the Innovation (SUMO Simulation sandbox) view!
   if (isAuthenticated) {
     return (
-      <div className="relative min-h-screen w-screen overflow-x-hidden flex flex-col justify-center">
-        <InteractiveMapBackground />
-        <main className="relative z-10 w-full min-h-screen flex items-center justify-center lg:justify-start px-6 sm:px-12 lg:pl-[14vw] xl:pl-[18vw] 2xl:pl-[22vw] py-8">
-          <UserProfileDashboard />
-        </main>
-      </div>
+      <LandingPage
+        initialTab="twin"
+        authenticatedUser={user}
+        onSignOut={logout}
+        onExplore={() => {}}
+        onLaunch={() => {}}
+      />
     );
   }
 

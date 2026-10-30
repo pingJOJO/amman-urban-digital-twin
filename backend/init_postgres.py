@@ -12,3 +12,4 @@ try:
 except Exception as e:
     print("Error creating tables:", e)
     sys.exit(1)
+

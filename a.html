@@ -1674,21 +1674,6 @@
             </p>
           </div>
 
-          <!-- 1-Click Quick Demo Login Button -->
-          <div class="mb-3 p-2.5 rounded-xl bg-emerald-900/10 border border-emerald-600/30 flex items-center justify-between gap-2">
-            <div class="text-left">
-              <p class="text-[11.5px] font-semibold text-[#1B3219]">Instant Demo Account Ready</p>
-              <p class="text-[10px] text-[#475C44]">engineer.faris@amman-digital-twin.jo</p>
-            </div>
-            <button
-              type="button"
-              onclick="triggerDemoLogin()"
-              class="px-3 py-1.5 rounded-full bg-[#3D8B62] hover:bg-[#327753] active:bg-[#276243] text-white text-[11px] font-semibold tracking-wide transition-all shadow-sm hover:scale-105 cursor-pointer shrink-0"
-            >
-              Quick Login
-            </button>
-          </div>
-
           <!-- Alert Box -->
           <div id="loginAlert" class="hidden mb-3 p-2.5 rounded-lg bg-red-900/15 border border-red-500/35 text-red-900 text-xs flex items-center gap-2">
             <span id="loginAlertText"></span>
@@ -2912,27 +2897,10 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Display Authenticated Session View
+    // Display Authenticated Session View -> Enters Innovation (SUMO Sandbox) directly!
     function displayAuthenticatedSession(user) {
-      const landing = document.getElementById('landingView');
-      const authMain = document.getElementById('authMainContainer');
-      const authCard = document.getElementById('authCard');
-      const authView = document.getElementById('authenticatedView');
-      const nameEl = document.getElementById('authUserName');
-      const emailEl = document.getElementById('authUserEmail');
-      const avatarEl = document.getElementById('authAvatar');
-      const providerEl = document.getElementById('authProviderLabel');
-
-      if (landing) landing.classList.add('hidden');
-      if (authMain) authMain.classList.remove('hidden');
-
-      nameEl.textContent = user.name || 'User';
-      emailEl.textContent = user.email || 'user@amman-digital-twin.jo';
-      avatarEl.textContent = (user.name || 'U').charAt(0).toUpperCase();
-      if (providerEl) providerEl.textContent = user.provider || 'JWT Session';
-
-      authCard.classList.add('hidden');
-      authView.classList.remove('hidden');
+      navigateToLanding();
+      switchLandingPage('twin');
     }
 
     // Handle Sign Out

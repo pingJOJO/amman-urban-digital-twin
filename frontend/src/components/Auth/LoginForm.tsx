@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { GoogleAuthButton } from './GoogleAuthButton';
-import { Mail, Lock, Eye, EyeOff, Loader2, AlertCircle, Sparkles, Check } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, Loader2, AlertCircle, Check } from 'lucide-react';
 
 interface LoginFormProps {
   onSwitchToSignUp: () => void;
@@ -55,25 +55,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignUp }) => {
     }
   };
 
-  const handleDemoLogin = async () => {
-    setValidationError(null);
-    clearError();
-    setEmail('engineer.faris@amman-digital-twin.jo');
-    setPassword('SmartCity#2026');
-    try {
-      await login({
-        email: 'engineer.faris@amman-digital-twin.jo',
-        password: 'SmartCity#2026',
-      });
-    } catch {
-      // Error handled by AuthContext
-    }
-  };
-
   return (
     <div className="w-full">
       {/* Header with Official Logo */}
-      <div className="text-center mb-3">
+      <div className="text-center mb-4">
         <img
           src="/logo.png"
           alt="Amman Urban Digital Twin Logo"
@@ -85,25 +70,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignUp }) => {
         <p className="text-[10.5px] sm:text-[11px] font-medium tracking-[0.06em] uppercase text-[#384A36]">
           ACCESS THE AMMAN URBAN DIGITAL TWIN PLATFORM
         </p>
-      </div>
-
-      {/* 1-Click Demo Login Banner */}
-      <div className="mb-3.5 p-2.5 rounded-xl bg-emerald-900/10 border border-emerald-600/30 flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-emerald-700 shrink-0" />
-          <div className="text-left">
-            <p className="text-[11.5px] font-semibold text-[#1B3219]">Instant Demo Account Ready</p>
-            <p className="text-[10px] text-[#475C44]">engineer.faris@amman-digital-twin.jo</p>
-          </div>
-        </div>
-        <button
-          type="button"
-          onClick={handleDemoLogin}
-          disabled={isLoading}
-          className="px-3 py-1.5 rounded-full bg-[#3D8B62] hover:bg-[#327753] active:bg-[#276243] text-white text-[11px] font-semibold tracking-wide transition-all shadow-sm hover:scale-105 cursor-pointer shrink-0 disabled:opacity-50"
-        >
-          {isLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Quick Login'}
-        </button>
       </div>
 
       {/* Alert Error Box */}

@@ -111,22 +111,88 @@ body {
 /* Organic Falling Botanical Leaves Animation */
 @keyframes leafDrift {
   0% {
-    transform: translateY(-6vh) translateX(0px) rotate(0deg);
+    transform: translateY(-8vh) translateX(0px) rotate(0deg);
     opacity: 0;
   }
-  12% {
-    opacity: 0.55;
-    transform: translateY(14vh) translateX(25px) rotate(45deg);
+  15% {
+    opacity: 0.6;
+    transform: translateY(15vh) translateX(25px) rotate(45deg);
   }
   50% {
-    transform: translateY(52vh) translateX(-22px) rotate(170deg);
+    transform: translateY(50vh) translateX(-25px) rotate(180deg);
+  }
+  85% {
+    opacity: 0.6;
+    transform: translateY(85vh) translateX(30px) rotate(315deg);
+  }
+  100% {
+    transform: translateY(115vh) translateX(10px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes driftFall {
+  0% {
+    transform: translateY(-8vh) translateX(0px) rotate(0deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.55;
+    transform: translateY(18vh) translateX(28px) rotate(50deg);
+  }
+  50% {
+    transform: translateY(52vh) translateX(-25px) rotate(190deg);
   }
   85% {
     opacity: 0.55;
-    transform: translateY(88vh) translateX(28px) rotate(295deg);
+    transform: translateY(88vh) translateX(32px) rotate(320deg);
   }
   100% {
-    transform: translateY(112vh) translateX(8px) rotate(360deg);
+    transform: translateY(115vh) translateX(10px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Subtle Smart City Traffic Stream Flow Animation */
+@keyframes trafficFlowDash {
+  0% {
+    stroke-dashoffset: 400;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes carCruiseEast {
+  0% {
+    transform: translateX(-150px);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.75;
+  }
+  90% {
+    opacity: 0.75;
+  }
+  100% {
+    transform: translateX(calc(100vw + 150px));
+    opacity: 0;
+  }
+}
+
+@keyframes carCruiseWest {
+  0% {
+    transform: translateX(calc(100vw + 150px));
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.75;
+  }
+  90% {
+    opacity: 0.75;
+  }
+  100% {
+    transform: translateX(-150px);
     opacity: 0;
   }
 }

@@ -14,13 +14,17 @@ import {
   Moon,
   Bus,
   CheckCircle2,
-  Sparkles
+  Sparkles,
+  LogOut
 } from 'lucide-react';
 import { AboutPage } from './AboutPage';
 import { TwinExplorePage } from './TwinExplorePage';
 import { ProjectsPage } from './ProjectsPage';
 
 interface LandingPageProps {
+  initialTab?: 'home' | 'about' | 'twin' | 'projects';
+  authenticatedUser?: { full_name: string; email: string } | null;
+  onSignOut?: () => void;
   onExplore: () => void;
   onLaunch: () => void;
 }
@@ -41,9 +45,15 @@ const LEAF_PARTICLES = [
   { id: 12, left: '85%', delay: '9.0s', duration: '20s', size: 20 }
 ];
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({
+  initialTab = 'home',
+  authenticatedUser,
+  onSignOut,
+  onExplore,
+  onLaunch
+}) => {
   const [theme, setTheme] = useState<'day' | 'night'>('day');
-  const [activeTab, setActiveTab] = useState<'home' | 'about' | 'twin' | 'projects'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'about' | 'twin' | 'projects'>(initialTab);
   const [selectedScenario, setSelectedScenario] = useState<number>(0);
   const [corridorLayer, setCorridorLayer] = useState<'all' | 'thermal' | 'brt' | 'traffic'>('all');
 
@@ -93,14 +103,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
           : 'bg-gradient-to-br from-[#E2F5DD] via-[#EDF9EC] to-[#DCF5DA] text-slate-900 selection:bg-[#44C2D0] selection:text-white'
       }`}
     >
-      {/* 1. BACKGROUND PARTICLES: GENTLY DRIFTING BOTANICAL LEAVES & CARS */}
+      {/* 1. BACKGROUND PARTICLES: GENTLY DRIFTING BOTANICAL LEAVES & SMART TRAFFIC MOBILITY FLOW */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         {/* Animated Botanical Leaves */}
         {LEAF_PARTICLES.map((leaf) => (
           <div
             key={leaf.id}
             className={`absolute -top-12 transition-opacity ${
-              isNight ? 'opacity-20 text-emerald-400' : 'opacity-35 text-[#4AA883]'
+              isNight ? 'opacity-25 text-emerald-400' : 'opacity-40 text-[#4AA883]'
             }`}
             style={{
               left: leaf.left,
@@ -113,12 +123,84 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
               height={leaf.size}
               viewBox="0 0 24 24"
               fill="currentColor"
-              className="transform rotate-45"
+              className="transform rotate-45 drop-shadow-sm"
             >
               <path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z" />
             </svg>
           </div>
         ))}
+
+        {/* Ambient Smart City Traffic Mobility Flow Layer (Subtle, High-Tech, Clean) */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30 select-none">
+          {/* Arterial Corridor 1 (Upper Horizontal Stream) */}
+          <div className="absolute top-[32%] left-0 w-full h-[2px]">
+            <svg className="w-full h-8 -top-3 absolute" preserveAspectRatio="none">
+              <line
+                x1="0"
+                y1="16"
+                x2="100%"
+                y2="16"
+                stroke={isNight ? 'rgba(74, 222, 128, 0.25)' : 'rgba(40, 110, 70, 0.18)'}
+                strokeWidth="1.5"
+                strokeDasharray="16 14"
+                style={{ animation: 'trafficFlowDash 18s linear infinite' }}
+              />
+            </svg>
+            {/* Small Sleek Cruising Sedan Eastbound */}
+            <div
+              className={`absolute -top-2 flex items-center gap-1 px-1.5 py-0.5 rounded-full ${
+                isNight
+                  ? 'bg-cyan-400/80 text-slate-950 shadow-[0_0_10px_rgba(34,211,238,0.7)]'
+                  : 'bg-[#2E7752] text-white shadow-[0_0_8px_rgba(46,119,82,0.4)]'
+              }`}
+              style={{ animation: 'carCruiseEast 24s cubic-bezier(0.4, 0, 0.2, 1) infinite', animationDelay: '2s' }}
+            >
+              <div className="w-2.5 h-1.5 rounded-sm bg-white/90" />
+              <div className="w-1 h-1 rounded-full bg-amber-300" />
+            </div>
+
+            {/* Small Sleek BRT Transit Bus Eastbound */}
+            <div
+              className={`absolute -top-2.5 flex items-center gap-1 px-2 py-0.5 rounded-sm ${
+                isNight
+                  ? 'bg-emerald-400/90 text-slate-950 shadow-[0_0_12px_rgba(52,211,153,0.7)]'
+                  : 'bg-[#1E583C] text-white shadow-[0_0_8px_rgba(30,88,60,0.5)]'
+              }`}
+              style={{ animation: 'carCruiseEast 32s linear infinite', animationDelay: '14s' }}
+            >
+              <div className="w-4 h-1.5 rounded-sm bg-emerald-200/90" />
+              <div className="w-1 h-1 rounded-full bg-cyan-300" />
+            </div>
+          </div>
+
+          {/* Arterial Corridor 2 (Lower Horizontal Stream) */}
+          <div className="absolute top-[72%] left-0 w-full h-[2px]">
+            <svg className="w-full h-8 -top-3 absolute" preserveAspectRatio="none">
+              <line
+                x1="0"
+                y1="16"
+                x2="100%"
+                y2="16"
+                stroke={isNight ? 'rgba(56, 189, 248, 0.25)' : 'rgba(50, 120, 85, 0.18)'}
+                strokeWidth="1.5"
+                strokeDasharray="20 18"
+                style={{ animation: 'trafficFlowDash 16s linear infinite reverse' }}
+              />
+            </svg>
+            {/* Small Sleek Cruising Sedan Westbound */}
+            <div
+              className={`absolute -top-2 flex items-center gap-1 px-1.5 py-0.5 rounded-full ${
+                isNight
+                  ? 'bg-emerald-400/80 text-slate-950 shadow-[0_0_10px_rgba(52,211,153,0.7)]'
+                  : 'bg-[#37855C] text-white shadow-[0_0_8px_rgba(55,133,92,0.4)]'
+              }`}
+              style={{ animation: 'carCruiseWest 26s cubic-bezier(0.4, 0, 0.2, 1) infinite', animationDelay: '6s' }}
+            >
+              <div className="w-1 h-1 rounded-full bg-amber-300" />
+              <div className="w-2.5 h-1.5 rounded-sm bg-white/90" />
+            </div>
+          </div>
+        </div>
 
         {/* Ambient Radial Depth Glows */}
         <div
@@ -233,16 +315,41 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onExplore, onLaunch })
               {isNight ? <Sun className="w-4 h-4 text-[#FDE047]" /> : <Moon className="w-4 h-4 text-[#164E33]" />}
             </button>
 
-            {/* Launch CTA */}
-            <button
-              onClick={onLaunch}
-              className="group relative inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[#44C2D0] to-[#51D3BE] text-[#14261B] text-xs sm:text-[13px] font-extrabold tracking-tight shadow-md hover:scale-105 active:scale-100 transition-all duration-300 cursor-pointer"
-            >
-              <span>Launch Experience</span>
-              <span className="w-5 h-5 rounded-full bg-[#182B20] text-white flex items-center justify-center transition-transform duration-300 group-hover:translate-x-0.5">
-                <ArrowRight className="w-3 h-3 stroke-[2.5]" />
-              </span>
-            </button>
+            {/* Authenticated User Pill & Sign Out vs Launch CTA */}
+            {authenticatedUser ? (
+              <div className="flex items-center gap-2">
+                <div
+                  className={`hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-semibold ${
+                    isNight
+                      ? 'bg-[#0E2018]/90 border-emerald-500/35 text-emerald-300'
+                      : 'bg-white/75 border-white/95 text-[#142A1D] shadow-sm'
+                  }`}
+                >
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="font-bold">{authenticatedUser.full_name}</span>
+                </div>
+                {onSignOut && (
+                  <button
+                    onClick={onSignOut}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-red-500/30 bg-red-500/10 hover:bg-red-500/20 active:bg-red-500/30 text-red-700 text-xs font-semibold transition-all cursor-pointer shadow-sm"
+                    title="Sign Out of Session"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                    <span>Sign Out</span>
+                  </button>
+                )}
+              </div>
+            ) : (
+              <button
+                onClick={onLaunch}
+                className="group relative inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[#44C2D0] to-[#51D3BE] text-[#14261B] text-xs sm:text-[13px] font-extrabold tracking-tight shadow-md hover:scale-105 active:scale-100 transition-all duration-300 cursor-pointer"
+              >
+                <span>Launch Experience</span>
+                <span className="w-5 h-5 rounded-full bg-[#182B20] text-white flex items-center justify-center transition-transform duration-300 group-hover:translate-x-0.5">
+                  <ArrowRight className="w-3 h-3 stroke-[2.5]" />
+                </span>
+              </button>
+            )}
           </div>
         </header>
 
