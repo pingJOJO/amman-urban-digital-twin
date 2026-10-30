@@ -570,218 +570,470 @@
   </div>
 
   <!-- ===================================================================== -->
-  <!-- 1. LANDING PAGE VIEW (Default View matching Mockup)                   -->
+  <!-- 1. LANDING PAGE VIEW (Executive Tesla/Microsoft Grade - Zero Emojis)  -->
   <!-- ===================================================================== -->
-  <div id="landingView" class="relative z-20 min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-[#E2F5DD] via-[#EDF9EC] to-[#DCF5DA] text-[#162719] font-sans">
+  <div id="landingView" class="relative z-20 min-h-screen w-full overflow-x-hidden bg-[#070F0B] text-[#F1F5F9] font-sans selection:bg-[#10B981] selection:text-[#070F0B]">
     
-    <!-- Subtle Geometric Constellation Mesh -->
-    <div class="pointer-events-none absolute inset-0 z-0 opacity-40 mix-blend-multiply">
-      <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern id="landing-mesh" width="160" height="160" patternUnits="userSpaceOnUse">
-            <circle cx="80" cy="80" r="1.5" fill="#4AA883" opacity="0.6" />
-            <circle cx="20" cy="30" r="1.5" fill="#4AA883" opacity="0.4" />
-            <circle cx="140" cy="120" r="1.5" fill="#4AA883" opacity="0.4" />
-            <line x1="80" y1="80" x2="20" y2="30" stroke="#4AA883" strokeWidth="0.5" strokeDasharray="3,3" opacity="0.3" />
-            <line x1="80" y1="80" x2="140" y2="120" stroke="#4AA883" strokeWidth="0.5" strokeDasharray="3,3" opacity="0.3" />
-            <line x1="140" y1="120" x2="160" y2="160" stroke="#4AA883" strokeWidth="0.5" strokeDasharray="3,3" opacity="0.3" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#landing-mesh)" />
-      </svg>
+    <!-- Precision Background Laser Grid & Radial Energy Centers -->
+    <div class="pointer-events-none fixed inset-0 z-0">
+      <div class="absolute inset-0 opacity-[0.07]" style="background-image: linear-gradient(to right, #10B981 1px, transparent 1px), linear-gradient(to bottom, #10B981 1px, transparent 1px); background-size: 48px 48px;"></div>
+      <div class="absolute top-[-15%] right-[-5%] w-[800px] h-[800px] rounded-full bg-gradient-to-br from-[#10B981]/15 to-[#06B6D4]/10 blur-[150px]"></div>
+      <div class="absolute top-[35%] left-[-10%] w-[700px] h-[700px] rounded-full bg-gradient-to-tr from-[#059669]/10 to-[#10B981]/5 blur-[160px]"></div>
+      <div class="absolute bottom-[-10%] right-[15%] w-[900px] h-[900px] rounded-full bg-gradient-to-tl from-[#06B6D4]/10 to-[#047857]/15 blur-[180px]"></div>
     </div>
 
-    <!-- Floating Glow Orbs -->
-    <div class="pointer-events-none absolute top-[-10%] right-[10%] w-[500px] h-[500px] rounded-full bg-[#75E2D9]/20 blur-[120px]"></div>
-    <div class="pointer-events-none absolute bottom-[10%] left-[5%] w-[450px] h-[450px] rounded-full bg-[#82E69F]/20 blur-[130px]"></div>
-
-    <div class="relative z-10 mx-auto max-w-7xl px-6 sm:px-10 lg:px-12 py-6 flex flex-col justify-between min-h-screen">
+    <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-8 lg:px-12 py-5 flex flex-col justify-between min-h-screen">
       
-      <!-- TOP NAVBAR -->
-      <header class="flex items-center justify-between py-2">
-        <!-- Logo & Brand -->
-        <div class="flex items-center gap-3 cursor-pointer group" onclick="navigateToLanding()">
-          <img
-            src="logo.png"
-            alt="Amman Urban Digital Twin Logo"
-            class="w-10 h-10 sm:w-11 sm:h-11 object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-300"
-          />
-          <div class="leading-tight text-left">
-            <span class="block text-sm sm:text-[15px] font-bold text-[#142A1D] tracking-tight">
-              Amman Urban
-            </span>
-            <span class="block text-xs sm:text-[12.5px] font-medium text-[#385141] tracking-wide">
-              Digital Twin
+      <!-- TOP EXECUTIVE NAVBAR -->
+      <header class="flex items-center justify-between py-3 border-b border-[#10B981]/15 backdrop-blur-xl">
+        <!-- Logo & Brand Identity -->
+        <div class="flex items-center gap-3.5 cursor-pointer group" onclick="navigateToLanding()">
+          <div class="relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-[#10B981]/20 to-[#06B6D4]/10 p-1.5 border border-[#10B981]/30 flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.2)] group-hover:border-[#10B981]/60 transition-all duration-300">
+            <img
+              src="logo.png"
+              alt="Amman Urban Digital Twin Logo"
+              class="w-full h-full object-contain filter drop-shadow-[0_2px_8px_rgba(0,229,153,0.5)] group-hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm sm:text-base font-extrabold tracking-tight text-white">
+                Amman Urban Digital Twin
+              </span>
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-[#10B981]/15 text-[#34D399] border border-[#10B981]/30">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse"></span>
+                SUMO v1.21
+              </span>
+            </div>
+            <span class="block text-[11px] font-mono text-[#94A3B8] tracking-wider uppercase">
+              Co-Simulation & Mobility Intelligence
             </span>
           </div>
         </div>
 
         <!-- Center Pills -->
-        <nav class="hidden md:flex items-center p-1 rounded-full bg-white/40 backdrop-blur-md border border-white/60 shadow-[0_2px_10px_rgba(20,40,25,0.04)]">
-          <button class="px-5 py-1.5 rounded-full text-xs font-semibold bg-[#BFE2F8] text-[#142C2A] shadow-sm">Home</button>
-          <button class="px-5 py-1.5 rounded-full text-xs font-semibold text-[#3D5545] hover:text-[#142A1D] hover:bg-white/40 transition-all">About</button>
-          <button class="px-5 py-1.5 rounded-full text-xs font-semibold text-[#3D5545] hover:text-[#142A1D] hover:bg-white/40 transition-all">Innovation</button>
-          <button class="px-5 py-1.5 rounded-full text-xs font-semibold text-[#3D5545] hover:text-[#142A1D] hover:bg-white/40 transition-all">Projects</button>
+        <nav class="hidden lg:flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#0D1F17]/80 backdrop-blur-md border border-[#10B981]/20 shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+          <a href="#overview" class="px-4 py-1.5 rounded-full text-xs font-semibold bg-[#10B981] text-[#070F0B] shadow-[0_0_15px_rgba(16,185,129,0.4)] font-bold">Platform Overview</a>
+          <a href="#capabilities" class="px-4 py-1.5 rounded-full text-xs font-semibold text-[#CBD5E1] hover:text-white hover:bg-white/5 transition-all">Simulation Sandbox</a>
+          <a href="#thermal" class="px-4 py-1.5 rounded-full text-xs font-semibold text-[#CBD5E1] hover:text-white hover:bg-white/5 transition-all">Heat & Carbon</a>
+          <a href="#about" class="px-4 py-1.5 rounded-full text-xs font-semibold text-[#CBD5E1] hover:text-white hover:bg-white/5 transition-all">About The Twin</a>
         </nav>
 
-        <!-- Right CTA & Lang Switcher -->
-        <div class="flex items-center gap-3 sm:gap-4">
-          <button class="px-2.5 py-1 rounded-md text-xs font-semibold text-[#2D4536] hover:text-[#142A1D] hover:bg-white/40 transition-colors cursor-pointer">
-            EN | AR
-          </button>
+        <!-- Right Actions: Lang Switcher & Executive Launch CTA -->
+        <div class="flex items-center gap-3">
           <button
             onclick="navigateToAuth()"
-            class="group inline-flex items-center gap-2.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-gradient-to-r from-[#44C2D0] to-[#51D3BE] text-[#14261B] text-xs sm:text-[13px] font-bold tracking-tight shadow-[0_4px_16px_rgba(68,194,208,0.35)] hover:shadow-[0_6px_22px_rgba(68,194,208,0.5)] hover:scale-105 active:scale-100 transition-all duration-300 cursor-pointer"
+            class="group relative inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[#10B981] to-[#06B6D4] text-[#070F0B] text-xs sm:text-[13px] font-extrabold tracking-tight shadow-[0_0_25px_rgba(16,185,129,0.4)] hover:shadow-[0_0_35px_rgba(6,182,212,0.6)] hover:scale-105 active:scale-100 transition-all duration-300 cursor-pointer"
           >
             <span>Launch Experience</span>
-            <span class="w-5 h-5 rounded-full bg-[#182B20] text-white flex items-center justify-center transition-transform duration-300 group-hover:translate-x-0.5">
-              →
+            <span class="w-5 h-5 rounded-full bg-[#070F0B] text-[#10B981] flex items-center justify-center transition-transform duration-300 group-hover:translate-x-0.5">
+              <svg class="w-3 h-3 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </span>
           </button>
         </div>
       </header>
 
-      <!-- HERO SECTION: A Smarter Way to Move Amman -->
-      <section class="pt-6 sm:pt-10 lg:pt-12 pb-8 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-4 items-center">
+      <!-- 2. HERO SECTION: Precision Urban Simulation -->
+      <section id="overview" class="pt-8 sm:pt-14 lg:pt-16 pb-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
         <!-- Left Text Column -->
-        <div class="lg:col-span-6 xl:col-span-5 space-y-5 lg:space-y-6 text-left">
+        <div class="lg:col-span-6 xl:col-span-6 space-y-6 text-left">
+          <!-- Top Pill -->
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#10B981]/10 border border-[#10B981]/25 text-[#34D399] text-xs font-mono tracking-wide">
+            <svg class="w-3.5 h-3.5 text-[#10B981]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            <span>Precision Urban Simulation • Zero Capital Risk</span>
+          </div>
+
+          <!-- Main Headline -->
           <div class="space-y-1">
-            <h1 class="text-4xl sm:text-5xl lg:text-[58px] font-extrabold tracking-[-0.02em] leading-[1.08] text-[#133020]">
+            <h1 class="text-4xl sm:text-5xl lg:text-[62px] font-black tracking-[-0.03em] leading-[1.06] text-white">
               A Smarter Way to
             </h1>
-            <h1 class="text-4xl sm:text-5xl lg:text-[58px] font-extrabold tracking-[-0.02em] leading-[1.08] bg-gradient-to-r from-[#4A72DF] via-[#48C3CB] to-[#7EDF89] bg-clip-text text-transparent pb-1">
+            <h1 class="text-4xl sm:text-5xl lg:text-[62px] font-black tracking-[-0.03em] leading-[1.06] bg-gradient-to-r from-[#10B981] via-[#06B6D4] to-[#38BDF8] bg-clip-text text-transparent pb-1">
               Move Amman
             </h1>
           </div>
 
-          <p class="text-sm sm:text-base text-[#2E4738] font-normal leading-relaxed max-w-md">
-            Explore traffic scenarios. Connect urban mobility. Build a greener city.
+          <!-- Subtext -->
+          <p class="text-sm sm:text-base text-[#94A3B8] font-normal leading-relaxed max-w-xl">
+            Why risk millions of Dinars and months of public gridlock in real-world trial and error? Amman Urban Digital Twin lets you simulate any infrastructure scenario in a microscopic virtual environment: test ambulance green corridors, autonomous signal logic, and microclimate heat mitigation before breaking ground.
           </p>
 
+          <!-- Key Metrics -->
+          <div class="grid grid-cols-3 gap-3 pt-2 max-w-lg">
+            <div class="p-3 rounded-xl bg-[#0D1F17]/90 border border-[#10B981]/20 shadow-inner">
+              <div class="flex items-center gap-1 text-[#10B981] text-xs font-mono font-bold mb-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>Zero Trial Cost</span>
+              </div>
+              <div class="text-xl sm:text-2xl font-black text-white font-mono">100%</div>
+              <p className="text-[10.5px] text-[#64748B] mt-0.5">Virtual Validation</p>
+            </div>
+
+            <div class="p-3 rounded-xl bg-[#0D1F17]/90 border border-[#06B6D4]/20 shadow-inner">
+              <div class="flex items-center gap-1 text-[#06B6D4] text-xs font-mono font-bold mb-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                <span>Emergency Wave</span>
+              </div>
+              <div class="text-xl sm:text-2xl font-black text-white font-mono">-4.2m</div>
+              <p className="text-[10.5px] text-[#64748B] mt-0.5">Corridor Clearance</p>
+            </div>
+
+            <div class="p-3 rounded-xl bg-[#0D1F17]/90 border border-[#10B981]/20 shadow-inner">
+              <div class="flex items-center gap-1 text-[#34D399] text-xs font-mono font-bold mb-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                <span>Heat Offset</span>
+              </div>
+              <div class="text-xl sm:text-2xl font-black text-white font-mono">-3.2°C</div>
+              <p className="text-[10.5px] text-[#64748B] mt-0.5">35° -> Green Canopies</p>
+            </div>
+          </div>
+
           <!-- Action Buttons -->
-          <div class="flex flex-wrap items-center gap-3.5 pt-2">
-            <!-- PRIMARY CTA: Explore the Digital Twin (Opens Sign In) -->
+          <div class="flex flex-wrap items-center gap-4 pt-3">
             <button
               onclick="navigateToAuth()"
-              class="group inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-[#42C2D0] to-[#55D5BB] text-[#14261B] text-sm font-bold tracking-tight shadow-[0_6px_20px_rgba(66,194,208,0.4)] hover:shadow-[0_8px_26px_rgba(66,194,208,0.6)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
+              class="group inline-flex items-center gap-3 px-7 py-3.5 rounded-full bg-gradient-to-r from-[#10B981] to-[#06B6D4] text-[#070F0B] text-sm font-extrabold tracking-tight shadow-[0_0_30px_rgba(16,185,129,0.35)] hover:shadow-[0_0_45px_rgba(6,182,212,0.6)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
             >
               <span>Explore the Digital Twin</span>
-              <span class="w-6 h-6 rounded-full bg-[#182B20] text-white flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1">
-                →
+              <span class="w-6 h-6 rounded-full bg-[#070F0B] text-[#10B981] flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1">
+                <svg class="w-3.5 h-3.5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
               </span>
             </button>
 
-            <!-- SECONDARY CTA: Discover Our Vision -->
-            <button
-              onclick="navigateToAuth()"
-              class="inline-flex items-center gap-2.5 px-5 py-3 rounded-full border border-[#2D4D37]/30 bg-white/35 backdrop-blur-sm text-[#1A3323] text-sm font-semibold tracking-tight hover:bg-white/65 hover:border-[#2D4D37]/50 active:scale-95 transition-all duration-200 cursor-pointer shadow-sm"
+            <a
+              href="#capabilities"
+              class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full border border-[#10B981]/30 bg-[#0E2018]/80 backdrop-blur-md text-[#E2E8F0] text-sm font-semibold tracking-tight hover:bg-[#10B981]/10 hover:border-[#10B981]/60 active:scale-95 transition-all duration-200 cursor-pointer shadow-sm"
             >
-              <span>Discover Our Vision</span>
-              <span class="w-5 h-5 rounded-full bg-[#BFE2F8] text-[#1E5D88] flex items-center justify-center text-[10px]">
-                ▶
-              </span>
-            </button>
+              <svg class="w-3.5 h-3.5 text-[#10B981] fill-current" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span>View Simulation Scenarios</span>
+            </a>
           </div>
         </div>
 
-        <!-- Right Visual Column: Robotic Hand Holding Amman Miniature City -->
-        <div class="lg:col-span-6 xl:col-span-7 flex justify-center lg:justify-end relative">
-          <div class="relative w-full max-w-[560px] lg:max-w-[620px] group">
-            <div class="absolute inset-0 bg-gradient-to-tr from-[#51D3BE]/30 to-[#4A72DF]/20 rounded-full blur-[70px] -z-10 transform scale-90"></div>
-            <img
-              src="hero-city-hand-blended.png"
-              onerror="this.src='hero-city-hand.jpg'"
-              alt="Amman Digital Twin on Robotic Hand"
-              class="w-full h-auto object-contain drop-shadow-[0_20px_35px_rgba(15,35,22,0.25)] transition-transform duration-700 ease-out group-hover:scale-[1.02] pointer-events-none select-none"
-            />
+        <!-- Right Visual Stage: Seamless Holographic Amman 3D Simulation -->
+        <div class="lg:col-span-6 xl:col-span-6 flex justify-center lg:justify-end relative">
+          <div class="relative w-full max-w-[580px] lg:max-w-[640px] group">
+            <div class="absolute inset-0 bg-gradient-to-tr from-[#10B981]/25 via-[#06B6D4]/20 to-transparent rounded-full blur-[80px] -z-10 transform scale-95"></div>
+            
+            <div class="relative overflow-hidden rounded-3xl p-1 bg-gradient-to-b from-[#10B981]/20 via-transparent to-[#10B981]/10 border border-[#10B981]/30 shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
+              <img
+                src="hero-city-hand-feathered.png"
+                onerror="this.src='hero-city-hand.jpg'"
+                alt="Amman Digital Twin Holographic Model"
+                class="w-full h-auto object-contain transition-transform duration-700 ease-out group-hover:scale-[1.02] select-none"
+                style="mask-image: radial-gradient(ellipse at center, black 65%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse at center, black 65%, transparent 100%);"
+              />
+
+              <!-- Floating Real-Time Telemetry HUD Overlays -->
+              <div class="absolute top-4 left-4 bg-[#070F0B]/85 backdrop-blur-md border border-[#10B981]/40 rounded-xl p-2.5 shadow-xl text-left flex items-center gap-2.5">
+                <div class="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-ping"></div>
+                <div>
+                  <div class="text-[10px] font-mono text-[#94A3B8] uppercase">SUMO Active Agents</div>
+                  <div class="text-xs font-bold font-mono text-white">18,420 Live Vehicles</div>
+                </div>
+              </div>
+
+              <div class="absolute bottom-4 right-4 bg-[#070F0B]/85 backdrop-blur-md border border-[#06B6D4]/40 rounded-xl p-2.5 shadow-xl text-left flex items-center gap-2.5">
+                <svg class="w-4 h-4 text-[#06B6D4] animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                <div>
+                  <div class="text-[10px] font-mono text-[#94A3B8] uppercase">Emergency Priority</div>
+                  <div class="text-xs font-bold font-mono text-[#38BDF8]">Green Wave Active</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- SECTION 2: REAL-TIME INSIGHTS (Explore Amman in Real Time) -->
-      <section class="pt-6 sm:pt-10 pb-6 border-t border-[#B8D8BF]/40 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-        <!-- Left Column: Illuminated Night Digital Twin View with IoT Telemetry -->
-        <div class="lg:col-span-6 xl:col-span-6 flex justify-center lg:justify-start">
-          <div class="relative w-full max-w-[500px] rounded-[22px] overflow-hidden p-1 bg-gradient-to-b from-white/40 to-white/10 backdrop-blur-md border border-white/60 shadow-[0_16px_36px_rgba(20,40,25,0.12)] group">
+      <!-- 3. SIMULATION CAPABILITIES (Zero Emojis - Tesla/Microsoft Quality) -->
+      <section id="capabilities" class="pt-16 pb-14 border-t border-[#10B981]/15">
+        <div class="text-center max-w-3xl mx-auto space-y-3 mb-12">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#10B981]/10 border border-[#10B981]/30 text-[#34D399] text-xs font-mono font-bold tracking-wider uppercase">
+            <svg class="w-3.5 h-3.5 text-[#10B981]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" stroke-width="2"/><rect x="9" y="9" width="6" height="6" stroke-width="2"/></svg>
+            <span>Scenario Sandbox Engine</span>
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            Test Any Urban Hypothesis in Silicon Before Asphalt
+          </h2>
+          <p class="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
+            Amman Urban Digital Twin enables urban engineers and transport authorities to stress-test radical urban solutions in high-fidelity simulation with zero public risk.
+          </p>
+        </div>
+
+        <!-- 4 Core Capabilities Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Card 1: Emergency Corridor -->
+          <div class="p-5 rounded-2xl bg-[#0B1812]/80 hover:bg-[#0E2018] border border-[#10B981]/20 hover:border-[#10B981]/60 transition-all duration-300 flex flex-col justify-between group">
+            <div class="space-y-3 text-left">
+              <div class="flex items-center justify-between">
+                <div class="w-10 h-10 rounded-xl bg-[#10B981]/15 text-[#10B981] flex items-center justify-center">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                </div>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/5 text-[#94A3B8] border border-white/10">TraCI Override</span>
+              </div>
+              <h3 class="text-base font-bold text-white group-hover:text-[#6EE7B7] transition-colors">
+                Emergency Green Corridor
+              </h3>
+              <p class="text-xs text-[#94A3B8] leading-relaxed">
+                Detects approaching civil defense and ambulance units. Preemptively opens signals, flushes downstream queues, and holds conflicting cross-traffic safely.
+              </p>
+            </div>
+            <div class="pt-4 mt-4 border-t border-white/10 flex items-center justify-between">
+              <div>
+                <div class="text-[10px] font-mono text-[#64748B]">Response Time</div>
+                <div class="text-lg font-black font-mono text-[#34D399]">-38% Faster</div>
+              </div>
+              <span class="w-7 h-7 rounded-full bg-white/5 group-hover:bg-[#10B981] group-hover:text-[#070F0B] text-[#94A3B8] flex items-center justify-center transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- Card 2: Adaptive Signal Logic -->
+          <div class="p-5 rounded-2xl bg-[#0B1812]/80 hover:bg-[#0E2018] border border-[#10B981]/20 hover:border-[#10B981]/60 transition-all duration-300 flex flex-col justify-between group">
+            <div class="space-y-3 text-left">
+              <div class="flex items-center justify-between">
+                <div class="w-10 h-10 rounded-xl bg-[#06B6D4]/15 text-[#06B6D4] flex items-center justify-center">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                </div>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/5 text-[#94A3B8] border border-white/10">Dynamic Logic</span>
+              </div>
+              <h3 class="text-base font-bold text-white group-hover:text-[#38BDF8] transition-colors">
+                Congestion Dissolution Logic
+              </h3>
+              <p class="text-xs text-[#94A3B8] leading-relaxed">
+                Sensor loops and computer vision assess real-time queue lengths, autonomously adjusting phase splits to dissolve roundabouts bottlenecks (7th & 8th Circles).
+              </p>
+            </div>
+            <div class="pt-4 mt-4 border-t border-white/10 flex items-center justify-between">
+              <div>
+                <div class="text-[10px] font-mono text-[#64748B]">Peak Delay</div>
+                <div class="text-lg font-black font-mono text-[#38BDF8]">-32.4%</div>
+              </div>
+              <span class="w-7 h-7 rounded-full bg-white/5 group-hover:bg-[#06B6D4] group-hover:text-[#070F0B] text-[#94A3B8] flex items-center justify-center transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- Card 3: Urban Heat Island -->
+          <div class="p-5 rounded-2xl bg-[#0B1812]/80 hover:bg-[#0E2018] border border-[#10B981]/20 hover:border-[#10B981]/60 transition-all duration-300 flex flex-col justify-between group">
+            <div class="space-y-3 text-left">
+              <div class="flex items-center justify-between">
+                <div class="w-10 h-10 rounded-xl bg-[#10B981]/15 text-[#34D399] flex items-center justify-center">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                </div>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/5 text-[#94A3B8] border border-white/10">35°C Heat Solver</span>
+              </div>
+              <h3 class="text-base font-bold text-white group-hover:text-[#6EE7B7] transition-colors">
+                Heat Island Mitigation
+              </h3>
+              <p class="text-xs text-[#94A3B8] leading-relaxed">
+                Identifies asphalt hotspots reaching 35°C. Simulates targeted microclimate cooling via green canopies, bioswales, and reflective road coatings.
+              </p>
+            </div>
+            <div class="pt-4 mt-4 border-t border-white/10 flex items-center justify-between">
+              <div>
+                <div class="text-[10px] font-mono text-[#64748B]">Thermal Drop</div>
+                <div class="text-lg font-black font-mono text-[#34D399]">-3.2°C</div>
+              </div>
+              <span class="w-7 h-7 rounded-full bg-white/5 group-hover:bg-[#10B981] group-hover:text-[#070F0B] text-[#94A3B8] flex items-center justify-center transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- Card 4: Carbon Emission Footprint -->
+          <div class="p-5 rounded-2xl bg-[#0B1812]/80 hover:bg-[#0E2018] border border-[#10B981]/20 hover:border-[#10B981]/60 transition-all duration-300 flex flex-col justify-between group">
+            <div class="space-y-3 text-left">
+              <div class="flex items-center justify-between">
+                <div class="w-10 h-10 rounded-xl bg-[#06B6D4]/15 text-[#38BDF8] flex items-center justify-center">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+                </div>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/5 text-[#94A3B8] border border-white/10">HBEFA Standard</span>
+              </div>
+              <h3 class="text-base font-bold text-white group-hover:text-[#38BDF8] transition-colors">
+                Carbon Plume Dynamics
+              </h3>
+              <p class="text-xs text-[#94A3B8] leading-relaxed">
+                Continuous vehicular CO2 dispersal modeling across major Amman corridors, testing public transit electrification and congestion mitigation scenarios.
+              </p>
+            </div>
+            <div class="pt-4 mt-4 border-t border-white/10 flex items-center justify-between">
+              <div>
+                <div class="text-[10px] font-mono text-[#64748B]">CO2 Reduction</div>
+                <div class="text-lg font-black font-mono text-[#38BDF8]">-24.8%</div>
+              </div>
+              <span class="w-7 h-7 rounded-full bg-white/5 group-hover:bg-[#06B6D4] group-hover:text-[#070F0B] text-[#94A3B8] flex items-center justify-center transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. REAL-TIME TELEMETRY & THERMAL HEATMAP SHOWCASE -->
+      <section id="thermal" class="pt-12 pb-14 border-t border-[#10B981]/15 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        <!-- Left Image Stage -->
+        <div class="lg:col-span-6 xl:col-span-7 flex justify-center lg:justify-start">
+          <div class="relative w-full max-w-[620px] rounded-3xl overflow-hidden p-1.5 bg-gradient-to-b from-[#10B981]/30 via-[#0B1C15] to-[#06B6D4]/20 border border-[#10B981]/30 shadow-[0_25px_60px_rgba(0,0,0,0.9)] group">
+            <div class="absolute inset-0 bg-gradient-to-tr from-[#10B981]/20 to-[#06B6D4]/15 rounded-3xl blur-[70px] -z-10"></div>
             <img
-              src="realtime-insights-blended.png"
+              src="realtime-insights-feathered.png"
               onerror="this.src='realtime-insights.jpg'"
-              alt="Amman Real Time City Insights"
-              class="w-full h-auto rounded-[18px] object-cover transition-transform duration-500 group-hover:scale-105"
+              alt="Amman Real Time City Insights & Thermal Heatmaps"
+              class="w-full h-auto rounded-2xl object-cover transition-transform duration-700 group-hover:scale-105"
+              style="mask-image: radial-gradient(ellipse at center, black 70%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse at center, black 70%, transparent 100%);"
             />
+            <div class="absolute bottom-6 left-6 bg-[#070F0B]/90 backdrop-blur-md border border-[#10B981]/40 rounded-xl px-3.5 py-2 flex items-center gap-3 shadow-2xl">
+              <div class="w-3 h-3 rounded-full bg-[#10B981] animate-ping"></div>
+              <div class="text-left font-mono">
+                <div class="text-[10px] text-[#94A3B8]">URBAN HEAT ISLAND REDUCTION</div>
+                <div class="text-xs font-bold text-[#34D399]">35.0°C Hotspot → 31.8°C with Green Canopy</div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Right Column: Real-Time Description & Feature Badges -->
-        <div class="lg:col-span-6 xl:col-span-6 space-y-4 lg:pl-6 text-left">
-          <div class="flex items-center gap-2">
-            <span class="text-[11px] font-bold text-[#2A7650] tracking-[0.12em] uppercase">
-              REAL-TIME INSIGHTS
-            </span>
-            <span class="w-8 h-[1.5px] bg-[#2A7650]/60 inline-block"></span>
+        <!-- Right Text Details -->
+        <div class="lg:col-span-6 xl:col-span-5 space-y-5 text-left">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#06B6D4]/10 border border-[#06B6D4]/30 text-[#38BDF8] text-xs font-mono font-bold tracking-wide uppercase">
+            <svg class="w-3.5 h-3.5 text-[#06B6D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            <span>Microclimate & Emissions</span>
           </div>
 
           <div>
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-[#142D1E] tracking-tight leading-tight">
-              Explore Amman
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+              Simulating Urban Heat Islands
             </h2>
-            <h2 class="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-[#3FB8C5] to-[#73D890] bg-clip-text text-transparent tracking-tight leading-tight">
-              in Real Time
+            <h2 class="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-[#10B981] to-[#06B6D4] bg-clip-text text-transparent tracking-tight leading-tight">
+              & Carbon Plume Dynamics
             </h2>
           </div>
 
-          <p class="text-xs sm:text-[13.5px] text-[#334D3D] leading-relaxed max-w-lg font-normal">
-            Visualize traffic flow, test scenarios, and make smarter decisions for a more connected, sustainable Amman.
+          <p class="text-xs sm:text-[13.5px] text-[#94A3B8] leading-relaxed font-normal">
+            Dense asphalt intersections across Amman frequently reach surface temperatures exceeding 35°C. Amman Urban Digital Twin models microclimate radiative physics, quantifying the exact cooling degree drop achieved by planting urban vegetation corridors, green roofs, and bioswales before committing municipal funds.
           </p>
 
-          <!-- 3 Feature Badges -->
-          <div class="grid grid-cols-3 gap-3 pt-3">
-            <div
-              onclick="navigateToAuth()"
-              class="p-3 rounded-xl bg-white/45 backdrop-blur-sm border border-white/70 hover:bg-white/80 hover:scale-105 transition-all duration-200 cursor-pointer text-center group shadow-sm"
-            >
-              <div class="w-9 h-9 mx-auto rounded-full bg-[#D6F3E0] flex items-center justify-center text-[#266F4A] mb-1.5 group-hover:bg-[#44C2D0] group-hover:text-white transition-colors text-base">
-                🚗
-              </div>
-              <h4 class="text-[11.5px] font-bold text-[#14261B] leading-tight">
-                Traffic Management
-              </h4>
+          <div class="space-y-2.5 pt-2 font-mono text-xs text-[#CBD5E1]">
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#10B981] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <span>Localized surface temperature thermal mapping (22°C - 35°C)</span>
             </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#10B981] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <span>Microscopic fleet emission dispersal & corridor carbon tracking</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#10B981] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <span>Dynamic demographic population flow & pedestrian accessibility</span>
+            </div>
+          </div>
 
-            <div
+          <div class="pt-2">
+            <button
               onclick="navigateToAuth()"
-              class="p-3 rounded-xl bg-white/45 backdrop-blur-sm border border-white/70 hover:bg-white/80 hover:scale-105 transition-all duration-200 cursor-pointer text-center group shadow-sm"
+              class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#10B981]/15 hover:bg-[#10B981]/25 border border-[#10B981]/40 text-[#6EE7B7] text-xs font-mono font-bold tracking-wider uppercase transition-all duration-200 cursor-pointer"
             >
-              <div class="w-9 h-9 mx-auto rounded-full bg-[#D6F3E0] flex items-center justify-center text-[#266F4A] mb-1.5 group-hover:bg-[#73D890] group-hover:text-[#14261B] transition-colors text-base">
-                🍃
-              </div>
-              <h4 class="text-[11.5px] font-bold text-[#14261B] leading-tight">
-                Greener Mobility
-              </h4>
-            </div>
-
-            <div
-              onclick="navigateToAuth()"
-              class="p-3 rounded-xl bg-white/45 backdrop-blur-sm border border-white/70 hover:bg-white/80 hover:scale-105 transition-all duration-200 cursor-pointer text-center group shadow-sm"
-            >
-              <div class="w-9 h-9 mx-auto rounded-full bg-[#D6F3E0] flex items-center justify-center text-[#266F4A] mb-1.5 group-hover:bg-[#4A72DF] group-hover:text-white transition-colors text-base">
-                📊
-              </div>
-              <h4 class="text-[11.5px] font-bold text-[#14261B] leading-tight">
-                Data-Driven Planning
-              </h4>
-            </div>
+              <span>Launch Thermal HUD</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </button>
           </div>
         </div>
       </section>
 
-      <!-- Footer -->
-      <footer class="py-4 border-t border-[#B8D8BF]/30 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#4A6453]">
-        <p>© 2026 Amman Urban Digital Twin. Connected with SUMO Simulation Engine.</p>
-        <div class="flex items-center gap-4 mt-2 sm:mt-0 font-medium">
-          <button onclick="navigateToAuth()" class="hover:text-[#183623] cursor-pointer">Explore Platform</button>
+      <!-- 5. ABOUT THE PROJECT DEEP-DIVE -->
+      <section id="about" class="pt-14 pb-14 border-t border-[#10B981]/15">
+        <div class="max-w-4xl mx-auto text-center space-y-4 mb-10">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#10B981]/10 border border-[#10B981]/30 text-[#34D399] text-xs font-mono font-bold tracking-wider uppercase">
+            <svg class="w-3.5 h-3.5 text-[#10B981]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+            <span>About The Digital Twin Project</span>
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            Architecting Future Cities: Bridging Artificial Intelligence & Urban Reality
+          </h2>
+          <p class="text-xs sm:text-sm text-[#94A3B8] leading-relaxed max-w-2xl mx-auto">
+            An advanced urban co-simulation platform bridging SUMO (Simulation of Urban MObility) with Python AI controllers, FastAPI backends, and modern spatial data systems.
+          </p>
+        </div>
+
+        <!-- 3 Pillars -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div class="p-6 rounded-2xl bg-[#0B1812]/90 border border-[#10B981]/20 shadow-xl space-y-3 text-left">
+            <div class="w-10 h-10 rounded-xl bg-[#10B981]/15 text-[#10B981] flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <h3 class="text-base font-bold text-white">SUMO Microscopic Engine</h3>
+            <p class="text-xs text-[#94A3B8] leading-relaxed">
+              Microscopic agent-based vehicle modeling factoring driver behavior, lane changes, reaction delays, and multi-modal transit across authentic OSM Amman road geometry.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-[#0B1812]/90 border border-[#06B6D4]/20 shadow-xl space-y-3 text-left">
+            <div class="w-10 h-10 rounded-xl bg-[#06B6D4]/15 text-[#06B6D4] flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" stroke-width="2"/><rect x="9" y="9" width="6" height="6" stroke-width="2"/></svg>
+            </div>
+            <h3 class="text-base font-bold text-white">TraCI Python AI Controllers</h3>
+            <p class="text-xs text-[#94A3B8] leading-relaxed">
+              Real-time bidirectional Python control loop querying queue states and dynamically overriding phase durations to dismantle emerging gridlock bottlenecks.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-[#0B1812]/90 border border-[#10B981]/20 shadow-xl space-y-3 text-left">
+            <div class="w-10 h-10 rounded-xl bg-[#10B981]/15 text-[#34D399] flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <h3 class="text-base font-bold text-white">Zero Infrastructure Capital Waste</h3>
+            <p class="text-xs text-[#94A3B8] leading-relaxed">
+              Validating bridges, tunnels, and Bus Rapid Transit (BRT) lane conversions in simulation prevents costly engineering failures and guarantees civic return on investment.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. EXECUTIVE FINAL CTA BANNER -->
+      <section class="my-10 rounded-3xl p-8 sm:p-12 bg-gradient-to-r from-[#0D261B] via-[#0F3022] to-[#0A1F16] border border-[#10B981]/30 shadow-[0_20px_50px_rgba(0,0,0,0.8)] text-center relative overflow-hidden">
+        <div class="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-[#10B981]/15 blur-[90px] -z-0"></div>
+        <div class="absolute -left-20 -top-20 w-80 h-80 rounded-full bg-[#06B6D4]/15 blur-[90px] -z-0"></div>
+
+        <div class="relative z-10 max-w-2xl mx-auto space-y-5">
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            Ready to Experience Amman’s Digital Twin?
+          </h2>
+          <p class="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
+            Join urban researchers and civil engineers testing live simulation scenarios, green wave preemption, and microclimate heat mapping.
+          </p>
+          <div class="pt-2">
+            <button
+              onclick="navigateToAuth()"
+              class="group inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-gradient-to-r from-[#10B981] to-[#06B6D4] text-[#070F0B] text-sm font-extrabold tracking-tight shadow-[0_0_30px_rgba(16,185,129,0.4)] hover:shadow-[0_0_45px_rgba(6,182,212,0.7)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
+            >
+              <span>Launch Simulation Workspace</span>
+              <span class="w-6 h-6 rounded-full bg-[#070F0B] text-[#10B981] flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1">
+                <svg class="w-3.5 h-3.5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. FOOTER -->
+      <footer class="py-6 border-t border-[#10B981]/15 flex flex-col sm:flex-row items-center justify-between text-xs text-[#64748B] font-mono">
+        <div class="flex items-center gap-3">
+          <span class="w-2 h-2 rounded-full bg-[#10B981]"></span>
+          <span>Amman Urban Digital Twin • Precision Co-Simulation © 2026</span>
+        </div>
+
+        <div class="flex items-center gap-4 mt-3 sm:mt-0">
+          <span class="text-[#94A3B8]">31.9539° N, 35.9106° E</span>
           <span>•</span>
-          <button onclick="navigateToAuth()" class="hover:text-[#183623] cursor-pointer">Sign In / Register</button>
+          <button onclick="navigateToAuth()" class="hover:text-[#10B981] transition-colors cursor-pointer">
+            Enter Platform
+          </button>
+          <span>•</span>
+          <button onclick="navigateToAuth()" class="hover:text-[#10B981] transition-colors cursor-pointer">
+            Sign In
+          </button>
         </div>
       </footer>
     </div>
