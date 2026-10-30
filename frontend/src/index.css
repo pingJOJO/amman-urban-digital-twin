@@ -107,3 +107,26 @@ body {
 .traffic-signal {
   transition: fill 0.3s ease;
 }
+
+/* Organic Falling Botanical Leaves Animation */
+@keyframes leafDrift {
+  0% {
+    transform: translateY(-6vh) translateX(0px) rotate(0deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.55;
+    transform: translateY(14vh) translateX(25px) rotate(45deg);
+  }
+  50% {
+    transform: translateY(52vh) translateX(-22px) rotate(170deg);
+  }
+  85% {
+    opacity: 0.55;
+    transform: translateY(88vh) translateX(28px) rotate(295deg);
+  }
+  100% {
+    transform: translateY(112vh) translateX(8px) rotate(360deg);
+    opacity: 0;
+  }
+}
