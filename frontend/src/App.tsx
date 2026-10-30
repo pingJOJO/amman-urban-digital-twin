@@ -57,7 +57,9 @@ const AppContent: React.FC = () => {
 };
 
 export const App: React.FC = () => {
-  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || 'dummy-google-client-id';
+  const googleClientId =
+    import.meta.env.VITE_GOOGLE_CLIENT_ID ||
+    '616697110221-s826h11pfu4nunm4j437lhu0iot49oqo.apps.googleusercontent.com';
 
   return (
     <GoogleOAuthProvider clientId={googleClientId}>

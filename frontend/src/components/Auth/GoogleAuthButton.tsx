@@ -11,7 +11,9 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ disabled = f
   const { loginWithGoogle, isLoading } = useAuth();
   const [authError, setAuthError] = useState<string | null>(null);
 
-  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  const googleClientId =
+    import.meta.env.VITE_GOOGLE_CLIENT_ID ||
+    '616697110221-s826h11pfu4nunm4j437lhu0iot49oqo.apps.googleusercontent.com';
   const isRealClientConfigured =
     googleClientId &&
     !googleClientId.includes('your_google_client_id') &&
