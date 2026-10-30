@@ -1123,24 +1123,6 @@
           <p class="text-sm sm:text-base text-[#2E4738] leading-relaxed max-w-2xl mx-auto font-normal">
             مشروع تخرج مبتكر بقيادة المهندسة ضحى زياد (2026)، يدمج محاكاة المرور المجهرية المتقدمة (SUMO) والتحكم بالذكاء الاصطناعي مع دراسة المناخ الحضري وانبعاثات الكربون، لتقديم منصة تدعم متخذي القرار في أمانة عمان الكبرى ووزارة النقل.
           </p>
-
-          <!-- Researcher Credit Card -->
-          <div class="inline-flex flex-col sm:flex-row items-center gap-4 p-4 px-6 rounded-3xl border border-white/90 bg-white/70 shadow-md text-[#142A1D]">
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#10B981] to-[#38BDF8] flex items-center justify-center text-[#070F0B] font-bold shadow-md">
-                <svg class="w-6 h-6 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-              </div>
-              <div class="text-left rtl:text-right">
-                <div class="text-xs font-mono text-[#587563] uppercase tracking-wider">إعداد الباحثة والمطوّرة</div>
-                <div class="text-base font-bold font-sans">ضحى زياد (Doha Ziad)</div>
-              </div>
-            </div>
-            <div class="hidden sm:block w-px h-8 bg-current opacity-15"></div>
-            <div class="text-left rtl:text-right text-xs font-mono">
-              <div class="text-[#587563] uppercase">Capstone Edition</div>
-              <div class="font-bold text-[#10B981]">2026 Academic Edition</div>
-            </div>
-          </div>
         </section>
 
         <!-- Four Pillars Grid -->
@@ -1517,10 +1499,10 @@
           </div>
 
           <form id="signupForm" onsubmit="handleSignupSubmit(event)" class="space-y-3">
-            <!-- Full Name / Username (NO SPACES ALLOWED) -->
+            <!-- Full Name -->
             <div class="space-y-1">
               <div class="flex justify-between items-center text-xs font-medium text-[#293828]">
-                <span>Name (بدون مسافات)</span>
+                <span>Name</span>
                 <span id="nameStatus" class="text-[11px] font-semibold"></span>
               </div>
               <input
@@ -1528,12 +1510,9 @@
                 id="inputName"
                 oninput="validateNameInput()"
                 required
-                placeholder="Faris_AlMajali"
+                placeholder="Faris Al-Majali"
                 class="twin-input w-full h-[40px] px-3.5 rounded-[8px] text-[13.5px]"
               />
-              <p id="nameSpaceWarning" class="hidden text-red-700 text-[11px] font-medium mt-0.5">
-                ⚠️ الاسم يجب ألا يحتوي على مسافات (استخدم الأحرف أو _ بدلاً من المسافة).
-              </p>
             </div>
 
             <!-- Email Address -->
@@ -1572,32 +1551,32 @@
                   onclick="togglePasswordVisibility('inputPassword', this)"
                   class="absolute right-3 top-1/2 -translate-y-1/2 text-[#5B6D58] hover:text-[#253524] text-xs cursor-pointer"
                 >
-                  👁️
+                  Show
                 </button>
               </div>
 
               <!-- DYNAMIC 3-ITEM PASSWORD CHECKLIST (Displayed only when user starts typing password) -->
               <div id="passwordChecklistContainer" class="hidden p-2.5 rounded-lg bg-black/5 border border-[#B5C4B2]/40 text-xs space-y-1.5 mt-1.5 transition-all">
                 <p class="font-semibold text-[#273826] text-[11px] mb-0.5">
-                  متطلبات كلمة المرور (Password Checklist):
+                  Password Checklist:
                 </p>
                 
                 <!-- Rule 1: Uppercase Letter -->
                 <div id="chkUpper" class="flex items-center gap-2 text-[#586A56] transition-colors">
                   <span id="chkUpperIcon" class="w-4 h-4 rounded-full border-2 border-[#8BA088] inline-block shrink-0"></span>
-                  <span class="text-[11.5px]">حرف كبير واحد على الأقل (At least one uppercase A-Z)</span>
+                  <span class="text-[11.5px]">At least one uppercase letter (A-Z)</span>
                 </div>
 
                 <!-- Rule 2: Number or Special Symbol -->
                 <div id="chkNumber" class="flex items-center gap-2 text-[#586A56] transition-colors">
                   <span id="chkNumberIcon" class="w-4 h-4 rounded-full border-2 border-[#8BA088] inline-block shrink-0"></span>
-                  <span class="text-[11.5px]">رقم أو رمز خاص واحد على الأقل (At least one number or symbol)</span>
+                  <span class="text-[11.5px]">At least one number or symbol</span>
                 </div>
 
                 <!-- Rule 3: Minimum 8 characters -->
                 <div id="chkLength" class="flex items-center gap-2 text-[#586A56] transition-colors">
                   <span id="chkLengthIcon" class="w-4 h-4 rounded-full border-2 border-[#8BA088] inline-block shrink-0"></span>
-                  <span class="text-[11.5px]">8 خانات على الأقل (At least 8 characters)</span>
+                  <span class="text-[11.5px]">At least 8 characters</span>
                 </div>
               </div>
             </div>
@@ -1698,7 +1677,7 @@
           <!-- 1-Click Quick Demo Login Button -->
           <div class="mb-3 p-2.5 rounded-xl bg-emerald-900/10 border border-emerald-600/30 flex items-center justify-between gap-2">
             <div class="text-left">
-              <p class="text-[11.5px] font-semibold text-[#1B3219]">حساب مهندس تجريبي جاهز</p>
+              <p class="text-[11.5px] font-semibold text-[#1B3219]">Instant Demo Account Ready</p>
               <p class="text-[10px] text-[#475C44]">engineer.faris@amman-digital-twin.jo</p>
             </div>
             <button
@@ -1706,7 +1685,7 @@
               onclick="triggerDemoLogin()"
               class="px-3 py-1.5 rounded-full bg-[#3D8B62] hover:bg-[#327753] active:bg-[#276243] text-white text-[11px] font-semibold tracking-wide transition-all shadow-sm hover:scale-105 cursor-pointer shrink-0"
             >
-              دخول فوري ⚡
+              Quick Login
             </button>
           </div>
 
@@ -2543,26 +2522,18 @@
       }
     }
 
-    // 1. Validation: Name must NOT contain spaces
+    // 1. Validation: Name must be at least 2 characters
     function validateNameInput() {
       const nameInput = document.getElementById('inputName');
       const nameVal = nameInput.value;
-      const warningEl = document.getElementById('nameSpaceWarning');
       const statusEl = document.getElementById('nameStatus');
-      const hasSpace = /\s/.test(nameVal);
 
-      if (hasSpace) {
-        warningEl.classList.remove('hidden');
-        nameInput.classList.add('border-red-500', 'ring-2', 'ring-red-400/30');
-        statusEl.innerHTML = '<span class="text-red-700">✕ لا يُسمح بالمسافات</span>';
+      if (nameVal.trim().length >= 2) {
+        statusEl.innerHTML = '<span class="text-emerald-700">✓ Valid</span>';
+      } else if (nameVal.length > 0) {
+        statusEl.innerHTML = '<span class="text-amber-800">Min 2 chars</span>';
       } else {
-        warningEl.classList.add('hidden');
-        nameInput.classList.remove('border-red-500', 'ring-2', 'ring-red-400/30');
-        if (nameVal.trim().length >= 2) {
-          statusEl.innerHTML = '<span class="text-emerald-700">✓ صحيح</span>';
-        } else {
-          statusEl.innerHTML = '';
-        }
+        statusEl.innerHTML = '';
       }
       validateAllSignupFields();
     }
@@ -2578,9 +2549,9 @@
       if (emailVal.length === 0) {
         statusEl.innerHTML = '';
       } else if (isValid) {
-        statusEl.innerHTML = '<span class="text-emerald-700">✓ صحيح</span>';
+        statusEl.innerHTML = '<span class="text-emerald-700">✓ Valid</span>';
       } else {
-        statusEl.innerHTML = '<span class="text-amber-800">بريد غير مكتمل</span>';
+        statusEl.innerHTML = '<span class="text-amber-800">Incomplete</span>';
       }
       validateAllSignupFields();
     }
@@ -2679,7 +2650,7 @@
     function handleSignupSubmit(e) {
       e.preventDefault();
       if (!validateAllSignupFields()) {
-        showSignupAlert('يرجى التأكد من استيفاء جميع الشروط الموضحة أعلاه (الاسم بدون مسافات، بريد صحيح، وقائمة كلمة المرور).');
+        showSignupAlert('Please make sure all requirements above are satisfied (Name, valid email, and password checklist).');
         return;
       }
 

@@ -32,7 +32,7 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ disabled = f
   const handleError = () => {
     console.warn('Google Login popup closed or origin unverified.');
     setAuthError(
-      'تعذر استكمال تسجيل الدخول عبر Google. إذا كنت تستخدم نافذة خاصة أو محظور ظهور النوافذ المنبثقة، يرجى السماح بها أو التأكد من إضافة http://localhost:5173 في Google Cloud Console.'
+      'Google sign-in could not be completed. If popups are blocked, please allow them or ensure http://localhost:5173 is authorized in Google Cloud Console.'
     );
   };
 
@@ -63,7 +63,7 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ disabled = f
               onClick={handleSimulatedGoogleClick}
               className="mt-1 block text-emerald-800 underline font-semibold hover:text-emerald-950 cursor-pointer"
             >
-              دخول مباشر بحساب Google التجريبي (للمعاينة الفورية) ⚡
+              Instant Demo Google Account Login (Quick Preview)
             </button>
           </div>
         </div>
@@ -73,7 +73,7 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ disabled = f
         <div className="w-full h-[42px] rounded-full border border-[#96B89F] bg-white/60 flex items-center justify-center gap-2 shadow-sm">
           <Loader2 className="w-4 h-4 animate-spin text-[#2E7752]" />
           <span className="text-xs font-semibold text-[#1F3320] tracking-wide">
-            جارِ مصادقة حساب Google مع النظام...
+            Authenticating Google account with system...
           </span>
         </div>
       ) : isRealClientConfigured ? (

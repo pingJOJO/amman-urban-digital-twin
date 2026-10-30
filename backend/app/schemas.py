@@ -8,13 +8,11 @@ class UserSignUp(BaseModel):
     """Payload for POST /auth/signup."""
     email: EmailStr = Field(..., description="Valid user email address", examples=["engineer@amman-digital-twin.jo"])
     password: str = Field(..., min_length=8, max_length=128, description="Password (at least 8 characters with uppercase and number/symbol)", examples=["SecurePass123!"])
-    full_name: str = Field(..., min_length=2, max_length=255, description="Full name / username of the user (no spaces allowed)", examples=["Ahmad_AlKhatib"])
+    full_name: str = Field(..., min_length=2, max_length=255, description="Full name of the user", examples=["Doha Ziad"])
 
     @field_validator("full_name")
     def validate_full_name(cls, v: str) -> str:
         clean = v.strip()
-        if " " in clean:
-            raise ValueError("Full name / username must not contain any spaces (use letters, numbers, or underscores)")
         if len(clean) < 2:
             raise ValueError("Full name must be at least 2 characters long")
         return clean

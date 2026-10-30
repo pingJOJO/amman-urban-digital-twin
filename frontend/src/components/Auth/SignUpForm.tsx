@@ -19,8 +19,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToLogin }) => {
   const [validationError, setValidationError] = useState<string | null>(null);
 
   // Real-time validations
-  const nameHasSpace = /\s/.test(fullName);
-  const isNameValid = fullName.trim().length >= 2 && !nameHasSpace;
+  const isNameValid = fullName.trim().length >= 2;
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   const isEmailValid = emailRegex.test(email.trim());
@@ -47,37 +46,32 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToLogin }) => {
     clearError();
 
     if (!fullName.trim()) {
-      setValidationError('يرجى إدخال الاسم / Please enter your name.');
-      return false;
-    }
-
-    if (nameHasSpace) {
-      setValidationError('الاسم يجب ألا يحتوي على أي مسافات (No spaces allowed in name/username).');
+      setValidationError('Please enter your name.');
       return false;
     }
 
     if (fullName.trim().length < 2) {
-      setValidationError('الاسم يجب أن يكون خانتين على الأقل (Name must be at least 2 characters).');
+      setValidationError('Name must be at least 2 characters.');
       return false;
     }
 
     if (!isEmailValid) {
-      setValidationError('يرجى إدخال بريد إلكتروني صحيح (e.g. name@domain.com).');
+      setValidationError('Please enter a valid email address (e.g. name@domain.com).');
       return false;
     }
 
     if (!isPasswordValid) {
-      setValidationError('يرجى استيفاء جميع شروط كلمة المرور الثلاثة الموضحة بالأسفل.');
+      setValidationError('Please fulfill all password requirements listed below.');
       return false;
     }
 
     if (password !== confirmPassword) {
-      setValidationError('كلمة المرور وتأكيد كلمة المرور غير متطابقتين (Passwords do not match).');
+      setValidationError('Password and confirmation do not match.');
       return false;
     }
 
     if (!agreeTerms) {
-      setValidationError('يجب الموافقة على شروط الاستخدام لإنشاء الحساب.');
+      setValidationError('Please accept the Terms & Conditions to proceed.');
       return false;
     }
 
@@ -126,20 +120,20 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToLogin }) => {
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-3">
-        {/* Full Name / Username */}
+        {/* Full Name */}
         <div className="space-y-1">
           <div className="flex justify-between items-center text-xs font-medium text-[#293828]">
-            <span>Name / Username (بدون مسافات)</span>
+            <span>Name</span>
             {fullName.length > 0 && (
-              nameHasSpace ? (
-                <span className="text-red-700 font-semibold flex items-center gap-1 text-[11px]">
-                  <X className="w-3 h-3 stroke-[3]" /> لا يُسمح بالمسافات
-                </span>
-              ) : isNameValid ? (
+              isNameValid ? (
                 <span className="text-emerald-700 font-semibold flex items-center gap-1 text-[11px]">
-                  <Check className="w-3 h-3 stroke-[3]" /> صحيح
+                  <Check className="w-3 h-3 stroke-[3]" /> Valid
                 </span>
-              ) : null
+              ) : (
+                <span className="text-amber-800 font-medium text-[11px]">
+                  Min 2 chars
+                </span>
+              )
             )}
           </div>
           <div className="relative">
@@ -149,17 +143,10 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToLogin }) => {
               value={fullName}
               onChange={handleNameChange}
               required
-              placeholder="Faris_AlMajali"
-              className={`twin-input w-full h-[40px] pl-10 pr-3.5 rounded-[8px] text-[13.5px] ${
-                nameHasSpace ? 'border-red-500 ring-2 ring-red-400/30' : ''
-              }`}
+              placeholder="Faris Al-Majali"
+              className="twin-input w-full h-[40px] pl-10 pr-3.5 rounded-[8px] text-[13.5px]"
             />
           </div>
-          {nameHasSpace && (
-            <p className="text-red-700 text-[11px] font-medium mt-0.5">
-              ⚠️ يرجى إزالة المسافات (استخدم الأحرف، الأرقام، أو _ بدلاً من المسافة).
-            </p>
-          )}
         </div>
 
         {/* Email */}
@@ -169,11 +156,11 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToLogin }) => {
             {email.length > 0 && (
               isEmailValid ? (
                 <span className="text-emerald-700 font-semibold flex items-center gap-1 text-[11px]">
-                  <Check className="w-3 h-3 stroke-[3]" /> صحيح
+                  <Check className="w-3 h-3 stroke-[3]" /> Valid
                 </span>
               ) : (
                 <span className="text-amber-800 font-medium text-[11px]">
-                  بريد غير مكتمل
+                  Incomplete
                 </span>
               )
             )}
@@ -200,7 +187,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToLogin }) => {
             <span>Password</span>
             {password.length > 0 && isPasswordValid && (
               <span className="text-emerald-700 font-semibold flex items-center gap-1 text-[11px]">
-                <Check className="w-3 h-3 stroke-[3]" /> كلمة مرور قوية
+                <Check className="w-3 h-3 stroke-[3]" /> Strong Password
               </span>
             )}
           </div>
@@ -231,7 +218,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToLogin }) => {
           {password.length > 0 && (
             <div className="p-2.5 rounded-lg bg-black/5 border border-[#B5C4B2]/40 text-xs space-y-1.5 mt-1.5 transition-all animate-fadeIn">
               <p className="font-semibold text-[#273826] text-[11px] mb-0.5">
-                متطلبات كلمة المرور (Password Checklist):
+                Password Checklist:
               </p>
               
               {/* Checklist Item 1: Uppercase Letter */}
@@ -243,7 +230,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToLogin }) => {
                 ) : (
                   <span className="w-4 h-4 rounded-full border-2 border-[#8BA088] inline-block shrink-0" />
                 )}
-                <span className="text-[11.5px]">حرف كبير واحد على الأقل (At least one uppercase A-Z)</span>
+                <span className="text-[11.5px]">At least one uppercase letter (A-Z)</span>
               </div>
 
               {/* Checklist Item 2: Number or Special Symbol */}
@@ -255,7 +242,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToLogin }) => {
                 ) : (
                   <span className="w-4 h-4 rounded-full border-2 border-[#8BA088] inline-block shrink-0" />
                 )}
-                <span className="text-[11.5px]">رقم أو رمز واحد على الأقل (At least one number or symbol)</span>
+                <span className="text-[11.5px]">At least one number or symbol</span>
               </div>
 
               {/* Checklist Item 3: Minimum 8 characters */}
@@ -267,7 +254,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToLogin }) => {
                 ) : (
                   <span className="w-4 h-4 rounded-full border-2 border-[#8BA088] inline-block shrink-0" />
                 )}
-                <span className="text-[11.5px]">8 خانات على الأقل (At least 8 characters)</span>
+                <span className="text-[11.5px]">At least 8 characters</span>
               </div>
             </div>
           )}
@@ -279,12 +266,12 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToLogin }) => {
             <span>Confirm Password</span>
             {isConfirmMatch && (
               <span className="text-emerald-700 font-semibold flex items-center gap-1 text-[11px]">
-                <Check className="w-3 h-3 stroke-[3]" /> متطابقتان
+                <Check className="w-3 h-3 stroke-[3]" /> Matches
               </span>
             )}
             {isConfirmMismatch && (
               <span className="text-red-700 font-semibold flex items-center gap-1 text-[11px]">
-                <X className="w-3 h-3 stroke-[3]" /> غير متطابقتين
+                <X className="w-3 h-3 stroke-[3]" /> Mismatch
               </span>
             )}
           </div>
@@ -306,7 +293,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToLogin }) => {
           </div>
           {isConfirmMismatch && (
             <p className="text-red-700 text-[11px] font-medium mt-0.5">
-              ⚠️ كلمة المرور وتأكيدها غير متطابقتين.
+              Password and confirmation do not match.
             </p>
           )}
         </div>

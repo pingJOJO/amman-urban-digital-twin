@@ -5,7 +5,6 @@ import {
   Cpu,
   Network,
   GraduationCap,
-  Award,
   Layers,
   Activity,
   ArrowRight,
@@ -98,40 +97,8 @@ export const AboutPage: React.FC<AboutPageProps> = ({ theme, onExplore }) => {
             isNight ? 'text-slate-300' : 'text-slate-700'
           }`}
         >
-          An innovative graduation capstone led by Doha Ziad (2026), bridging microscopic traffic co-simulation (SUMO), Python AI controllers (TraCI), and microclimate thermal modeling to provide Greater Amman Municipality with actionable, zero-risk infrastructure analytics.
+          An innovative graduation capstone bridging microscopic traffic co-simulation (SUMO), Python AI controllers (TraCI), and microclimate thermal modeling to provide Greater Amman Municipality with actionable, zero-risk infrastructure analytics.
         </p>
-
-        {/* Researcher Credit Card */}
-        <div
-          className={`inline-flex flex-col sm:flex-row items-center gap-4 p-4 px-6 rounded-3xl border shadow-md transition-all duration-300 hover:scale-[1.02] ${
-            isNight
-              ? 'bg-[#0B1812]/90 border-emerald-500/30 text-white'
-              : 'bg-white/70 border-white/90 text-[#142A1D]'
-          }`}
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-cyan-400 flex items-center justify-center text-slate-950 font-bold shadow-md">
-              <Award className="w-6 h-6 stroke-[2.2]" />
-            </div>
-            <div className="text-left">
-              <div className="text-xs font-mono text-[#587563] uppercase tracking-wider">
-                Lead Researcher & Developer
-              </div>
-              <div className="text-base font-bold font-sans">
-                Doha Ziad
-              </div>
-            </div>
-          </div>
-
-          <div className="hidden sm:block w-px h-8 bg-current opacity-15" />
-
-          <div className="text-left text-xs font-mono">
-            <div className="text-[#587563] uppercase">
-              Capstone Year
-            </div>
-            <div className="font-bold text-emerald-500">2026 Academic Edition</div>
-          </div>
-        </div>
       </section>
 
       {/* 2. THE FOUR SYSTEM PILLARS */}

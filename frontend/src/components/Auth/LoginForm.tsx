@@ -24,17 +24,17 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignUp }) => {
 
     const cleanEmail = email.trim();
     if (!cleanEmail) {
-      setValidationError('يرجى إدخال البريد الإلكتروني / Please enter your email.');
+      setValidationError('Please enter your email address.');
       return false;
     }
 
     if (!isEmailValid) {
-      setValidationError('صيغة البريد الإلكتروني غير صحيحة (مثال: name@domain.com)');
+      setValidationError('Please enter a valid email address (e.g. name@domain.com).');
       return false;
     }
 
     if (!password) {
-      setValidationError('يرجى إدخال كلمة المرور / Please enter your password.');
+      setValidationError('Please enter your password.');
       return false;
     }
 
@@ -92,7 +92,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignUp }) => {
         <div className="flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-emerald-700 shrink-0" />
           <div className="text-left">
-            <p className="text-[11.5px] font-semibold text-[#1B3219]">حساب تجريبي جاهز للدخول الفوري</p>
+            <p className="text-[11.5px] font-semibold text-[#1B3219]">Instant Demo Account Ready</p>
             <p className="text-[10px] text-[#475C44]">engineer.faris@amman-digital-twin.jo</p>
           </div>
         </div>
@@ -102,7 +102,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignUp }) => {
           disabled={isLoading}
           className="px-3 py-1.5 rounded-full bg-[#3D8B62] hover:bg-[#327753] active:bg-[#276243] text-white text-[11px] font-semibold tracking-wide transition-all shadow-sm hover:scale-105 cursor-pointer shrink-0 disabled:opacity-50"
         >
-          {isLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'دخول فوري ⚡'}
+          {isLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Quick Login'}
         </button>
       </div>
 
@@ -123,11 +123,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignUp }) => {
             {email.length > 0 && (
               isEmailValid ? (
                 <span className="text-emerald-700 font-semibold flex items-center gap-1 text-[11px]">
-                  <Check className="w-3 h-3 stroke-[3]" /> صحيح
+                  <Check className="w-3 h-3 stroke-[3]" /> Valid
                 </span>
               ) : (
                 <span className="text-amber-800 font-medium text-[11px]">
-                  صيغة غير مكتملة
+                  Incomplete format
                 </span>
               )
             )}

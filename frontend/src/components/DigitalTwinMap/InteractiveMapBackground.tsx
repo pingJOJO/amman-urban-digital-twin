@@ -1,5 +1,16 @@
 import React, { useEffect, useRef } from 'react';
 
+// Drifting botanical leaves overlay for atmospheric living motion
+const BACKGROUND_LEAVES = [
+  { id: 1, left: '8%', delay: '0s', duration: '15s', size: 22 },
+  { id: 2, left: '22%', delay: '2.5s', duration: '18s', size: 18 },
+  { id: 3, left: '38%', delay: '5.2s', duration: '20s', size: 24 },
+  { id: 4, left: '55%', delay: '1.2s', duration: '16s', size: 20 },
+  { id: 5, left: '72%', delay: '4.0s', duration: '19s', size: 25 },
+  { id: 6, left: '86%', delay: '6.5s', duration: '22s', size: 19 },
+  { id: 7, left: '94%', delay: '3.0s', duration: '17s', size: 21 },
+];
+
 export const InteractiveMapBackground: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -97,7 +108,7 @@ export const InteractiveMapBackground: React.FC = () => {
           { type: 'vehicle-bus', length: 44, cruiseSpeed: 0.64, currentSpeed: 0.64, pos: -120, scale: 0.94, el: null as SVGElement | null },
           { type: 'vehicle-sedan-dark', length: 24, cruiseSpeed: 0.88, currentSpeed: 0.88, pos: 320, scale: 0.90, el: null as SVGElement | null },
           { type: 'vehicle-car-olive', length: 20, cruiseSpeed: 0.82, currentSpeed: 0.82, pos: 790, scale: 0.90, el: null as SVGElement | null },
-          { type: 'vehicle-sedan-dark', length: 24, cruiseSpeed: 0.86, currentSpeed: 0.86, pos: 1220, scale: 0.90, el: null as SVGElement | null },
+          { type: 'vehicle-sedan-dark', length: 24, cruiseSpeed: 0.86, currentSpeed: 0.86, pos: 1220, scale: 0.92, el: null as SVGElement | null },
         ],
       },
       {
@@ -110,10 +121,10 @@ export const InteractiveMapBackground: React.FC = () => {
         stopLine: 710,
         angle: 180,
         vehicles: [
-          { type: 'vehicle-bus', length: 44, cruiseSpeed: 0.64, currentSpeed: 0.64, pos: 1420, scale: 0.94, el: null as SVGElement | null },
-          { type: 'vehicle-car-olive', length: 20, cruiseSpeed: 0.82, currentSpeed: 0.82, pos: 970, scale: 0.90, el: null as SVGElement | null },
-          { type: 'vehicle-sedan-dark', length: 24, cruiseSpeed: 0.88, currentSpeed: 0.88, pos: 520, scale: 0.90, el: null as SVGElement | null },
-          { type: 'vehicle-car-olive', length: 20, cruiseSpeed: 0.80, currentSpeed: 0.80, pos: 70, scale: 0.90, el: null as SVGElement | null },
+          { type: 'vehicle-bus', length: 44, cruiseSpeed: 0.66, currentSpeed: 0.66, pos: 1450, scale: 0.94, el: null as SVGElement | null },
+          { type: 'vehicle-car-olive', length: 20, cruiseSpeed: 0.80, currentSpeed: 0.80, pos: 980, scale: 0.90, el: null as SVGElement | null },
+          { type: 'vehicle-sedan-dark', length: 24, cruiseSpeed: 0.86, currentSpeed: 0.86, pos: 510, scale: 0.92, el: null as SVGElement | null },
+          { type: 'vehicle-car-olive', length: 20, cruiseSpeed: 0.82, currentSpeed: 0.82, pos: 80, scale: 0.90, el: null as SVGElement | null },
         ],
       },
     ];
@@ -122,255 +133,133 @@ export const InteractiveMapBackground: React.FC = () => {
     if (trafficContainer) {
       trafficContainer.innerHTML = '';
       lanes.forEach((lane) => {
-        lane.vehicles.forEach((v) => {
-          const useEl = document.createElementNS(svgNS, 'use');
-          useEl.setAttribute('href', `#${v.type}`);
-          v.el = useEl;
-          trafficContainer.appendChild(useEl);
+        lane.vehicles.forEach((veh) => {
+          const g = document.createElementNS(svgNS, 'g');
+          const use = document.createElementNS(svgNS, 'use');
+          use.setAttribute('href', `#${veh.type}`);
+          g.appendChild(use);
+          trafficContainer.appendChild(g);
+          veh.el = g;
         });
       });
     }
 
-    function updateVehiclePositions() {
-      const STOP_GAP = 28;
-      const SLOW_GAP = 95;
+    // 3. Dynamic Pedestrian System
+    const pedestrianWalkers = [
+      { axis: 'x', dir: 1, fixedY: 260, minX: 840, maxX: 1090, pos: 850, speed: 0.35, el: null as SVGElement | null },
+      { axis: 'x', dir: -1, fixedY: 380, minX: 840, maxX: 1090, pos: 1080, speed: 0.32, el: null as SVGElement | null },
+      { axis: 'y', dir: 1, fixedX: 920, minY: 200, maxY: 430, pos: 210, speed: 0.30, el: null as SVGElement | null },
+      { axis: 'x', dir: 1, fixedY: 320, minX: 1140, maxX: 1260, pos: 1145, speed: 0.33, el: null as SVGElement | null },
+    ];
+
+    const pedContainer = document.getElementById('mapPedestriansWalkersContainer');
+    if (pedContainer) {
+      pedContainer.innerHTML = '';
+      pedestrianWalkers.forEach((p) => {
+        const use = document.createElementNS(svgNS, 'use');
+        use.setAttribute('href', '#pedestrian-grid');
+        pedContainer.appendChild(use);
+        p.el = use;
+      });
+    }
+
+    function animateTraffic() {
+      if (!trafficRunning) return;
+      updateTrafficSignals();
 
       lanes.forEach((lane) => {
-        const isVert = lane.axis === 'y';
-        const hasStopSignal = isVert ? signalPhase !== 0 : signalPhase !== 2;
+        const numVeh = lane.vehicles.length;
+        for (let i = 0; i < numVeh; i++) {
+          const v = lane.vehicles[i];
+          const nextIdx = (i + 1) % numVeh;
+          const lead = lane.vehicles[nextIdx];
 
-        const sorted = lane.dir === 1
-          ? [...lane.vehicles].sort((a, b) => a.pos - b.pos)
-          : [...lane.vehicles].sort((a, b) => b.pos - a.pos);
-
-        const count = sorted.length;
-
-        for (let i = 0; i < count; i++) {
-          const v = sorted[i];
-          const leader = sorted[(i + 1) % count];
-
-          let distToLeader: number;
+          let distToLead: number;
           if (lane.dir === 1) {
-            distToLeader = leader.pos > v.pos
-              ? leader.pos - v.pos
-              : (lane.max - v.pos) + (leader.pos - lane.min);
+            distToLead = lead.pos > v.pos ? lead.pos - v.pos : lane.max - v.pos + (lead.pos - lane.min);
           } else {
-            distToLeader = leader.pos < v.pos
-              ? v.pos - leader.pos
-              : (v.pos - lane.min) + (lane.max - leader.pos);
+            distToLead = lead.pos < v.pos ? v.pos - lead.pos : v.pos - lane.min + (lane.max - lead.pos);
           }
-          const leaderClearance = distToLeader - (v.length / 2 + leader.length / 2);
 
-          let signalClearance = 9999;
-          if (hasStopSignal) {
-            const dStop = lane.dir === 1 ? lane.stopLine - v.pos : v.pos - lane.stopLine;
-            if (dStop > 0 && dStop < 240) {
-              signalClearance = dStop - v.length / 2;
+          let mustStopAtSignal = false;
+          let distToStopLine = Infinity;
+
+          if (lane.axis === 'y') {
+            const isRedOrYellow = signalPhase === 2 || signalPhase === 3 || signalPhase === 1;
+            if (isRedOrYellow) {
+              if (lane.dir === 1 && v.pos < lane.stopLine && lane.stopLine - v.pos < 170) {
+                mustStopAtSignal = true;
+                distToStopLine = lane.stopLine - v.pos;
+              } else if (lane.dir === -1 && v.pos > lane.stopLine && v.pos - lane.stopLine < 170) {
+                mustStopAtSignal = true;
+                distToStopLine = v.pos - lane.stopLine;
+              }
+            }
+          } else {
+            const isRedOrYellow = signalPhase === 0 || signalPhase === 1 || signalPhase === 3;
+            if (isRedOrYellow) {
+              if (lane.dir === 1 && v.pos < lane.stopLine && lane.stopLine - v.pos < 170) {
+                mustStopAtSignal = true;
+                distToStopLine = lane.stopLine - v.pos;
+              } else if (lane.dir === -1 && v.pos > lane.stopLine && v.pos - lane.stopLine < 170) {
+                mustStopAtSignal = true;
+                distToStopLine = v.pos - lane.stopLine;
+              }
             }
           }
 
-          const effectiveGap = Math.min(leaderClearance, signalClearance);
-
           let targetSpeed = v.cruiseSpeed;
-          if (effectiveGap <= STOP_GAP) {
+          if (distToLead < 55) {
             targetSpeed = 0;
-          } else if (effectiveGap < SLOW_GAP) {
-            const ratio = (effectiveGap - STOP_GAP) / (SLOW_GAP - STOP_GAP);
-            const leaderSpeed = leader ? Math.abs(leader.currentSpeed) : v.cruiseSpeed;
-            targetSpeed = Math.min(v.cruiseSpeed * ratio, Math.max(0.08, leaderSpeed * 0.96));
+          } else if (distToLead < 100) {
+            targetSpeed = Math.min(targetSpeed, lead.currentSpeed * 0.85);
           }
 
-          if (targetSpeed < v.currentSpeed) {
-            v.currentSpeed += (targetSpeed - v.currentSpeed) * 0.12;
-          } else {
-            v.currentSpeed += (targetSpeed - v.currentSpeed) * 0.04;
+          if (mustStopAtSignal) {
+            if (distToStopLine < 14) {
+              targetSpeed = 0;
+            } else if (distToStopLine < 70) {
+              targetSpeed = Math.min(targetSpeed, 0.28);
+            }
           }
 
-          if (effectiveGap <= STOP_GAP - 2) {
-            v.currentSpeed = 0;
+          if (v.currentSpeed < targetSpeed) {
+            v.currentSpeed += 0.022 * speedMultiplier;
+          } else if (v.currentSpeed > targetSpeed) {
+            v.currentSpeed -= 0.045 * speedMultiplier;
           }
+          v.currentSpeed = Math.max(0, Math.min(v.currentSpeed, v.cruiseSpeed));
 
           v.pos += v.currentSpeed * lane.dir * speedMultiplier;
 
-          if (lane.dir === 1) {
-            if (leader.pos > v.pos) {
-              const maxAllowed = leader.pos - (v.length / 2 + leader.length / 2 + 18);
-              if (v.pos > maxAllowed) v.pos = maxAllowed;
-            }
-            if (hasStopSignal && v.pos > lane.stopLine - (v.length / 2 + 3) && v.pos < lane.stopLine + 15) {
-              v.pos = lane.stopLine - (v.length / 2 + 3);
-            }
-            if (v.pos > lane.max) v.pos = lane.min;
-          } else {
-            if (leader.pos < v.pos) {
-              const minAllowed = leader.pos + (v.length / 2 + leader.length / 2 + 18);
-              if (v.pos < minAllowed) v.pos = minAllowed;
-            }
-            if (hasStopSignal && v.pos < lane.stopLine + (v.length / 2 + 3) && v.pos > lane.stopLine - 15) {
-              v.pos = lane.stopLine + (v.length / 2 + 3);
-            }
-            if (v.pos < lane.min) v.pos = lane.max;
-          }
+          if (lane.dir === 1 && v.pos > lane.max) v.pos = lane.min;
+          if (lane.dir === -1 && v.pos < lane.min) v.pos = lane.max;
 
           if (v.el) {
-            const x = lane.axis === 'x' ? v.pos : lane.fixedCoord;
-            const y = lane.axis === 'y' ? v.pos : lane.fixedCoord;
-            v.el.setAttribute(
-              'transform',
-              `translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${lane.angle}) scale(${v.scale})`
-            );
+            const posX = lane.axis === 'x' ? v.pos : lane.fixedCoord;
+            const posY = lane.axis === 'y' ? v.pos : lane.fixedCoord;
+            v.el.setAttribute('transform', `translate(${posX}, ${posY}) rotate(${lane.angle}) scale(${v.scale})`);
           }
         }
       });
-    }
 
-    // 3. Pedestrian Walking Engine
-    interface PedestrianData {
-      type: 'bezier' | 'linear';
-      p0?: { x: number; y: number };
-      p1?: { x: number; y: number };
-      p2?: { x: number; y: number };
-      start?: { x: number; y: number };
-      end?: { x: number; y: number };
-      t: number;
-      dir: number;
-      speed: number;
-      pauseFrames: number;
-      color: string;
-      stride: number;
-      el?: SVGElement | null;
-      legL?: SVGLineElement | null;
-      legR?: SVGLineElement | null;
-    }
-
-    const pedestrians: PedestrianData[] = [
-      { type: 'bezier', p0: { x: 845, y: 260 }, p1: { x: 960, y: 310 }, p2: { x: 1085, y: 242 }, t: 0.15, dir: 1, speed: 0.0011, pauseFrames: 0, color: '#263324', stride: 0 },
-      { type: 'bezier', p0: { x: 895, y: 205 }, p1: { x: 950, y: 320 }, p2: { x: 925, y: 425 }, t: 0.75, dir: -1, speed: 0.0013, pauseFrames: 0, color: '#344532', stride: 0 },
-      { type: 'bezier', p0: { x: 845, y: 380 }, p1: { x: 975, y: 345 }, p2: { x: 1085, y: 395 }, t: 0.45, dir: 1, speed: 0.0010, pauseFrames: 0, color: '#2A3828', stride: 0 },
-      { type: 'linear', start: { x: 1155, y: 235 }, end: { x: 1220, y: 410 }, t: 0.3, dir: 1, speed: 0.0014, pauseFrames: 0, color: '#243022', stride: 0 },
-      { type: 'linear', start: { x: 880, y: 115 }, end: { x: 1045, y: 120 }, t: 0.55, dir: 1, speed: 0.0012, pauseFrames: 0, color: '#334431', stride: 0 },
-      { type: 'linear', start: { x: 565, y: 235 }, end: { x: 625, y: 280 }, t: 0.35, dir: 1, speed: 0.0015, pauseFrames: 0, color: '#2C3A2A', stride: 0 },
-      { type: 'linear', start: { x: 740, y: 795 }, end: { x: 890, y: 805 }, t: 0.8, dir: -1, speed: 0.0012, pauseFrames: 0, color: '#233021', stride: 0 },
-      { type: 'linear', start: { x: 310, y: 795 }, end: { x: 460, y: 810 }, t: 0.4, dir: 1, speed: 0.0013, pauseFrames: 0, color: '#2D3C2B', stride: 0 },
-    ];
-
-    const pContainer = document.getElementById('mapPedestriansWalkersContainer');
-    if (pContainer) {
-      pContainer.innerHTML = '';
-      pedestrians.forEach((p) => {
-        const g = document.createElementNS(svgNS, 'g');
-
-        const shadow = document.createElementNS(svgNS, 'ellipse');
-        shadow.setAttribute('cx', '2.5');
-        shadow.setAttribute('cy', '5.5');
-        shadow.setAttribute('rx', '3.6');
-        shadow.setAttribute('ry', '1.3');
-        shadow.setAttribute('fill', '#5E7259');
-        shadow.setAttribute('opacity', '0.35');
-        g.appendChild(shadow);
-
-        const legL = document.createElementNS(svgNS, 'line');
-        legL.setAttribute('x1', '-0.7');
-        legL.setAttribute('y1', '1.5');
-        legL.setAttribute('x2', '-1.8');
-        legL.setAttribute('y2', '5.5');
-        legL.setAttribute('stroke', '#2D382B');
-        legL.setAttribute('stroke-width', '1.3');
-        legL.setAttribute('stroke-linecap', 'round');
-        g.appendChild(legL);
-
-        const legR = document.createElementNS(svgNS, 'line');
-        legR.setAttribute('x1', '0.7');
-        legR.setAttribute('y1', '1.5');
-        legR.setAttribute('x2', '1.8');
-        legR.setAttribute('y2', '5.5');
-        legR.setAttribute('stroke', '#2D382B');
-        legR.setAttribute('stroke-width', '1.3');
-        legR.setAttribute('stroke-linecap', 'round');
-        g.appendChild(legR);
-
-        const torso = document.createElementNS(svgNS, 'path');
-        torso.setAttribute('d', 'M -1.8 -2.2 L 1.8 -2.2 L 1.4 2 L -1.4 2 Z');
-        torso.setAttribute('fill', p.color);
-        g.appendChild(torso);
-
-        const head = document.createElementNS(svgNS, 'circle');
-        head.setAttribute('cx', '0');
-        head.setAttribute('cy', '-4.2');
-        head.setAttribute('r', '1.7');
-        head.setAttribute('fill', '#2D382B');
-        g.appendChild(head);
-
-        p.el = g;
-        p.legL = legL;
-        p.legR = legR;
-        pContainer.appendChild(g);
+      pedestrianWalkers.forEach((p) => {
+        p.pos += p.speed * p.dir * speedMultiplier;
+        if (p.axis === 'x' && p.maxX !== undefined && p.minX !== undefined) {
+          if (p.pos > p.maxX) p.dir = -1;
+          if (p.pos < p.minX) p.dir = 1;
+          if (p.el) p.el.setAttribute('transform', `translate(${p.pos}, ${p.fixedY})`);
+        } else if (p.axis === 'y' && p.maxY !== undefined && p.minY !== undefined) {
+          if (p.pos > p.maxY) p.dir = -1;
+          if (p.pos < p.minY) p.dir = 1;
+          if (p.el) p.el.setAttribute('transform', `translate(${p.fixedX}, ${p.pos})`);
+        }
       });
+
+      animFrameId = requestAnimationFrame(animateTraffic);
     }
 
-    function updatePedestrians() {
-      pedestrians.forEach((p) => {
-        if (!p.el || !p.legL || !p.legR) return;
-
-        if (p.pauseFrames > 0) {
-          p.pauseFrames -= speedMultiplier;
-          p.legL.setAttribute('x2', '-1.5');
-          p.legR.setAttribute('x2', '1.5');
-          return;
-        }
-
-        p.t += p.speed * p.dir * speedMultiplier;
-        p.stride += 0.22 * speedMultiplier;
-
-        let x = 0, y = 0, dx = 0;
-        if (p.type === 'bezier' && p.p0 && p.p1 && p.p2) {
-          const t = p.t;
-          const mt = 1 - t;
-          x = mt * mt * p.p0.x + 2 * mt * t * p.p1.x + t * t * p.p2.x;
-          y = mt * mt * p.p0.y + 2 * mt * t * p.p1.y + t * t * p.p2.y;
-          dx = 2 * mt * (p.p1.x - p.p0.x) + 2 * t * (p.p2.x - p.p1.x);
-        } else if (p.start && p.end) {
-          x = p.start.x + (p.end.x - p.start.x) * p.t;
-          y = p.start.y + (p.end.y - p.start.y) * p.t;
-          dx = p.end.x - p.start.x;
-        }
-
-        if (p.t >= 1) {
-          p.t = 1;
-          p.dir = -1;
-          p.pauseFrames = 80 + Math.random() * 60;
-        } else if (p.t <= 0) {
-          p.t = 0;
-          p.dir = 1;
-          p.pauseFrames = 80 + Math.random() * 60;
-        }
-
-        const moveDirX = dx * p.dir;
-        const facing = moveDirX >= 0 ? 1 : -1;
-
-        const swing = Math.sin(p.stride) * 2.2;
-        p.legL.setAttribute('x2', (-0.6 + swing).toFixed(1));
-        p.legR.setAttribute('x2', (0.6 - swing).toFixed(1));
-
-        const bob = Math.abs(Math.sin(p.stride)) * 0.45;
-
-        p.el.setAttribute(
-          'transform',
-          `translate(${x.toFixed(1)}, ${(y - bob).toFixed(1)}) rotate(36) scale(${facing}, 1)`
-        );
-      });
-    }
-
-    function loop() {
-      if (trafficRunning) {
-        updateTrafficSignals();
-        updateVehiclePositions();
-        updatePedestrians();
-      }
-      animFrameId = requestAnimationFrame(loop);
-    }
-
-    animFrameId = requestAnimationFrame(loop);
+    animateTraffic();
 
     return () => {
       trafficRunning = false;
@@ -379,11 +268,26 @@ export const InteractiveMapBackground: React.FC = () => {
   }, []);
 
   return (
-    <div
-      id="svgMapLayer"
-      ref={containerRef}
-      className="fixed inset-0 pointer-events-none z-0 map-mask-container select-none overflow-hidden"
-    >
+    <div ref={containerRef} className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#EDF6E8]">
+      {/* Gentle Falling Leaves Overlay for Atmospheric Living Motion */}
+      <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+        {BACKGROUND_LEAVES.map((leaf) => (
+          <div
+            key={leaf.id}
+            className="absolute -top-10 opacity-30 text-[#3C8D66]"
+            style={{
+              left: leaf.left,
+              animation: `driftFall ${leaf.duration} linear infinite`,
+              animationDelay: leaf.delay
+            }}
+          >
+            <svg width={leaf.size} height={leaf.size} viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z" />
+            </svg>
+          </div>
+        ))}
+      </div>
+
       <svg viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" className="w-full h-full">
         <defs>
           <filter id="softShadow" x="-20%" y="-20%" width="150%" height="150%">
@@ -404,7 +308,7 @@ export const InteractiveMapBackground: React.FC = () => {
             </g>
           </g>
 
-          {/* Upright Isometric Small Bush/Tree */}
+          {/* Upright Small Bush */}
           <g id="tree-small-grid">
             <g transform="rotate(36)">
               <ellipse cx="2" cy="7" rx="5.2" ry="2.5" fill="#6E8667" opacity="0.32" />
@@ -414,7 +318,7 @@ export const InteractiveMapBackground: React.FC = () => {
             </g>
           </g>
 
-          {/* Upright Isometric Cypress Tree */}
+          {/* Upright Conical Cypress Tree */}
           <g id="tree-cone-grid">
             <g transform="rotate(36)">
               <ellipse cx="3" cy="12" rx="6" ry="3" fill="#6E8667" opacity="0.35" />
@@ -424,7 +328,7 @@ export const InteractiveMapBackground: React.FC = () => {
             </g>
           </g>
 
-          {/* Standing Citizen Symbol */}
+          {/* Upright Pedestrian Figure */}
           <g id="pedestrian-grid">
             <g transform="rotate(36) scale(1.12)">
               <ellipse cx="3.5" cy="5.5" rx="3.5" ry="1.2" transform="rotate(25 3.5 5.5)" fill="#5E7259" opacity="0.35" />
@@ -435,7 +339,7 @@ export const InteractiveMapBackground: React.FC = () => {
             </g>
           </g>
 
-          {/* City Bus */}
+          {/* Vehicles */}
           <g id="vehicle-bus">
             <rect x="-21" y="-5.5" width="42" height="12" rx="3" fill="#1E281C" opacity="0.28" transform="translate(1.5, 2.5)" />
             <rect x="-21" y="-6" width="42" height="12" rx="3" fill="#283526" />
@@ -449,7 +353,6 @@ export const InteractiveMapBackground: React.FC = () => {
             <circle cx="20.5" cy="3.5" r="1.1" fill="#F4FBE8" />
           </g>
 
-          {/* Sedan Car */}
           <g id="vehicle-sedan-dark">
             <rect x="-11" y="-4.5" width="22" height="9.5" rx="3.5" fill="#1E281C" opacity="0.24" transform="translate(1.2, 2)" />
             <rect x="-11" y="-4.8" width="22" height="9.6" rx="3.5" fill="#2F3E2D" />
@@ -460,7 +363,6 @@ export const InteractiveMapBackground: React.FC = () => {
             <circle cx="10.6" cy="3" r="0.9" fill="#F7FDE8" />
           </g>
 
-          {/* Compact Olive Car */}
           <g id="vehicle-car-olive">
             <rect x="-9.5" y="-4.2" width="19" height="8.8" rx="3.2" fill="#1E281C" opacity="0.22" transform="translate(1.2, 2)" />
             <rect x="-9.5" y="-4.5" width="19" height="9" rx="3.2" fill="#465943" />
@@ -473,17 +375,18 @@ export const InteractiveMapBackground: React.FC = () => {
 
         <rect width="1600" height="1000" fill="#EDF6E8" />
 
-        {/* Rotated Urban Grid (-36 deg) */}
+        {/* Rotated Urban Grid (-36 deg) with Full Extruded Buildings and Parks */}
         <g id="urbanGridSpace" transform="translate(980, 480) rotate(-36) translate(-800, -500)">
           {/* Secondary streets */}
           <g stroke="#DCE8D6" strokeWidth="2" fill="none">
             <rect x="-500" y="-500" width="2600" height="2000" fill="#F3F9EF" />
-            <path d="M 100 -400 L 100 1400 M 240 -400 L 240 1400 M 380 -400 L 380 1400 M 520 -400 L 520 1400 M 820 -400 L 820 1400 M 960 -400 L 960 1400 M 1115 -400 L 1115 1400 M 1280 -400 L 1280 1400" />
+            <path d="M 100 -400 L 100 1400 M 240 -400 L 240 1400 M 380 -400 L 380 1400 M 520 -400 L 520 1400 M 820 -400 L 820 1400 M 960 -400 L 960 1400 M 1115 -400 L 1115 1400 M 1280 -400 L 1280 1400 M 1420 -400 L 1420 1400" />
             <path d="M -300 60 L 1800 60 M -300 180 L 1800 180 M -300 320 L 1800 320 M -300 450 L 1800 450 M -300 730 L 1800 730 M -300 870 L 1800 870" />
           </g>
 
-          {/* Urban City Blocks & Green Parks */}
+          {/* Urban City Blocks, Residential Quarters & 3D Extruded Buildings */}
           <g filter="url(#blockBevel)">
+            {/* Upper Left Quadrant Blocks */}
             <rect x="115" y="-120" width="110" height="165" rx="4" fill="#DFEDD9" />
             <rect x="115" y="75" width="110" height="90" rx="4" fill="#D5E7CE" />
             <rect x="255" y="-80" width="110" height="125" rx="4" fill="#D5E7CE" />
@@ -491,40 +394,85 @@ export const InteractiveMapBackground: React.FC = () => {
             <rect x="395" y="-80" width="110" height="125" rx="6" fill="#C9E1C0" />
             <rect x="395" y="75" width="110" height="90" rx="5" fill="#C5DFB8" />
 
+            {/* Mid Left Blocks */}
             <rect x="115" y="195" width="110" height="105" rx="5" fill="#CEE5C5" />
             <rect x="255" y="195" width="110" height="105" rx="5" fill="#E1EFE0" />
             <rect x="395" y="195" width="110" height="105" rx="5" fill="#C7E0BC" />
             <rect x="535" y="75" width="112" height="90" rx="6" fill="#DCECD5" />
             <rect x="535" y="195" width="112" height="105" rx="6" fill="#C4DFB8" />
+            <rect x="550" y="210" width="82" height="75" rx="3" fill="#B5D4A7" />
 
-            {/* Central Botanical Park */}
+            {/* High-detail 3D Extruded Building Massing with Rooftops */}
+            <g transform="translate(525, -145)">
+              <rect x="0" y="0" width="122" height="190" rx="4" fill="#9FB09A" />
+              <rect x="12" y="12" width="98" height="166" rx="2" fill="#D8E5D3" />
+              <rect x="22" y="24" width="78" height="65" fill="#BACBB4" />
+              <rect x="22" y="102" width="78" height="62" fill="#C7D7C2" />
+            </g>
+            <g transform="translate(703, -180)">
+              <rect x="0" y="0" width="102" height="140" rx="4" fill="#92A38D" />
+              <rect x="10" y="10" width="82" height="120" rx="2" fill="#DCE9D7" />
+            </g>
+
+            {/* Central & Right Sector Blocks */}
+            <rect x="703" y="-10" width="102" height="55" rx="5" fill="#D5E7CE" />
+            <rect x="703" y="75" width="102" height="90" rx="6" fill="#CBE2C2" />
+            <rect x="835" y="-120" width="110" height="165" rx="6" fill="#D3E7CA" />
+            <rect x="835" y="75" width="110" height="90" rx="6" fill="#C5DFB8" />
+            <rect x="975" y="-60" width="125" height="105" rx="6" fill="#CBE2C2" />
+            <rect x="975" y="75" width="125" height="90" rx="6" fill="#D6E8CE" />
+            <rect x="1130" y="75" width="135" height="90" rx="6" fill="#C4DFB8" />
+
+            {/* Large Central Botanical Park */}
             <rect x="835" y="195" width="265" height="240" rx="10" fill="#C2DEB6" />
             <path d="M 835 260 Q 960 310 1100 240" stroke="#EEF7EA" strokeWidth="5.5" fill="none" />
             <path d="M 890 195 Q 950 320 920 435" stroke="#EEF7EA" strokeWidth="5" fill="none" />
             <path d="M 835 380 Q 980 340 1100 395" stroke="#EEF7EA" strokeWidth="5" fill="none" />
 
-            {/* East Annex */}
+            {/* East Botanical Annex Park */}
             <rect x="1130" y="195" width="135" height="240" rx="8" fill="#C9E2BE" />
+            <rect x="1148" y="215" width="100" height="95" rx="5" fill="#B8D7AB" />
+
+            {/* Block Left of Central Park */}
             <rect x="703" y="195" width="102" height="110" rx="6" fill="#D9EAD2" />
             <rect x="703" y="335" width="102" height="100" rx="6" fill="#C8E1BD" />
 
-            {/* Blocks along highway */}
+            {/* Blocks Between Y=320 and Y=450 */}
+            <rect x="255" y="335" width="110" height="100" rx="4" fill="#DCECD5" />
+            <rect x="395" y="335" width="110" height="100" rx="4" fill="#C9E1C0" />
+            <rect x="535" y="335" width="112" height="100" rx="4" fill="#D1E6C8" />
+
+            {/* Blocks Between Y=450 and Main Arterial Y=590 */}
             <rect x="255" y="465" width="110" height="102" rx="5" fill="#CBE2C2" />
             <rect x="395" y="465" width="110" height="102" rx="5" fill="#D5E8CD" />
             <rect x="535" y="465" width="112" height="102" rx="5" fill="#C6DFB9" />
             <rect x="703" y="465" width="102" height="102" rx="5" fill="#C7E0BC" />
             <rect x="835" y="465" width="110" height="102" rx="5" fill="#DFEDD9" />
             <rect x="975" y="465" width="125" height="102" rx="5" fill="#D1E6C8" />
+            <rect x="995" y="482" width="60" height="50" rx="3" fill="#B5D3A8" />
             <rect x="1130" y="465" width="135" height="102" rx="6" fill="#C4DFB8" />
+            <rect x="1295" y="465" width="115" height="102" rx="6" fill="#D1E6C8" />
 
-            {/* South of intersection */}
+            {/* Blocks South of Main Arterial Y=590 */}
             <rect x="255" y="613" width="110" height="102" rx="5" fill="#D4E8CC" />
             <rect x="395" y="613" width="110" height="102" rx="5" fill="#E2F0DC" />
             <rect x="535" y="613" width="112" height="102" rx="5" fill="#C8E1BD" />
+            <rect x="552" y="628" width="78" height="68" rx="3" fill="#B4D2A7" />
             <rect x="703" y="613" width="102" height="102" rx="5" fill="#DCECD5" />
             <rect x="835" y="613" width="110" height="102" rx="5" fill="#C5DFB8" />
             <rect x="975" y="613" width="125" height="102" rx="5" fill="#E2F0DC" />
             <rect x="1130" y="613" width="135" height="102" rx="6" fill="#C4DFB8" />
+            <rect x="1295" y="613" width="115" height="102" rx="6" fill="#CBE2C2" />
+
+            {/* Lower Southern Blocks (Below Y=730) */}
+            <rect x="255" y="748" width="250" height="108" rx="8" fill="#C2DEB6" />
+            <rect x="535" y="748" width="112" height="108" rx="5" fill="#DCECD5" />
+            <rect x="703" y="748" width="102" height="108" rx="5" fill="#D1E6C8" />
+            <rect x="835" y="748" width="110" height="108" rx="6" fill="#CBE3C0" />
+            <rect x="975" y="748" width="125" height="108" rx="6" fill="#C2DEB6" />
+            <rect x="1130" y="748" width="135" height="108" rx="6" fill="#D5E8CD" />
+            <rect x="703" y="885" width="242" height="120" rx="6" fill="#C6DFB9" />
+            <rect x="975" y="885" width="290" height="120" rx="6" fill="#CDE4C3" />
           </g>
 
           {/* Secondary streets */}
@@ -535,12 +483,16 @@ export const InteractiveMapBackground: React.FC = () => {
             <line x1="820" y1="-350" x2="820" y2="1200" />
             <line x1="960" y1="-350" x2="960" y2="1200" />
             <line x1="1115" y1="-350" x2="1115" y2="1200" />
+            <line x1="1280" y1="-350" x2="1280" y2="1200" />
+            <line x1="-100" y1="60" x2="1550" y2="60" />
+            <line x1="-100" y1="180" x2="1550" y2="180" />
+            <line x1="-100" y1="320" x2="820" y2="320" />
             <line x1="-100" y1="450" x2="1550" y2="450" />
             <line x1="-100" y1="730" x2="1550" y2="730" />
+            <line x1="-100" y1="870" x2="1550" y2="870" />
           </g>
 
           {/* TWO MAIN ARTERIAL HIGHWAYS (Dark Olive-Grey Asphalt) */}
-          {/* Horizontal Arterial Y = 590 */}
           <line x1="-350" y1="590" x2="1650" y2="590" stroke="#DCE8D6" strokeWidth="34" />
           <line x1="-350" y1="590" x2="1650" y2="590" stroke="#7C8D76" strokeWidth="28" />
           <line x1="-350" y1="590" x2="1650" y2="590" stroke="#E6F1E2" strokeWidth="1.8" strokeDasharray="14 12" />
@@ -569,34 +521,122 @@ export const InteractiveMapBackground: React.FC = () => {
           {/* Dynamic Pedestrians Layer */}
           <g id="mapPedestriansWalkersContainer"></g>
 
-          {/* Resting Citizens */}
-          <g>
+          {/* Static Citizens & Resting Walkers */}
+          <g id="pedestriansRestingContainer">
             <use href="#pedestrian-grid" transform="translate(956, 335)" />
             <use href="#pedestrian-grid" transform="translate(964, 338)" />
             <use href="#pedestrian-grid" transform="translate(1045, 310)" />
+            <use href="#pedestrian-grid" transform="translate(885, 240)" />
             <use href="#pedestrian-grid" transform="translate(1185, 320)" />
             <use href="#pedestrian-grid" transform="translate(1193, 324)" />
             <use href="#pedestrian-grid" transform="translate(755, 515)" />
             <use href="#pedestrian-grid" transform="translate(763, 518)" />
+            <use href="#pedestrian-grid" transform="translate(588, 662)" />
+            <use href="#pedestrian-grid" transform="translate(890, 658)" />
+            <use href="#pedestrian-grid" transform="translate(1035, 805)" />
+            <use href="#pedestrian-grid" transform="translate(1043, 808)" />
           </g>
 
-          {/* Architectural 2.5D Trees */}
+          {/* Dense Architectural 2.5D Tree Canopy (Over 50+ Trees across Parks and Streets) */}
           <g filter="url(#softShadow)">
+            {/* 1. Large Central Botanical Park */}
             <use href="#tree-round-grid" transform="translate(860, 222) scale(1.25)" />
-            <use href="#tree-cone-grid" transform="translate(918, 228) scale(1.15)" />
+            <use href="#tree-small-grid" transform="translate(882, 215) scale(1.05)" />
+            <use href="#tree-cone-grid"  transform="translate(918, 228) scale(1.15)" />
             <use href="#tree-round-grid" transform="translate(972, 220) scale(1.2)" />
+            <use href="#tree-small-grid" transform="translate(998, 232) scale(1.0)" />
             <use href="#tree-round-grid" transform="translate(1058, 218) scale(1.3)" />
+            <use href="#tree-cone-grid"  transform="translate(1080, 235) scale(1.1)" />
+
             <use href="#tree-round-grid" transform="translate(858, 295) scale(1.2)" />
-            <use href="#tree-cone-grid" transform="translate(945, 310) scale(1.2)" />
+            <use href="#tree-small-grid" transform="translate(876, 312) scale(1.0)" />
+            <use href="#tree-cone-grid"  transform="translate(945, 310) scale(1.2)" />
+            <use href="#tree-round-grid" transform="translate(968, 295) scale(1.1)" />
             <use href="#tree-round-grid" transform="translate(1022, 292) scale(1.25)" />
+            <use href="#tree-small-grid" transform="translate(1045, 308) scale(1.05)" />
+            <use href="#tree-cone-grid"  transform="translate(1078, 298) scale(1.15)" />
+
+            <use href="#tree-round-grid" transform="translate(862, 408) scale(1.25)" />
+            <use href="#tree-small-grid" transform="translate(888, 415) scale(1.0)" />
+            <use href="#tree-round-grid" transform="translate(960, 382) scale(1.2)" />
+            <use href="#tree-cone-grid"  transform="translate(1012, 410) scale(1.15)" />
+            <use href="#tree-round-grid" transform="translate(1072, 412) scale(1.25)" />
+            <use href="#tree-small-grid" transform="translate(1042, 418) scale(0.95)" />
+
+            {/* 2. East Botanical Annex */}
             <use href="#tree-round-grid" transform="translate(1155, 225) scale(1.2)" />
-            <use href="#tree-cone-grid" transform="translate(1235, 230) scale(1.15)" />
+            <use href="#tree-small-grid" transform="translate(1180, 218) scale(1.0)" />
+            <use href="#tree-cone-grid"  transform="translate(1235, 230) scale(1.15)" />
+            <use href="#tree-round-grid" transform="translate(1160, 325) scale(1.25)" />
+            <use href="#tree-small-grid" transform="translate(1188, 338) scale(1.05)" />
+            <use href="#tree-round-grid" transform="translate(1240, 315) scale(1.15)" />
+            <use href="#tree-cone-grid"  transform="translate(1158, 412) scale(1.15)" />
+            <use href="#tree-round-grid" transform="translate(1232, 405) scale(1.25)" />
+
+            {/* 3. Upper Sector Blocks */}
+            <use href="#tree-round-grid" transform="translate(420, -40) scale(1.15)" />
+            <use href="#tree-small-grid" transform="translate(445, -25) scale(0.95)" />
+            <use href="#tree-cone-grid"  transform="translate(480, 15) scale(1.1)" />
+            <use href="#tree-round-grid" transform="translate(425, 105) scale(1.2)" />
+            <use href="#tree-small-grid" transform="translate(480, 135) scale(1.0)" />
+            <use href="#tree-round-grid" transform="translate(560, 102) scale(1.15)" />
+            <use href="#tree-small-grid" transform="translate(618, 138) scale(1.0)" />
+            <use href="#tree-cone-grid"  transform="translate(730, 105) scale(1.15)" />
+            <use href="#tree-round-grid" transform="translate(778, 138) scale(1.15)" />
+            <use href="#tree-round-grid" transform="translate(862, -75) scale(1.2)" />
+            <use href="#tree-small-grid" transform="translate(915, -40) scale(1.0)" />
+            <use href="#tree-cone-grid"  transform="translate(865, 15) scale(1.15)" />
+            <use href="#tree-round-grid" transform="translate(918, 22) scale(1.1)" />
+            <use href="#tree-round-grid" transform="translate(860, 102) scale(1.2)" />
+            <use href="#tree-round-grid" transform="translate(1002, -25) scale(1.25)" />
+            <use href="#tree-round-grid" transform="translate(1075, 140) scale(1.2)" />
+            <use href="#tree-round-grid" transform="translate(1165, 110) scale(1.2)" />
+
+            {/* 4. Mid & Central Parcels */}
+            <use href="#tree-round-grid" transform="translate(285, 230) scale(1.15)" />
+            <use href="#tree-round-grid" transform="translate(420, 225) scale(1.2)" />
+            <use href="#tree-cone-grid"  transform="translate(480, 275) scale(1.1)" />
+            <use href="#tree-round-grid" transform="translate(555, 220) scale(1.2)" />
             <use href="#tree-round-grid" transform="translate(728, 225) scale(1.2)" />
-            <use href="#tree-cone-grid" transform="translate(730, 365) scale(1.15)" />
+            <use href="#tree-cone-grid"  transform="translate(730, 365) scale(1.15)" />
+            <use href="#tree-round-grid" transform="translate(780, 410) scale(1.2)" />
+            <use href="#tree-round-grid" transform="translate(422, 362) scale(1.15)" />
+            <use href="#tree-cone-grid"  transform="translate(558, 362) scale(1.15)" />
+            <use href="#tree-round-grid" transform="translate(622, 412) scale(1.2)" />
+
+            {/* 5. Along Arterial Roads */}
             <use href="#tree-round-grid" transform="translate(420, 495) scale(1.15)" />
             <use href="#tree-round-grid" transform="translate(558, 492) scale(1.2)" />
+            <use href="#tree-cone-grid"  transform="translate(622, 542) scale(1.15)" />
+            <use href="#tree-round-grid" transform="translate(728, 492) scale(1.2)" />
             <use href="#tree-round-grid" transform="translate(862, 492) scale(1.2)" />
-            <use href="#tree-cone-grid" transform="translate(920, 542) scale(1.1)" />
+            <use href="#tree-cone-grid"  transform="translate(920, 542) scale(1.1)" />
+            <use href="#tree-round-grid" transform="translate(1072, 495) scale(1.25)" />
+            <use href="#tree-round-grid" transform="translate(1158, 492) scale(1.2)" />
+            <use href="#tree-cone-grid"  transform="translate(1235, 540) scale(1.15)" />
+            <use href="#tree-round-grid" transform="translate(1330, 505) scale(1.2)" />
+
+            {/* 6. Southern Residential Suburbs */}
+            <use href="#tree-round-grid" transform="translate(425, 640) scale(1.15)" />
+            <use href="#tree-round-grid" transform="translate(555, 638) scale(1.2)" />
+            <use href="#tree-cone-grid"  transform="translate(625, 692) scale(1.15)" />
+            <use href="#tree-round-grid" transform="translate(728, 638) scale(1.2)" />
+            <use href="#tree-round-grid" transform="translate(860, 640) scale(1.25)" />
+            <use href="#tree-cone-grid"  transform="translate(1002, 640) scale(1.15)" />
+            <use href="#tree-round-grid" transform="translate(1075, 690) scale(1.2)" />
+            <use href="#tree-round-grid" transform="translate(1158, 642) scale(1.25)" />
+            <use href="#tree-round-grid" transform="translate(1335, 655) scale(1.2)" />
+            <use href="#tree-round-grid" transform="translate(295, 780) scale(1.25)" />
+            <use href="#tree-round-grid" transform="translate(472, 825) scale(1.25)" />
+            <use href="#tree-round-grid" transform="translate(560, 778) scale(1.2)" />
+            <use href="#tree-cone-grid"  transform="translate(730, 778) scale(1.15)" />
+            <use href="#tree-round-grid" transform="translate(780, 830) scale(1.2)" />
+            <use href="#tree-round-grid" transform="translate(862, 778) scale(1.25)" />
+            <use href="#tree-round-grid" transform="translate(1005, 778) scale(1.25)" />
+            <use href="#tree-cone-grid"  transform="translate(1072, 830) scale(1.15)" />
+            <use href="#tree-round-grid" transform="translate(1162, 780) scale(1.2)" />
+            <use href="#tree-round-grid" transform="translate(745, 915) scale(1.25)" />
+            <use href="#tree-round-grid" transform="translate(1020, 918) scale(1.3)" />
           </g>
         </g>
       </svg>

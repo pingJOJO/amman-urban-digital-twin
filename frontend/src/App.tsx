@@ -39,7 +39,7 @@ const AppContent: React.FC = () => {
       {/* 1. Architectural 3D Isometric Map Background with Live Traffic & Pedestrians */}
       <InteractiveMapBackground />
 
-      {/* 2. Main Content Viewport: Balanced position ("نص السنتر") */}
+      {/* 2. Main Content Viewport: Balanced centered position */}
       <main className="relative z-10 w-full min-h-screen flex items-center justify-center lg:justify-start px-6 sm:px-12 lg:pl-[14vw] xl:pl-[18vw] 2xl:pl-[22vw] py-8 animate-fadeIn">
         {isLoading ? (
           <div className="glass-card rounded-[20px] p-10 flex flex-col items-center justify-center gap-3">

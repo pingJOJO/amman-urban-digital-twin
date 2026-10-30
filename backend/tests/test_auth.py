@@ -70,16 +70,16 @@ def test_signup_success():
     assert data["user"]["has_password"] is True
 
 
-def test_signup_name_with_spaces_rejected():
-    """Ensure full_name with spaces is rejected."""
+def test_signup_name_with_spaces_accepted():
+    """Ensure full_name with spaces is accepted."""
     payload = {
-        "email": "spaced.name@smartcity.jo",
+        "email": "doha.ziad@smartcity.jo",
         "password": "SecurePassword2026!",
-        "full_name": "Ahmad With Space",
+        "full_name": "Doha Ziad",
     }
     response = client.post("/auth/signup", json=payload)
-    assert response.status_code == 422
-    assert "space" in response.text.lower()
+    assert response.status_code == 201
+    assert response.json()["user"]["full_name"] == "Doha Ziad"
 
 
 def test_signup_duplicate_email():
