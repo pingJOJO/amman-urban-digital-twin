@@ -227,9 +227,6 @@ export const TwinExplorePage: React.FC<TwinExplorePageProps> = ({ theme }) => {
           {/* Architectural Digital Twin Viewport */}
           <img
             src="/queen-rania-corridor-twin-v2.png"
-            onError={(e) => {
-              (e.currentTarget as HTMLImageElement).src = '/queen-rania-corridor-twin.png';
-            }}
             alt="SUMO Simulation Viewport"
             className="w-full h-full object-cover max-h-[540px] opacity-90 transition-transform duration-700"
           />

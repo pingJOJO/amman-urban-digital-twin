@@ -638,9 +638,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
                     <img
                       src="/queen-rania-corridor-twin-v2.png"
-                      onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).src = '/queen-rania-corridor-twin.png';
-                      }}
                       alt="Queen Rania St. Corridor Twin - BRT and Microclimate Heatmap"
                       className="w-full h-auto object-contain rounded-2xl transition-transform duration-500 group-hover:scale-[1.01]"
                     />
